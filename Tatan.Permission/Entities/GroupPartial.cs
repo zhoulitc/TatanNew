@@ -1,0 +1,38 @@
+﻿namespace Tatan.Permission.Entities
+{
+    using Collections;
+
+    /// <summary>
+    /// 组，组的权限为自身权限和关联角色权限的集合
+    /// </summary>
+    public partial class Group
+    {
+        private UserRelationCollection _users;
+        private RoleRelationCollection _roles;
+        private PermissionRelationCollection _permissions;
+
+        /// <summary>
+        /// 组包含的用户关联集合
+        /// </summary>
+        public UserRelationCollection Users
+        {
+            get { return _users ?? (_users = new UserRelationCollection(this, "GroupId", "UserGroup")); }
+        }
+
+        /// <summary>
+        /// 组包含的角色关联集合
+        /// </summary>
+        public RoleRelationCollection Roles
+        {
+            get { return _roles ?? (_roles = new RoleRelationCollection(this, "GroupId", "GroupRole")); }
+        }
+
+        /// <summary>
+        /// 组包含的权限集合
+        /// </summary>
+        public PermissionRelationCollection Permissions
+        {
+            get { return _permissions ?? (_permissions = new PermissionRelationCollection(this, "GroupId", "GroupPermission")); }
+        }
+    }
+}

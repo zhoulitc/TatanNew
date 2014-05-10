@@ -1,0 +1,1481 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Tatan.Data</name>
+    </assembly>
+    <members>
+        <member name="T:Tatan.Data.ObjectQuery.Aggregate">
+            <summary>
+            聚合函数类型
+            </summary>
+        </member>
+        <member name="F:Tatan.Data.ObjectQuery.Aggregate.Count">
+            <summary>
+            统计
+            </summary>
+        </member>
+        <member name="F:Tatan.Data.ObjectQuery.Aggregate.Min">
+            <summary>
+            求最小值
+            </summary>
+        </member>
+        <member name="F:Tatan.Data.ObjectQuery.Aggregate.Max">
+            <summary>
+            求最大值
+            </summary>
+        </member>
+        <member name="F:Tatan.Data.ObjectQuery.Aggregate.Avg">
+            <summary>
+            求平均值
+            </summary>
+        </member>
+        <member name="F:Tatan.Data.ObjectQuery.Aggregate.Sum">
+            <summary>
+            求和
+            </summary>
+        </member>
+        <member name="T:Tatan.Data.ObjectQuery.CaseWhenExpression">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Tatan.Data.ObjectQuery.IExpression">
+            <summary>
+            表达式接口
+            </summary>
+        </member>
+        <member name="T:Tatan.Data.ObjectQuery.IOQL">
+            <summary>
+            对象语言字符串化接口
+            </summary>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.IOQL.ToString">
+            <summary>
+            获取OQL对应的SQL
+            </summary>
+            <returns>SQL语句</returns>
+        </member>
+        <member name="F:Tatan.Data.ObjectQuery.CaseWhenExpression._alias">
+            <summary>
+            别名
+            </summary>
+        </member>
+        <member name="T:Tatan.Data.ObjectQuery.FunctionExpression">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.FunctionExpression.Create(System.String,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="function"></param>
+            <param name="field"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.FunctionExpression.Create(Tatan.Data.ObjectQuery.Aggregate,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="aggregate"></param>
+            <param name="field"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.FunctionExpression.#ctor(System.String,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="function"></param>
+            <param name="field"></param>
+        </member>
+        <member name="T:Tatan.Data.ObjectQuery.IFrom">
+            <summary>
+            集合接口
+            <para>处理查询语句中的from子句</para>
+            </summary>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.IFrom._(System.String,System.String[])">
+            <summary>
+            追加表
+            </summary>
+            <param name="table">表名</param>
+            <param name="tables">其他表名</param>
+            <returns>集合接口</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.IFrom._(Tatan.Data.ObjectQuery.IOQL,Tatan.Data.ObjectQuery.IOQL[])">
+            <summary>
+            追加数据查询集合
+            </summary>
+            <param name="select">数据查询集合</param>
+            <param name="selects">其他数据查询集合</param>
+            <returns>集合接口</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.IFrom.Join(System.String,Tatan.Data.ObjectQuery.JoinType,System.String,Tatan.Data.ObjectQuery.IExpression)">
+            <summary>
+            连接两个集合
+            </summary>
+            <param name="left">左表</param>
+            <param name="join">连接类型枚举</param>
+            <param name="right">右表</param>
+            <param name="expression">ON表达式</param>
+            <returns>集合接口</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.IFrom.Where(Tatan.Data.ObjectQuery.IExpression)">
+            <summary>
+            检索条件
+            </summary>
+            <param name="expression">表达式对象</param>
+            <returns>数据查询接口</returns>
+        </member>
+        <member name="T:Tatan.Data.ObjectQuery.ISelect">
+            <summary>
+            选择接口
+            <para>处理查询语句中的select子句</para>
+            </summary>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.ISelect._(System.String,System.String[])">
+            <summary>
+            追加字段名
+            </summary>
+            <param name="field">字段名</param>
+            <param name="fields">其他字段名</param>
+            <returns>选择接口</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.ISelect._(Tatan.Data.ObjectQuery.CaseWhenExpression,Tatan.Data.ObjectQuery.CaseWhenExpression[])">
+            <summary>
+            追加CaseWhen表达式
+            </summary>
+            <param name="expression">表达式</param>
+            <param name="expressions">其他表达式</param>
+            <returns>选择接口</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.ISelect._(Tatan.Data.ObjectQuery.FunctionExpression,Tatan.Data.ObjectQuery.FunctionExpression[])">
+            <summary>
+            追加函数表达式
+            </summary>
+            <param name="expression">表达式</param>
+            <param name="expressions">其他表达式</param>
+            <returns>选择接口</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.ISelect.From(System.String,System.String[])">
+            <summary>
+            设置包含集合
+            </summary>
+            <param name="table">表名</param>
+            <param name="tables">其他表名</param>
+            <returns>集合接口</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.ISelect.Distinct(System.String)">
+            <summary>
+            设置Distinct语句
+            </summary>
+            <param name="field">字段名</param>
+            <returns>选择接口</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.ISelect.Top(System.UInt32,System.Boolean)">
+            <summary>
+            设置Top语句
+            </summary>
+            <param name="n">前n行或者n%行</param>
+            <param name="isPercent">是否为百分比</param>
+            <returns>选择接口</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.ISelect.ToString">
+            <summary>
+            返回Empty，没有表名无法查询
+            </summary>
+            <returns>返回空字符串</returns>
+        </member>
+        <member name="T:Tatan.Data.ObjectQuery.IWhere">
+            <summary>
+            数据查询语言(Data Query Language)接口
+            <para>跨表操作时最好用试图或者存储过程</para>
+            </summary>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.IWhere.GroupBy(System.String,System.String[])">
+            <summary>
+            设置分组子句
+            </summary>
+            <param name="field">字段名</param>
+            <param name="fields">其他字段名</param>
+            <returns>数据查询语言接口</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.IWhere.Having(Tatan.Data.ObjectQuery.IExpression)">
+            <summary>
+            设置分组条件子句，需要先设置分组子句
+            </summary>
+            <param name="expression">条件表达式</param>
+            <returns>数据查询语言接口</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.IWhere.OrderBy(System.String,System.String,System.String[])">
+            <summary>
+            设置排序子句
+            </summary>
+            <param name="sort">排序类型，分为asc和desc，其他任意字符将会被认为是asc</param>
+            <param name="field">字段名</param>
+            <param name="fields">其他字段名</param>
+            <returns>数据查询语言接口</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.IWhere.From(Tatan.Data.ObjectQuery.SetMerge,Tatan.Data.ObjectQuery.IOQL,Tatan.Data.ObjectQuery.IOQL[])">
+            <summary>
+            设置包含集合
+            </summary>
+            <param name="oper">集合操作类型</param>
+            <param name="select">数据查询接口</param>
+            <param name="selects">其他数据查询接口</param>
+            <returns>集合接口</returns>
+        </member>
+        <member name="T:Tatan.Data.ObjectQuery.JoinType">
+            <summary>
+            链接类型
+            </summary>
+        </member>
+        <member name="F:Tatan.Data.ObjectQuery.JoinType.Cross">
+            <summary>
+            交叉连接
+            </summary>
+        </member>
+        <member name="F:Tatan.Data.ObjectQuery.JoinType.Inner">
+            <summary>
+            内连接
+            </summary>
+        </member>
+        <member name="F:Tatan.Data.ObjectQuery.JoinType.Left">
+            <summary>
+            左外连接
+            </summary>
+        </member>
+        <member name="F:Tatan.Data.ObjectQuery.JoinType.Right">
+            <summary>
+            右外连接
+            </summary>
+        </member>
+        <member name="F:Tatan.Data.ObjectQuery.JoinType.Full">
+            <summary>
+            全外连接
+            </summary>
+        </member>
+        <member name="T:Tatan.Data.ObjectQuery.ObjectQuerier">
+            <summary>
+            对象查询器
+            <para>Select[->Top][->Distinct][->{_}]</para>
+            <para>From[->{_}][->Join]</para>
+            <para>[->Where][->GroupBy[->Having]][->OrderBy]</para>
+            <para>[->From][->{_}....]</para>
+            <remarks>中括号表示步骤可选，大括号表示方法可无限叠加</remarks>
+            </summary>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.ObjectQuerier.Select(System.String[])">
+            <summary>
+            表数据选择
+            </summary>
+            <param name="fields">选择字段集合</param>
+            <returns>选择接口</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.ObjectQuerier.InternalSelect.#ctor(System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            内联构造函数
+            </summary>
+            <param name="fields">字段集合</param>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.ObjectQuerier.InternalSelect._(System.String,System.String[])">
+            <summary>
+            追加字段名
+            </summary>
+            <param name="field">字段名</param>
+            <param name="fields">其他字段名</param>
+            <returns>选择接口</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.ObjectQuerier.InternalSelect._(Tatan.Data.ObjectQuery.CaseWhenExpression,Tatan.Data.ObjectQuery.CaseWhenExpression[])">
+            <summary>
+            追加CaseWhen表达式
+            </summary>
+            <param name="expression">表达式</param>
+            <param name="expressions">其他表达式</param>
+            <returns>选择接口</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.ObjectQuerier.InternalSelect._(Tatan.Data.ObjectQuery.FunctionExpression,Tatan.Data.ObjectQuery.FunctionExpression[])">
+            <summary>
+            追加函数表达式
+            </summary>
+            <param name="expression">表达式</param>
+            <param name="expressions">其他表达式</param>
+            <returns>选择接口</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.ObjectQuerier.InternalSelect.From(System.String,System.String[])">
+            <summary>
+            设置包含集合
+            </summary>
+            <param name="table">表名</param>
+            <param name="tables">其他表名</param>
+            <returns>集合接口</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.ObjectQuerier.InternalSelect.Distinct(System.String)">
+            <summary>
+            为对应字段设置不重复选项
+            </summary>
+            <param name="field">字段名</param>
+            <returns>选择接口</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.ObjectQuerier.InternalSelect.Top(System.UInt32,System.Boolean)">
+            <summary>
+            设置TOP语句
+            </summary>
+            <param name="n">前n行或者n%行</param>
+            <param name="isPercent">是否为百分比</param>
+            <returns>选择接口</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.ObjectQuerier.InternalSelect.ToString">
+            <summary>
+            返回Empty，没有表名无法查询
+            </summary>
+            <returns>返回空字符串</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.ObjectQuerier.InternalFrom.#ctor(System.String,System.String,System.String[])">
+            <summary>
+            内联构造函数
+            </summary>
+            <param name="select">select列表</param>
+            <param name="table">表名</param>
+            <param name="tables">其他表名</param>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.ObjectQuerier.InternalFrom.ToString">
+            <summary>
+            获取OQL对应的SQL
+            </summary>
+            <returns>SQL语句</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.ObjectQuerier.InternalFrom._(System.String,System.String[])">
+            <summary>
+            追加表
+            </summary>
+            <param name="table">表名</param>
+            <param name="tables">其他表名</param>
+            <returns>集合接口</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.ObjectQuerier.InternalFrom._(Tatan.Data.ObjectQuery.IOQL,Tatan.Data.ObjectQuery.IOQL[])">
+            <summary>
+            追加数据查询集合
+            </summary>
+            <param name="select">数据查询集合</param>
+            <param name="selects">其他数据查询集合</param>
+            <returns>集合接口</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.ObjectQuerier.InternalFrom.Join(System.String,Tatan.Data.ObjectQuery.JoinType,System.String,Tatan.Data.ObjectQuery.IExpression)">
+            <summary>
+            连接两个集合
+            </summary>
+            <param name="left">左表</param>
+            <param name="join">连接类型枚举</param>
+            <param name="right">右表</param>
+            <param name="expression">ON表达式</param>
+            <returns>集合接口</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.ObjectQuerier.InternalFrom.Where(Tatan.Data.ObjectQuery.IExpression)">
+            <summary>
+            检索条件
+            </summary>
+            <param name="expression">表达式对象</param>
+            <returns>数据查询接口</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.ObjectQuerier.InternalWhere.#ctor(System.String,System.String,System.String,System.String)">
+            <summary>
+            内联构造函数
+            </summary>
+            <param name="list">select列表</param>
+            <param name="froms">from集合</param>
+            <param name="joins">join子句</param>
+            <param name="expression">表达式</param>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.ObjectQuerier.InternalWhere.ToString">
+            <summary>
+            获取OQL对应的SQL
+            </summary>
+            <returns>SQL语句</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.ObjectQuerier.InternalWhere.GroupBy(System.String,System.String[])">
+            <summary>
+            设置分组子句
+            </summary>
+            <param name="field">字段名</param>
+            <param name="fields">其他字段名</param>
+            <returns>数据查询接口</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.ObjectQuerier.InternalWhere.Having(Tatan.Data.ObjectQuery.IExpression)">
+            <summary>
+            设置分组条件子句，需要先设置分组子句
+            </summary>
+            <param name="expression">条件表达式</param>
+            <returns>数据查询接口</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.ObjectQuerier.InternalWhere.OrderBy(System.String,System.String,System.String[])">
+            <summary>
+            设置排序子句
+            </summary>
+            <param name="sort">排序类型</param>
+            <param name="field">字段名</param>
+            <param name="fields">其他字段名</param>
+            <returns>数据查询接口</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.ObjectQuerier.InternalWhere.From(Tatan.Data.ObjectQuery.SetMerge,Tatan.Data.ObjectQuery.IOQL,Tatan.Data.ObjectQuery.IOQL[])">
+            <summary>
+            包含集合操作
+            </summary>
+            <param name="oper">集合操作类型</param>
+            <param name="select">数据查询接口</param>
+            <param name="selects">其他数据查询接口</param>
+            <returns>集合接口</returns>
+        </member>
+        <member name="T:Tatan.Data.ObjectQuery.SetMerge">
+            <summary>
+            集合合并操作枚举
+            </summary>
+        </member>
+        <member name="F:Tatan.Data.ObjectQuery.SetMerge.Except">
+            <summary>
+            差集
+            </summary>
+        </member>
+        <member name="F:Tatan.Data.ObjectQuery.SetMerge.Intersect">
+            <summary>
+            交集
+            </summary>
+        </member>
+        <member name="F:Tatan.Data.ObjectQuery.SetMerge.Union">
+            <summary>
+            并集，剔除重复
+            </summary>
+        </member>
+        <member name="F:Tatan.Data.ObjectQuery.SetMerge.UnionAll">
+            <summary>
+            并集，不剔除重复
+            </summary>
+        </member>
+        <member name="T:Tatan.Data.ObjectQuery.WhereExpression">
+            <summary>
+            条件表达式类
+            </summary>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.WhereExpression.#ctor(System.String,System.String,System.Object)">
+            <summary>
+            私有构造函数
+            </summary>
+            <param name="left">左表达式</param>
+            <param name="join">连接符</param>
+            <param name="right">右表达式</param>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.WhereExpression._AndOr(System.String,Tatan.Data.ObjectQuery.IExpression[])">
+            <summary>
+            用and或者or连接表达式
+            </summary>
+            <param name="oper">and或者or</param>
+            <param name="expressions">多个表达式对象</param>
+            <returns>表达式对象</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.WhereExpression._NotInExists(System.String,System.String,System.Object[])">
+            <summary>
+            IN、NOT IN、EXISTS、NOT EXISTS表达式
+            </summary>
+            <param name="oper">(not) in/exists</param>
+            <param name="name">参数名</param>
+            <param name="values">参数值集合</param>
+            <returns>表达式对象</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.WhereExpression._NotInExists(System.String,System.String,Tatan.Data.ObjectQuery.IOQL)">
+            <summary>
+            IN、NOT IN、EXISTS、NOT EXISTS表达式
+            </summary>
+            <param name="oper">(not) in/exists</param>
+            <param name="name">参数名</param>
+            <param name="select">数据查询接口</param>
+            <returns>表达式对象</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.WhereExpression._Create(System.String,System.String)">
+            <summary>
+            创建一个比较表达式
+            </summary>
+            <param name="name">参数名</param>
+            <param name="operand">操作符</param>
+            <returns>表达式对象</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.WhereExpression._Create(System.String,System.String,System.Object)">
+            <summary>
+            创建一个比较表达式
+            </summary>
+            <param name="name">参数名</param>
+            <param name="operand">操作符</param>
+            <param name="value">参数值</param>
+            <returns>表达式对象</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.WhereExpression._Create(System.String,System.String,Tatan.Data.ObjectQuery.IOQL)">
+            <summary>
+            创建一个比较表达式
+            </summary>
+            <param name="name">参数名</param>
+            <param name="operand">操作符</param>
+            <param name="select">数据查询接口</param>
+            <returns>表达式对象</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.WhereExpression.Equal(System.String)">
+            <summary>
+            创建一个等于比较表达式
+            </summary>
+            <param name="name">参数名</param>
+            <returns>表达式对象</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.WhereExpression.Equal(System.String,System.Object)">
+            <summary>
+            创建一个等于比较表达式
+            </summary>
+            <param name="name">参数名</param>
+            <param name="value">参数值</param>
+            <returns>表达式对象</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.WhereExpression.Equal(System.String,Tatan.Data.ObjectQuery.IOQL)">
+            <summary>
+            创建一个等于比较表达式
+            </summary>
+            <param name="name">参数名</param>
+            <param name="select">数据查询接口</param>
+            <returns>表达式对象</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.WhereExpression.NotEqual(System.String)">
+            <summary>
+            创建一个不等于比较表达式
+            </summary>
+            <param name="name">参数名</param>
+            <returns>表达式对象</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.WhereExpression.NotEqual(System.String,System.Object)">
+            <summary>
+            创建一个不等于比较表达式
+            </summary>
+            <param name="name">参数名</param>
+            <param name="value">参数值</param>
+            <returns>表达式对象</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.WhereExpression.NotEqual(System.String,Tatan.Data.ObjectQuery.IOQL)">
+            <summary>
+            创建一个不等于比较表达式
+            </summary>
+            <param name="name">参数名</param>
+            <param name="select">数据查询接口</param>
+            <returns>表达式对象</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.WhereExpression.GreatThan(System.String)">
+            <summary>
+            创建一个大于比较表达式
+            </summary>
+            <param name="name">参数名</param>
+            <returns>表达式对象</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.WhereExpression.GreatThan(System.String,System.Object)">
+            <summary>
+            创建一个大于比较表达式
+            </summary>
+            <param name="name">参数名</param>
+            <param name="value">参数值</param>
+            <returns>表达式对象</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.WhereExpression.GreatThan(System.String,Tatan.Data.ObjectQuery.IOQL)">
+            <summary>
+            创建一个大于比较表达式
+            </summary>
+            <param name="name">参数名</param>
+            <param name="select">数据查询接口</param>
+            <returns>表达式对象</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.WhereExpression.GreatEqual(System.String)">
+            <summary>
+            创建一个大于等于比较表达式
+            </summary>
+            <param name="name">参数名</param>
+            <returns>表达式对象</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.WhereExpression.GreatEqual(System.String,System.Object)">
+            <summary>
+            创建一个大于等于比较表达式
+            </summary>
+            <param name="name">参数名</param>
+            <param name="value">参数值</param>
+            <returns>表达式对象</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.WhereExpression.GreatEqual(System.String,Tatan.Data.ObjectQuery.IOQL)">
+            <summary>
+            创建一个大于等于比较表达式
+            </summary>
+            <param name="name">参数名</param>
+            <param name="select">数据查询接口</param>
+            <returns>表达式对象</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.WhereExpression.LessThan(System.String)">
+            <summary>
+            创建一个小于比较表达式
+            </summary>
+            <param name="name">参数名</param>
+            <returns>表达式对象</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.WhereExpression.LessThan(System.String,System.Object)">
+            <summary>
+            创建一个小于比较表达式
+            </summary>
+            <param name="name">参数名</param>
+            <param name="value">参数值</param>
+            <returns>表达式对象</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.WhereExpression.LessThan(System.String,Tatan.Data.ObjectQuery.IOQL)">
+            <summary>
+            创建一个小于比较表达式
+            </summary>
+            <param name="name">参数名</param>
+            <param name="select">数据查询接口</param>
+            <returns>表达式对象</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.WhereExpression.LessEqual(System.String)">
+            <summary>
+            创建一个小于等于比较表达式
+            </summary>
+            <param name="name">参数名</param>
+            <returns>表达式对象</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.WhereExpression.LessEqual(System.String,System.Object)">
+            <summary>
+            创建一个小于等于比较表达式
+            </summary>
+            <param name="name">参数名</param>
+            <param name="value">参数值</param>
+            <returns>表达式对象</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.WhereExpression.LessEqual(System.String,Tatan.Data.ObjectQuery.IOQL)">
+            <summary>
+            创建一个小于等于比较表达式
+            </summary>
+            <param name="name">参数名</param>
+            <param name="select">数据查询接口</param>
+            <returns>表达式对象</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.WhereExpression.And(Tatan.Data.ObjectQuery.IExpression[])">
+            <summary>
+            用and连接表达式
+            </summary>
+            <param name="expressions">多个表达式对象</param>
+            <returns>表达式对象</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.WhereExpression.Or(Tatan.Data.ObjectQuery.IExpression[])">
+            <summary>
+            用or连接表达式
+            </summary>
+            <param name="expressions">多个表达式对象</param>
+            <returns>表达式对象</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.WhereExpression.In(System.String,System.Object[])">
+            <summary>
+            IN表达式
+            </summary>
+            <param name="name">参数名</param>
+            <param name="values">参数值集合</param>
+            <returns>表达式对象</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.WhereExpression.In(System.String,Tatan.Data.ObjectQuery.IOQL)">
+            <summary>
+            IN表达式
+            </summary>
+            <param name="name">参数名</param>
+            <param name="select">数据查询接口</param>
+            <returns>表达式对象</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.WhereExpression.NotIn(System.String,System.Object[])">
+            <summary>
+            NOT IN表达式
+            </summary>
+            <param name="name">参数名</param>
+            <param name="values">参数值集合</param>
+            <returns>表达式对象</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.WhereExpression.NotIn(System.String,Tatan.Data.ObjectQuery.IOQL)">
+            <summary>
+            NOT IN表达式
+            </summary>
+            <param name="name">参数名</param>
+            <param name="select">数据查询接口</param>
+            <returns>表达式对象</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.WhereExpression.Exists(System.String,System.Object[])">
+            <summary>
+            EXISTS表达式
+            </summary>
+            <param name="name">参数名</param>
+            <param name="values">参数值集合</param>
+            <returns>表达式对象</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.WhereExpression.Exists(System.String,Tatan.Data.ObjectQuery.IOQL)">
+            <summary>
+            EXISTS表达式
+            </summary>
+            <param name="name">参数名</param>
+            <param name="select">数据查询接口</param>
+            <returns>表达式对象</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.WhereExpression.NotExists(System.String,System.Object[])">
+            <summary>
+            NOT EXISTS表达式
+            </summary>
+            <param name="name">参数名</param>
+            <param name="values">参数值集合</param>
+            <returns>表达式对象</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.WhereExpression.NotExists(System.String,Tatan.Data.ObjectQuery.IOQL)">
+            <summary>
+            NOT EXISTS表达式
+            </summary>
+            <param name="name">参数名</param>
+            <param name="select">数据查询接口</param>
+            <returns>表达式对象</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.WhereExpression.IsNull(System.String)">
+            <summary>
+            IS NULL表达式
+            </summary>
+            <param name="name">参数名</param>
+            <returns>表达式对象</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.WhereExpression.NotIsNull(System.String)">
+            <summary>
+            IS NULL表达式
+            </summary>
+            <param name="name">参数名</param>
+            <returns>表达式对象</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.WhereExpression.Like(System.String,System.Object,System.Boolean)">
+            <summary>
+            LIKE表达式
+            </summary>
+            <param name="name">参数名</param>
+            <param name="value">参数值</param>
+            <param name="isBeforeMatch">是否前匹配</param>
+            <returns>表达式对象</returns>
+        </member>
+        <member name="M:Tatan.Data.ObjectQuery.WhereExpression.ToString">
+            <summary>
+            获取表达式的字符串描述
+            </summary>
+            <returns>字符串描述</returns>
+        </member>
+        <member name="P:Tatan.Data.ObjectQuery.WhereExpression.Provider">
+            <summary>
+            数据提供者
+            </summary>
+        </member>
+        <member name="T:Tatan.Data.DataTableCollection">
+            <summary>
+            数据记录
+            </summary>
+        </member>
+        <member name="M:Tatan.Data.DataTableCollection.Contains(System.String)">
+            <summary>
+            集合中是否包含此表
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Tatan.Data.DataTableCollection.Add(System.Type)">
+            <summary>
+            添加一个表
+            </summary>
+            <param name="type"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Tatan.Data.DataTableCollection.GetEnumerator">
+            <summary>
+            获取此表集合的迭代
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Tatan.Data.DataTableCollection.Item(System.String)">
+            <summary>
+            根据表名获取数据表
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Tatan.Data.DataTableCollection.Count">
+            <summary>
+            获取数据表个数
+            </summary>
+        </member>
+        <member name="T:Tatan.Data.DataEntity">
+            <summary>
+            抽象通用实体类
+            </summary>
+        </member>
+        <member name="T:Tatan.Data.IDataEntity">
+            <summary>
+            数据实体接口
+            </summary>
+        </member>
+        <member name="M:Tatan.Data.IDataEntity.Clear">
+            <summary>
+            清空实体记录
+            </summary>
+        </member>
+        <member name="P:Tatan.Data.IDataEntity.Item(System.String)">
+            <summary>
+            通过name来获取或者设置value
+            </summary>
+            <param name="name">实体名</param>
+            <returns>数据值</returns>
+        </member>
+        <member name="M:Tatan.Data.DataEntity.#ctor(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="id"></param>
+        </member>
+        <member name="M:Tatan.Data.DataEntity.Finalize">
+            <summary>
+            析构
+            </summary>
+        </member>
+        <member name="M:Tatan.Data.DataEntity.Clear">
+            <summary>
+            清理实体值
+            </summary>
+        </member>
+        <member name="M:Tatan.Data.DataEntity.Clone">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Tatan.Data.DataEntity.Copy">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Tatan.Data.DataEntity.Properties">
+            <summary>
+            获取实体的属性
+            </summary>
+        </member>
+        <member name="P:Tatan.Data.DataEntity.Item(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="name"></param>
+        </member>
+        <member name="P:Tatan.Data.DataEntity.Id">
+            <summary>
+            一个自动生成的唯一标识符
+            </summary>
+        </member>
+        <member name="E:Tatan.Data.DataEntity.PropertyChanged">
+            <summary>
+            属性改变时的行为
+            </summary>
+        </member>
+        <member name="T:Tatan.Data.DataSource">
+            <summary>
+            数据源
+            </summary>
+        </member>
+        <member name="T:Tatan.Data.IDataSource">
+            <summary>
+            数据源
+            </summary>
+        </member>
+        <member name="M:Tatan.Data.IDataSource.UseSession``1(System.String,System.Func{Tatan.Data.IDataSession,``0})">
+            <summary>
+            使用库的session
+            </summary>
+            <param name="identity">session标识符</param>
+            <param name="function"></param>
+            <returns>想要的结果</returns>
+        </member>
+        <member name="P:Tatan.Data.IDataSource.Provider">
+            <summary>
+            数据提供者
+            </summary>
+        </member>
+        <member name="P:Tatan.Data.IDataSource.Tables">
+            <summary>
+            获取表集合
+            </summary>
+        </member>
+        <member name="M:Tatan.Data.DataSource.Connect(System.String,System.String)">
+            <summary>
+            连接一个数据源对象
+            </summary>
+            <param name="providerName"></param>
+            <param name="connectionString"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Tatan.Data.DataSource.Finalize">
+            <summary>
+            析构
+            </summary>
+        </member>
+        <member name="M:Tatan.Data.DataSource.UseSession``1(System.String,System.Func{Tatan.Data.IDataSession,``0})">
+            <summary>
+            使用数据会话对象
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="identity"></param>
+            <param name="function"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Tatan.Data.DataSource.Provider">
+            <summary>
+            获取数据供应者
+            </summary>
+        </member>
+        <member name="P:Tatan.Data.DataSource.Tables">
+            <summary>
+            获取数据表集合
+            </summary>
+        </member>
+        <member name="T:Tatan.Data.DataSort">
+            <summary>
+            通用数据排序
+            </summary>
+        </member>
+        <member name="F:Tatan.Data.DataSort.Ascending">
+            <summary>
+            升序
+            </summary>
+        </member>
+        <member name="F:Tatan.Data.DataSort.Descending">
+            <summary>
+            降序
+            </summary>
+        </member>
+        <member name="T:Tatan.Data.IDataProvider">
+            <summary>
+            数据提供者
+            </summary>
+        </member>
+        <member name="P:Tatan.Data.IDataProvider.Name">
+            <summary>
+            供应者名称
+            </summary>
+        </member>
+        <member name="P:Tatan.Data.IDataProvider.ParameterSymbol">
+            <summary>
+            参数符号
+            </summary>
+        </member>
+        <member name="P:Tatan.Data.IDataProvider.StringSplicingSymbol">
+            <summary>
+            字符串连接符号
+            </summary>
+        </member>
+        <member name="P:Tatan.Data.IDataProvider.FuzzyMatchingSymbol">
+            <summary>
+            模糊匹配符号
+            </summary>
+        </member>
+        <member name="T:Tatan.Data.IDataTable">
+            <summary>
+            数据表
+            </summary>
+        </member>
+        <member name="M:Tatan.Data.IDataTable.Insert``1(``0)">
+            <summary>
+            添加一个属于此表的实体
+            <para>使用此方法还需要使用Add方法才可以将元素加入到集合中</para>
+            </summary>
+            <param name="entity">数据实体</param>
+            <returns>数据项</returns>
+        </member>
+        <member name="M:Tatan.Data.IDataTable.Delete``1(``0)">
+            <summary>
+            移除一个实体
+            </summary>
+            <param name="entity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Tatan.Data.IDataTable.Delete``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
+            <summary>
+            根据模式表达式，移除指定的记录
+            </summary>
+            <param name="condition">表达式</param>
+            <returns>删除条数</returns>
+        </member>
+        <member name="M:Tatan.Data.IDataTable.Update``1(``0)">
+            <summary>
+            更新一条记录
+            </summary>
+            <param name="entity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Tatan.Data.IDataTable.Update``1(System.Collections.Generic.IDictionary{System.String,System.Object},System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
+            <summary>
+            根据模式表达式，更新指定的记录
+            </summary>
+            <param name="sets"></param>
+            <param name="condition"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Tatan.Data.IDataTable.Count">
+            <summary>
+            获取此表的记录数
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Tatan.Data.IDataTable.Count``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
+            <summary>
+            获取此表的记录数
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Tatan.Data.IDataTable.NewEntity``1(System.Int32)">
+            <summary>
+            构建一个新实体
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Tatan.Data.IDataTable.Name">
+            <summary>
+            获取表名
+            </summary>
+        </member>
+        <member name="P:Tatan.Data.IDataTable.DataSource">
+            <summary>
+            获取数据源
+            </summary>
+        </member>
+        <member name="T:Tatan.Data.DataRecord">
+            <summary>
+            数据记录
+            </summary>
+        </member>
+        <member name="T:Tatan.Data.IDataRecord">
+            <summary>
+            数据记录
+            </summary>
+        </member>
+        <member name="P:Tatan.Data.IDataRecord.Count">
+            <summary>
+            获取数据记录中的数据个数
+            </summary>
+        </member>
+        <member name="P:Tatan.Data.IDataRecord.Item(System.String)">
+            <summary>
+            通过name来获取或者设置value
+            </summary>
+            <param name="name">数据名</param>
+            <returns>数据值</returns>
+        </member>
+        <member name="P:Tatan.Data.IDataRecord.Item(System.Int32)">
+            <summary>
+            通过索引来获取或者设置value
+            </summary>
+            <param name="index">数据索引</param>
+            <returns>数据值</returns>
+        </member>
+        <member name="T:Tatan.Data.IDataSession">
+            <summary>
+            数据会话接口
+            </summary>
+        </member>
+        <member name="M:Tatan.Data.IDataSession.GetData(System.String,System.Action{Tatan.Data.IDataParameters})">
+            <summary>
+            获取一个数据集
+            </summary>
+            <param name="request">请求串，向数据源请求数据，例如SQL、存储过程等</param>
+            <param name="action">参数设置行为</param>
+            <returns>数据集</returns>
+        </member>
+        <member name="M:Tatan.Data.IDataSession.GetDataAsync(System.String,System.Action{Tatan.Data.IDataParameters})">
+            <summary>
+            获取一个数据集（异步版本）
+            </summary>
+            <param name="request">请求串，向数据源请求数据，例如SQL、存储过程等</param>
+            <param name="action">参数设置行为</param>
+            <returns>数据集</returns>
+        </member>
+        <member name="M:Tatan.Data.IDataSession.GetEntities``1(System.String,System.Action{Tatan.Data.IDataParameters},System.Int32,System.Int32)">
+            <summary>
+            获取一个数据实体集
+            <para>泛型必须继承至实体接口</para>
+            <para>泛型必须带无参数的构造函数</para>
+            </summary>
+            <param name="request">请求串，向数据源请求数据，例如SQL、存储过程等</param>
+            <param name="action">参数设置行为</param>
+            <param name="begin">起始行</param>
+            <param name="end">停止行</param>
+            <returns>泛型列表</returns>
+        </member>
+        <member name="M:Tatan.Data.IDataSession.GetEntitiesAsync``1(System.String,System.Action{Tatan.Data.IDataParameters},System.Int32,System.Int32)">
+            <summary>
+            获取一个数据实体集（异步版本）
+            <para>泛型必须继承至实体接口</para>
+            <para>泛型必须带无参数的构造函数</para>
+            </summary>
+            <param name="request">请求串，向数据源请求数据，例如SQL、存储过程等</param>
+            <param name="action">参数设置行为</param>
+            <param name="begin">起始行</param>
+            <param name="end">停止行</param>
+            <returns>泛型列表</returns>
+        </member>
+        <member name="M:Tatan.Data.IDataSession.GetScalar``1(System.String,System.Action{Tatan.Data.IDataParameters})">
+            <summary>
+            获取一个数据标量
+            </summary>
+            <param name="request">请求串，向数据源请求数据，例如SQL、存储过程等</param>
+            <param name="action">参数设置行为</param>
+            <returns>唯一标量</returns>
+        </member>
+        <member name="M:Tatan.Data.IDataSession.GetScalarAsync``1(System.String,System.Action{Tatan.Data.IDataParameters})">
+            <summary>
+            获取一个数据标量（异步版本）
+            </summary>
+            <param name="request">请求串，向数据源请求数据，例如SQL、存储过程等</param>
+            <param name="action">参数设置行为</param>
+            <returns>唯一标量</returns>
+        </member>
+        <member name="M:Tatan.Data.IDataSession.Execute(System.String,System.Action{Tatan.Data.IDataParameters})">
+            <summary>
+            执行命令
+            </summary>
+            <param name="command">命令，可以是SQL语句，也可以是存储过程名</param>
+            <param name="action"></param>
+            <returns>返回操作行数</returns>
+        </member>
+        <member name="M:Tatan.Data.IDataSession.ExecuteAsync(System.String,System.Action{Tatan.Data.IDataParameters})">
+            <summary>
+            执行命令（异步版本）
+            </summary>
+            <param name="command">命令，可以是SQL语句，也可以是存储过程名</param>
+            <param name="action"></param>
+            <returns>返回操作行数</returns>
+        </member>
+        <member name="M:Tatan.Data.IDataSession.BeginTransaction(System.Data.IsolationLevel)">
+            <summary>
+            开始事务处理，NOSQL待定
+            </summary>
+            <param name="lockLevel">事务锁定级别，默认与当前数据库的默认值一致</param>
+            <returns>事务处理接口</returns>
+        </member>
+        <member name="T:Tatan.Data.DataType">
+            <summary>
+            通用数据类型
+            </summary>
+        </member>
+        <member name="F:Tatan.Data.DataType.String">
+            <summary>
+            字符串
+            </summary>
+        </member>
+        <member name="F:Tatan.Data.DataType.Integer">
+            <summary>
+            整数
+            </summary>
+        </member>
+        <member name="F:Tatan.Data.DataType.Number">
+            <summary>
+            数字
+            </summary>
+        </member>
+        <member name="F:Tatan.Data.DataType.Boolean">
+            <summary>
+            布尔
+            </summary>
+        </member>
+        <member name="F:Tatan.Data.DataType.Date">
+            <summary>
+            日期和时间
+            </summary>
+        </member>
+        <member name="F:Tatan.Data.DataType.Binary">
+            <summary>
+            二进制
+            </summary>
+        </member>
+        <member name="F:Tatan.Data.DataType.Object">
+            <summary>
+            任意对象
+            </summary>
+        </member>
+        <member name="T:Tatan.Data.DataDocument">
+            <summary>
+            数据文档
+            </summary>
+        </member>
+        <member name="T:Tatan.Data.IDataDocument">
+            <summary>
+            数据文档
+            </summary>
+        </member>
+        <member name="P:Tatan.Data.IDataDocument.Count">
+            <summary>
+            获取数据集中的项目个数
+            </summary>
+        </member>
+        <member name="P:Tatan.Data.IDataDocument.Item(System.String)">
+            <summary>
+            根据唯一标识符获取内部文档
+            </summary>
+            <param name="identity">唯一标识符</param>
+            <returns>数据文档</returns>
+        </member>
+        <member name="P:Tatan.Data.IDataDocument.Item(System.Int32)">
+            <summary>
+            根据索引获取内部文档
+            </summary>
+            <param name="index">索引</param>
+            <returns>数据文档</returns>
+        </member>
+        <member name="T:Tatan.Data.DataSession">
+            <summary>
+            数据库抽象会话类，处理一些通用的会话操作
+            </summary>
+        </member>
+        <member name="T:Tatan.Data.IDataParameters">
+            <summary>
+            参数集操作接口
+            </summary>
+        </member>
+        <member name="M:Tatan.Data.IDataParameters.Clear">
+            <summary>
+            清空参数集
+            </summary>
+        </member>
+        <member name="P:Tatan.Data.IDataParameters.Count">
+            <summary>
+            获取参数个数
+            </summary>
+        </member>
+        <member name="P:Tatan.Data.IDataParameters.Item(System.Int32,Tatan.Data.DataType,System.Int32)">
+            <summary>
+            设置一个非数字型参数
+            </summary>
+            <param name="index">参数索引</param>
+            <param name="type">参数类型</param>
+            <param name="size">参数大小</param>
+            <exception cref="T:System.IndexOutOfRangeException">当索引超出范围时抛出</exception>
+            <returns>参数值</returns>
+        </member>
+        <member name="P:Tatan.Data.IDataParameters.Item(System.Int32,System.Byte,System.Byte)">
+            <summary>
+            设置一个数字型参数
+            </summary>
+            <param name="index">参数索引</param>
+            <param name="precision">参数精度</param>
+            <param name="scale">参数小数位数</param>
+            <exception cref="T:System.IndexOutOfRangeException">当索引超出范围时抛出</exception>
+            <returns>参数值</returns>
+        </member>
+        <member name="P:Tatan.Data.IDataParameters.Item(System.String,Tatan.Data.DataType,System.Int32)">
+            <summary>
+            设置一个非数字型参数
+            </summary>
+            <param name="name">参数名</param>
+            <param name="type">参数类型</param>
+            <param name="size">参数大小</param>
+            <exception cref="T:System.ArgumentNullException">当参数名为空时抛出</exception>
+            <returns>参数值</returns>
+        </member>
+        <member name="P:Tatan.Data.IDataParameters.Item(System.String,System.Byte,System.Byte)">
+            <summary>
+            设置一个数字型参数
+            </summary>
+            <param name="name">参数名</param>
+            <param name="precision">参数精度</param>
+            <param name="scale">参数小数位数</param>
+            <exception cref="T:System.ArgumentNullException">当参数名为空时抛出</exception>
+            <returns>参数值</returns>
+        </member>
+        <member name="T:Tatan.Data.IDataEntities`1">
+            <summary>
+            实体集合接口
+            </summary>
+            <typeparam name="T">实体类型</typeparam>
+        </member>
+        <member name="P:Tatan.Data.IDataEntities`1.TotalCount">
+            <summary>
+            获取总记录数
+            </summary>
+        </member>
+        <member name="T:Tatan.Data.Relation.Fields">
+            <summary>
+            Fields的实体类，无法继承。此实体保存了表的列信息
+            </summary>
+        </member>
+        <member name="M:Tatan.Data.Relation.Fields.#ctor(System.Int32)">
+            <summary>
+            构造函数
+            </summary>
+            <param name="id">唯一标识符</param>
+        </member>
+        <member name="M:Tatan.Data.Relation.Fields.Clear">
+            <summary>
+            清理属性
+            </summary>
+        </member>
+        <member name="P:Tatan.Data.Relation.Fields.Properties">
+            <summary>
+            获取属性集合
+            </summary>
+        </member>
+        <member name="P:Tatan.Data.Relation.Fields.Name">
+            <summary>
+            字段名
+            </summary>
+        </member>
+        <member name="P:Tatan.Data.Relation.Fields.Title">
+            <summary>
+            字段显示名
+            </summary>
+        </member>
+        <member name="P:Tatan.Data.Relation.Fields.Type">
+            <summary>
+            字段类型
+            </summary>
+        </member>
+        <member name="P:Tatan.Data.Relation.Fields.Size">
+            <summary>
+            字段长度/精度
+            </summary>
+        </member>
+        <member name="P:Tatan.Data.Relation.Fields.Scale">
+            <summary>
+            字段小数位数
+            </summary>
+        </member>
+        <member name="P:Tatan.Data.Relation.Fields.DefaultValue">
+            <summary>
+            字段默认值
+            </summary>
+        </member>
+        <member name="P:Tatan.Data.Relation.Fields.TableName">
+            <summary>
+            字段表名
+            </summary>
+        </member>
+        <member name="P:Tatan.Data.Relation.Fields.OrderId">
+            <summary>
+            字段排序编号
+            </summary>
+        </member>
+        <member name="T:Tatan.Data.Relation.IGenerator">
+            <summary>
+            生成器接口
+            </summary>
+        </member>
+        <member name="M:Tatan.Data.Relation.IGenerator.Execute(System.String,System.String)">
+            <summary>
+            执行生成操作
+            </summary>
+            <param name="inputFile">输入路径，通常是模板文件</param>
+            <param name="outputFolder">输出路径，通常是输出目录</param>
+            <exception cref="T:System.Exception">执行可能抛出异常</exception>
+        </member>
+        <member name="T:Tatan.Data.Relation.EntityGenerator">
+            <summary>
+            实体生成器
+            </summary>
+        </member>
+        <member name="M:Tatan.Data.Relation.EntityGenerator.#ctor(System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            
+            </summary>
+            <param name="data"></param>
+        </member>
+        <member name="M:Tatan.Data.Relation.EntityGenerator.Execute(System.String,System.String)">
+            <summary>
+            执行生成操作
+            </summary>
+            <param name="inputFile"></param>
+            <param name="outputFolder"></param>
+        </member>
+        <member name="T:Tatan.Data.Relation.Tables">
+            <summary>
+            Tables的实体类，无法继承。此实体保存了表的信息
+            </summary>
+        </member>
+        <member name="M:Tatan.Data.Relation.Tables.#ctor(System.Int32)">
+            <summary>
+            构造函数
+            </summary>
+            <param name="id">唯一标识符</param>
+        </member>
+        <member name="M:Tatan.Data.Relation.Tables.Clear">
+            <summary>
+            清理属性
+            </summary>
+        </member>
+        <member name="P:Tatan.Data.Relation.Tables.Properties">
+            <summary>
+            获取属性集合
+            </summary>
+        </member>
+        <member name="P:Tatan.Data.Relation.Tables.Name">
+            <summary>
+            表名
+            </summary>
+        </member>
+        <member name="P:Tatan.Data.Relation.Tables.Title">
+            <summary>
+            表显示名
+            </summary>
+        </member>
+        <member name="P:Tatan.Data.Relation.Tables.Remark">
+            <summary>
+            表备注
+            </summary>
+        </member>
+        <member name="T:Tatan.Entities.Table1">
+            <summary>
+            Table1的实体类，无法继承
+            </summary>
+        </member>
+        <member name="M:Tatan.Entities.Table1.#ctor(System.Int32)">
+            <summary>
+            构造函数
+            </summary>
+            <param name="id">唯一标识符</param>
+        </member>
+        <member name="M:Tatan.Entities.Table1.Clear">
+            <summary>
+            清理属性
+            </summary>
+        </member>
+        <member name="P:Tatan.Entities.Table1.Properties">
+            <summary>
+            获取属性集合
+            </summary>
+        </member>
+        <member name="P:Tatan.Entities.Table1.Column1">
+            <summary>
+            列1
+            </summary>
+        </member>
+        <member name="P:Tatan.Entities.Table1.Column2">
+            <summary>
+            列2
+            </summary>
+        </member>
+        <member name="P:Tatan.Entities.Table1.Column3">
+            <summary>
+            列3
+            </summary>
+        </member>
+        <member name="P:Tatan.Entities.Table1.Column4">
+            <summary>
+            列4
+            </summary>
+        </member>
+        <member name="P:Tatan.Entities.Table1.Column5">
+            <summary>
+            列5
+            </summary>
+        </member>
+        <member name="P:Tatan.Entities.Table1.Column6">
+            <summary>
+            列6
+            </summary>
+        </member>
+    </members>
+</doc>

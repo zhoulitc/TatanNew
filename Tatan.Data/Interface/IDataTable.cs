@@ -1,0 +1,92 @@
+﻿// ReSharper disable once CheckNamespace
+namespace Tatan.Data
+{
+    using System;
+    using System.Collections.Generic;
+    using System.Linq.Expressions;
+
+    /// <summary>
+    /// 数据表
+    /// </summary>
+    public interface IDataTable
+    {
+        /// <summary>
+        /// 获取表名
+        /// </summary>
+        string Name { get; }
+
+        /// <summary>
+        /// 获取数据源
+        /// </summary>
+        IDataSource DataSource { get; }
+
+        /// <summary>
+        /// 添加一个属于此表的实体
+        /// <para>使用此方法还需要使用Add方法才可以将元素加入到集合中</para>
+        /// </summary>
+        /// <param name="entity">数据实体</param>
+        /// <exception cref="System.ArgumentNullException">参数为空时抛出</exception>
+        /// <returns>数据项</returns>
+        bool Insert<T>(T entity) 
+            where T : class, IDataEntity;
+
+        /// <summary>
+        /// 移除一个实体
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <exception cref="System.ArgumentNullException">参数为空时抛出</exception>
+        /// <returns></returns>
+        bool Delete<T>(T entity) 
+            where T : class, IDataEntity;
+
+        /// <summary>
+        /// 根据模式表达式，移除指定的记录
+        /// </summary>
+        /// <param name="condition">表达式</param>
+        /// <exception cref="System.ArgumentNullException">参数为空时抛出</exception>
+        /// <returns>删除条数</returns>
+        int Delete<T>(Expression<Func<T, bool>> condition)
+            where T : class, IDataEntity;
+
+        /// <summary>
+        /// 更新一条记录
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <exception cref="System.ArgumentNullException">参数为空时抛出</exception>
+        /// <returns></returns>
+        bool Update<T>(T entity) 
+            where T : class, IDataEntity;
+
+        /// <summary>
+        /// 根据模式表达式，更新指定的记录
+        /// </summary>
+        /// <param name="sets"></param>
+        /// <param name="condition"></param>
+        /// <exception cref="System.ArgumentNullException">参数为空时抛出</exception>
+        /// <returns></returns>
+        int Update<T>(IDictionary<string, object> sets, Expression<Func<T, bool>> condition) 
+            where T : class, IDataEntity;
+
+        /// <summary>
+        /// 获取此表的记录数
+        /// </summary>
+        /// <returns></returns>
+        int Count();
+
+        /// <summary>
+        /// 获取此表的记录数
+        /// </summary>
+        /// <exception cref="System.ArgumentNullException">参数为空时抛出</exception>
+        /// <returns></returns>
+        int Count<T>(Expression<Func<T, bool>> condition)
+            where T : class, IDataEntity;
+
+        /// <summary>
+        /// 构建一个新实体
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        T NewEntity<T>(int id)
+            where T : class, IDataEntity;
+    }
+}

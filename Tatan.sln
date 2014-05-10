@@ -1,0 +1,62 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tatan", "Tatan", "{FB7B21F9-2F74-497C-99AE-0795C15746E1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tatan.Test", "Tatan.Test", "{E36DC19E-F355-4E7D-A25F-B6A9DB1D9FA4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tatan.Common", "Tatan.Common\Tatan.Common.csproj", "{BDBC7A1B-C33F-4D6F-8FFE-BE6FC1B929CA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tatan.Data", "Tatan.Data\Tatan.Data.csproj", "{2A8B5777-0055-4215-B04A-CE73C091269C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tatan.Common.UnitTest", "Tatan.Common.UnitTest\Tatan.Common.UnitTest.csproj", "{46FFB02A-9744-47A0-9E34-E8FB3D407B4D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tatan.Data.UnitTest", "Tatan.Data.UnitTest\Tatan.Data.UnitTest.csproj", "{3A776CA8-BFF0-40AA-B60C-67B47F9C3F7A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tatan.Web", "Tatan.Web\Tatan.Web.csproj", "{F1DC7453-2734-4DD9-9E1B-AFAE60D3271D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tatan.Permission", "Tatan.Permission\Tatan.Permission.csproj", "{138D3393-AA0D-4D92-A76C-F2D48CAE17BC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BDBC7A1B-C33F-4D6F-8FFE-BE6FC1B929CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDBC7A1B-C33F-4D6F-8FFE-BE6FC1B929CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDBC7A1B-C33F-4D6F-8FFE-BE6FC1B929CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDBC7A1B-C33F-4D6F-8FFE-BE6FC1B929CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A8B5777-0055-4215-B04A-CE73C091269C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A8B5777-0055-4215-B04A-CE73C091269C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A8B5777-0055-4215-B04A-CE73C091269C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A8B5777-0055-4215-B04A-CE73C091269C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46FFB02A-9744-47A0-9E34-E8FB3D407B4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46FFB02A-9744-47A0-9E34-E8FB3D407B4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46FFB02A-9744-47A0-9E34-E8FB3D407B4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46FFB02A-9744-47A0-9E34-E8FB3D407B4D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A776CA8-BFF0-40AA-B60C-67B47F9C3F7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A776CA8-BFF0-40AA-B60C-67B47F9C3F7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A776CA8-BFF0-40AA-B60C-67B47F9C3F7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A776CA8-BFF0-40AA-B60C-67B47F9C3F7A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1DC7453-2734-4DD9-9E1B-AFAE60D3271D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1DC7453-2734-4DD9-9E1B-AFAE60D3271D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1DC7453-2734-4DD9-9E1B-AFAE60D3271D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1DC7453-2734-4DD9-9E1B-AFAE60D3271D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{138D3393-AA0D-4D92-A76C-F2D48CAE17BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{138D3393-AA0D-4D92-A76C-F2D48CAE17BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{138D3393-AA0D-4D92-A76C-F2D48CAE17BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{138D3393-AA0D-4D92-A76C-F2D48CAE17BC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BDBC7A1B-C33F-4D6F-8FFE-BE6FC1B929CA} = {FB7B21F9-2F74-497C-99AE-0795C15746E1}
+		{2A8B5777-0055-4215-B04A-CE73C091269C} = {FB7B21F9-2F74-497C-99AE-0795C15746E1}
+		{F1DC7453-2734-4DD9-9E1B-AFAE60D3271D} = {FB7B21F9-2F74-497C-99AE-0795C15746E1}
+		{138D3393-AA0D-4D92-A76C-F2D48CAE17BC} = {FB7B21F9-2F74-497C-99AE-0795C15746E1}
+		{46FFB02A-9744-47A0-9E34-E8FB3D407B4D} = {E36DC19E-F355-4E7D-A25F-B6A9DB1D9FA4}
+		{3A776CA8-BFF0-40AA-B60C-67B47F9C3F7A} = {E36DC19E-F355-4E7D-A25F-B6A9DB1D9FA4}
+	EndGlobalSection
+EndGlobal

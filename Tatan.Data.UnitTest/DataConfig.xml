@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DataConfig>
+  <!-- 下面是不同数据库的DBProvider值 -->
+  <!-- SqlServer : System.Data.SqlClient -->
+  <!-- Access : System.Data.OleDb -->
+  <!-- MySql : MySql.Data.MySqlClient -->
+  <!-- Oracle : System.Data.OracleClient -->
+  
+  <!-- 以下暂时不实现 -->
+  <!-- Db2 : IBM.Data.DB2 -->
+  <!-- Informix : IBM.Data.Informix -->
+  <!-- PostgreSQL : Npgsql -->
+  <!-- SQLite : System.Data.SQLite -->
+  <!-- Sybase : Sybase.Data.AseClient -->
+  <Provider>System.Data.SqlClient</Provider>
+  <ConnectionString>"AF986D72783D743BF2A5190F559CD90C4E5CBCFFE2222C7AB8327791F3834F3BB5E7F0F88F4C2043C59E818954C2FB9AC3FF0ABEC09FFE4B72EFBE713AD846E1625166A3D45D94A6C4296C5FC8B2BE24381E554459DC95CD9CC354E9A1FA2E82E1F018609CBB7B69</ConnectionString>
+
+  <!-- 分页存储过程的信息，如果采用存储过程进行分页的话 -->
+  <DbPager Name="SP_CommonPager(?,?,?,?)" />
+</DataConfig>

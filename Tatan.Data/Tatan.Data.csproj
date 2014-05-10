@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{2A8B5777-0055-4215-B04A-CE73C091269C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Tatan.Data</RootNamespace>
+    <AssemblyName>Tatan.Data</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <DocumentationFile>..\bin\Tatan.Data.XML</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <DocumentationFile>..\bin\Release\Tatan.Data.XML</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ObjectQuery\Enum\Aggregate.cs" />
+    <Compile Include="ObjectQuery\Expression\CaseWhenExpression.cs" />
+    <Compile Include="ObjectQuery\Expression\FunctionExpression.cs" />
+    <Compile Include="ObjectQuery\Interface\IExpression.cs" />
+    <Compile Include="ObjectQuery\Interface\IFrom.cs" />
+    <Compile Include="ObjectQuery\Interface\IOQL.cs" />
+    <Compile Include="ObjectQuery\Interface\ISelect.cs" />
+    <Compile Include="ObjectQuery\Interface\IWhere.cs" />
+    <Compile Include="ObjectQuery\Enum\Join.cs" />
+    <Compile Include="ObjectQuery\ObjectQuerier.cs" />
+    <Compile Include="ObjectQuery\Enum\SetMerge.cs" />
+    <Compile Include="ObjectQuery\Expression\WhereExpression.cs" />
+    <Compile Include="Collection\DataTableCollection.cs" />
+    <Compile Include="DataEntity.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DataSource.cs" />
+    <Compile Include="Enum\DataSort.cs" />
+    <Compile Include="Interface\IDataProvider.cs" />
+    <Compile Include="Internal\DataProvider.cs" />
+    <Compile Include="Internal\DataTable.cs" />
+    <Compile Include="Internal\ReadOnly\DataRecord.cs" />
+    <Compile Include="Interface\IDataSession.cs" />
+    <Compile Include="Interface\IDataSource.cs" />
+    <Compile Include="Interface\ReadOnly\IDataRecord.cs" />
+    <Compile Include="Enum\DataType.cs" />
+    <Compile Include="Internal\ReadOnly\DataDocument.cs" />
+    <Compile Include="Internal\DataSession.cs" />
+    <Compile Include="Interface\ReadOnly\IDataDocument.cs" />
+    <Compile Include="Interface\IDataTable.cs" />
+    <Compile Include="Interface\IDataEntities.cs" />
+    <Compile Include="Interface\IDataParameters.cs" />
+    <Compile Include="Interface\IDataEntity.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Relation\Fields.cs" />
+    <Compile Include="Relation\IGenerator.cs" />
+    <Compile Include="Relation\EntityGenerator.cs" />
+    <Compile Include="Relation\Tables.cs" />
+    <Compile Include="Relation\TablesPartial.cs" />
+    <Compile Include="Relation\Collections\FieldsCollection.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Template\Entity.template">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Tatan.Common\Tatan.Common.csproj">
+      <Project>{bdbc7a1b-c33f-4d6f-8ffe-be6fc1b929ca}</Project>
+      <Name>Tatan.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
