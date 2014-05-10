@@ -8,7 +8,7 @@
     /// </summary>
     public static class Date
     {
-        private const string _format = "yyyyMMddhhmmss"; 
+        private const string _format = "yyyyMMddhhmmss";
 
         /// <summary>
         /// 获取当前时间串

@@ -5,7 +5,7 @@
     using Common.Exception;
 
     /// <summary>
-    /// 网络操作类
+    ///Http操作类
     /// </summary>
     public static class Http
     {
