@@ -8,14 +8,14 @@
     /// 用户登录信息
     /// </summary>
     [Serializable]
-    public partial class UserLoginInfo : DataEntity
+    public partial class UserLogin : DataEntity
     {
         #region 构造函数
         /// <summary>
         /// 构造函数
         /// </summary>
         /// <param name="id">唯一标识符</param>
-        public UserLoginInfo(int id)
+        public UserLogin(int id)
             : base(id)
         {
         }
@@ -25,9 +25,9 @@
         [NonSerialized]
         private static readonly PropertyCollection _perproties;
 
-        static UserLoginInfo()
+        static UserLogin()
         {
-            _perproties = new PropertyCollection(typeof(UserLoginInfo),
+            _perproties = new PropertyCollection(typeof(UserLogin),
                 "Name", "Password", "RegisterTime", "Count", "LastLoginTime", "LastLogoutTime", "LastLoginIp"
             );
         }

@@ -8,14 +8,14 @@
     /// 用户联系信息
     /// </summary>
     [Serializable]
-    public partial class UserContactInfo : DataEntity
+    public partial class UserContact : DataEntity
     {
         #region 构造函数
         /// <summary>
         /// 构造函数
         /// </summary>
         /// <param name="id">唯一标识符</param>
-        public UserContactInfo(int id)
+        public UserContact(int id)
             : base(id)
         {
         }
@@ -25,9 +25,9 @@
         [NonSerialized]
         private static readonly PropertyCollection _perproties;
 
-        static UserContactInfo()
+        static UserContact()
         {
-            _perproties = new PropertyCollection(typeof(UserContactInfo),
+            _perproties = new PropertyCollection(typeof(UserContact),
                 "Email", "Phone", "Address"
             );
         }

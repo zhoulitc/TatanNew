@@ -15,12 +15,12 @@
         /// <summary>
         /// 用户登录信息
         /// </summary>
-        public UserLoginInfo Login { get; set; }
+        public UserLogin Login { get; set; }
 
         /// <summary>
         /// 用户联系信息
         /// </summary>
-        public UserContactInfo Contact { get; set; }
+        public UserContact Contact { get; set; }
 
         /// <summary>
         /// 用户包含的组关联集合
