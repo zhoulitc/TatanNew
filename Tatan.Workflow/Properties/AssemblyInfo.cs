@@ -4,11 +4,11 @@ using System.Runtime.InteropServices;
 // 有关程序集的常规信息通过以下
 // 特性集控制。更改这些特性值可修改
 // 与程序集关联的信息。
-[assembly: AssemblyTitle("Tatan.Web")]
+[assembly: AssemblyTitle("Tatan.Workflow")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Tatan.Web")]
+[assembly: AssemblyProduct("Tatan.Workflow")]
 [assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -19,7 +19,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // 如果此项目向 COM 公开，则下列 GUID 用于类型库的 ID
-[assembly: Guid("64eb4ab3-9afa-4485-984a-4440e7f66a54")]
+[assembly: Guid("ac7fece4-8715-4ca2-9e78-1da04d5eea61")]
 
 // 程序集的版本信息由下面四个值组成:
 //

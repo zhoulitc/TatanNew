@@ -1,5 +1,6 @@
 ﻿namespace Tatan.Permission.Entities
 {
+    using System;
     using Collections;
 
     /// <summary>
@@ -7,8 +8,13 @@
     /// </summary>
     public partial class Role
     {
+        [NonSerialized]
         private GroupRelationCollection _groups;
+
+        [NonSerialized]
         private UserRelationCollection _users;
+
+        [NonSerialized]
         private PermissionRelationCollection _permissions;
 
         /// <summary>
