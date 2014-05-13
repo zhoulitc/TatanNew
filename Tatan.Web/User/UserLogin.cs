@@ -1,8 +1,9 @@
-﻿namespace Tatan.Permission.UserExtension
+﻿namespace Tatan.Web.User
 {
     using System;
     using Common.Collections;
     using Data;
+
 
     /// <summary>
     /// 用户登录信息

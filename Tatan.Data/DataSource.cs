@@ -95,8 +95,12 @@ namespace Tatan.Data
         public T UseSession<T>(string identity, Func<IDataSession, T> function)
         {
             ExceptionHandler.ArgumentNull("function", function);
-            if (string.IsNullOrEmpty(identity) || identity.Length > 128 || !Sessions.ContainsKey(identity))
+            if (string.IsNullOrEmpty(identity) || identity.Length > 128)
                 return function(_session);
+            if (!Sessions.ContainsKey(identity))
+            {
+                Sessions.Add(identity, new DataSession(this, identity, _dataProvider.Name, _dataProvider.Connection));
+            }
             using (IDataSession session = Sessions[identity])
             {
                 return function(session);

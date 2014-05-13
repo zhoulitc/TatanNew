@@ -67,6 +67,21 @@
         /// </summary>
         public string Name { get; set; }
 
+        /// <summary>
+        /// 邮箱
+        /// </summary>
+        public string Email { get; set; }
+
+        /// <summary>
+        /// 电话
+        /// </summary>
+        public string Phone { get; set; }
+
+        /// <summary>
+        /// 地址
+        /// </summary>
+        public string Address { get; set; }
+
         #endregion
     }
 }

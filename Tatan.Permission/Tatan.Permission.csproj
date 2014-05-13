@@ -61,8 +61,6 @@
     <Compile Include="Entities\Relation\UserGroup.cs" />
     <Compile Include="Entities\Relation\UserPermission.cs" />
     <Compile Include="Entities\Relation\UserRole.cs" />
-    <Compile Include="UserExtension\UserLoginInfo.cs" />
-    <Compile Include="UserExtension\UserContact.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Tatan.Common\Tatan.Common.csproj">
