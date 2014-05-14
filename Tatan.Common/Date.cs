@@ -14,23 +14,21 @@
         /// 获取当前时间串
         /// </summary>
         /// <exception cref="System.ArgumentOutOfRangeException">当前区域时间超出范围时</exception>
-        public static string Now
+        public static string Now(string format = null)
         {
-            get 
-            {
-                return ToString(DateTime.Now);
-            }
+            return ToString(DateTime.Now, format);
         }
 
         /// <summary>
         /// 获取指定时间串(String)
         /// </summary>
         /// <param name="dt">时间</param>
+        /// <param name="format">格式</param>
         /// <exception cref="System.ArgumentOutOfRangeException">当前区域时间超出范围时</exception>
         /// <returns>时间串</returns>
-        public static string ToString(DateTime dt)
+        public static string ToString(DateTime dt, string format = null)
         {
-            return dt.ToString(_format);
+            return dt.ToString(format ?? _format);
         }
 
         /// <summary>

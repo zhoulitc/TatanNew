@@ -8,6 +8,7 @@ namespace Tatan.Data
     using System.Data.Common;
     using System.Threading.Tasks;
     using Common.Exception;
+    using Common.Logging;
 
     /// <summary>
     /// 数据库抽象会话类，处理一些通用的会话操作
@@ -356,6 +357,7 @@ namespace Tatan.Data
             }
             catch (Exception ex)
             {
+                Log.Default.Error(typeof(DataSession), ex.Message, ex);
                 _command.Cancel();
                 ExceptionHandler.DatabaseError(ex);
             }
@@ -385,6 +387,7 @@ namespace Tatan.Data
             }
             catch (Exception ex)
             {
+                Log.Default.Error(typeof(DataSession), ex.Message, ex);
                 _command.Cancel();
                 ExceptionHandler.DatabaseError(ex);
             }

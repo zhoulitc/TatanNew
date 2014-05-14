@@ -1,5 +1,6 @@
 ﻿namespace Tatan.Common.Extension.String.Convert
 {
+    using Logging;
     using System;
     using System.Text;
 
@@ -270,8 +271,9 @@
             {
                 ret = (encoding ?? Encoding.Default).GetBytes(value);
             }
-            catch
+            catch (EncoderFallbackException ex)
             {
+                Log.Default.Warn(typeof(Convert), ex.Message, ex);
                 ret = new byte[0];
             }
             return ret;
@@ -303,8 +305,9 @@
                 //可能转换失败
                 ret = (T) mi.Invoke(Activator.CreateInstance(type), new object[] {value});
             }
-            catch
+            catch (Exception ex)
             {
+                Log.Default.Warn(typeof(Convert), ex.Message, ex);
             }
             return ret;
         }

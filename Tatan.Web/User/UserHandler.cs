@@ -5,6 +5,7 @@
     using Common.Cryptography;
     using Common.Exception;
     using Common.Extension.String.Convert;
+    using Common.Logging;
     using Data;
 
     /// <summary>
@@ -72,7 +73,7 @@
                         Source.Provider.ParameterSymbol), p =>
                     {
                         p["Id"] = id;
-                        p["LastLoginTime", DataType.Date] = Date.Now;
+                        p["LastLoginTime", DataType.Date] = Date.Now();
                         p["LastLoginIP"] = _GetIp();
 
                     }) == 1;
@@ -108,7 +109,7 @@
                             Source.Provider.ParameterSymbol), p =>
                             {
                                 p["Id"] = user.Id;
-                                p["LastLogoutTime", DataType.Date] = Date.Now;
+                                p["LastLogoutTime", DataType.Date] = Date.Now();
                             }) == 1))
                 {
                     Http.Cache[guid] = null;
@@ -118,8 +119,9 @@
                     return true;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Log.Default.Error(typeof(UserHandler), ex.Message, ex);
             }
             return false;
         }
@@ -210,8 +212,9 @@
 
                 return string.Compare(ip, "unknown", true) == 0 ? Http.Request.UserHostAddress : ip;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Log.Default.Warn(typeof(UserHandler), ex.Message, ex);
                 return string.Empty;
             }
         }
