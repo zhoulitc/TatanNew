@@ -26,8 +26,8 @@
         {
             if (string.IsNullOrEmpty(directory))
                 throw new ArgumentNullException("directory", _buildError);
-            if (directory[directory.Length - 1] != Path.Separator)
-                directory += directory + Path.Separator;
+            if (directory[directory.Length - 1].ToString() != Runtime.Separator)
+                directory += Runtime.Separator;
             _format = directory + "{0}.xml";
             _informations = new Dictionary<string, IDictionary<string, string>>();
             LoadInformation(CultureInfo.CurrentUICulture.Name.ToLower());
@@ -44,7 +44,7 @@
                 culture = CultureInfo.CurrentUICulture.Name;
             lock (_syncRoot)
             {
-                return LoadInformation(culture);
+                return LoadInformation(culture.ToLower());
             }
         }
 

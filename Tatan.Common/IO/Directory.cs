@@ -30,9 +30,9 @@ namespace Tatan.Common.IO
             ExceptionHandler.ArgumentNull("source", source);
             ExceptionHandler.ArgumentNull("destination", destination);
 
-            if (destination[destination.Length - 1] != Path.Separator)
+            if (destination[destination.Length - 1].ToString() != Runtime.Separator)
             {
-                destination += Path.Separator;
+                destination += Runtime.Separator;
             }
             if (!SystemDirectory.Exists(destination))
             {

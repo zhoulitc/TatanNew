@@ -3,9 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Tatan.Common.UnitTest
 {
-    using Newtonsoft.Json;
-    using Tatan.Common;
-    using Tatan.Common.Serialization;
+    using Common;
 
     [TestClass]
     public class DateTest
@@ -13,7 +11,7 @@ namespace Tatan.Common.UnitTest
         [TestMethod]
         public void DateNowTest()
         {
-            Assert.AreEqual(Date.Now, DateTime.Now.ToString("yyyyMMddhhmmss"));
+            Assert.AreEqual(Date.Now(), DateTime.Now.ToString("yyyyMMddhhmmss"));
         }
 
         [TestMethod]

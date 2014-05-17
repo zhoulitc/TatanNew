@@ -1,10 +1,10 @@
 ﻿namespace Tatan.Common.Configuration
 {
-    using System;
-    using System.IO;
     using System.Text;
     using Serialization;
     using Exception;
+    using IO;
+    using SystemFile = System.IO.File;
 
     /// <summary>
     /// 配置文件工厂
@@ -31,9 +31,9 @@
         public static T GetXmlConfig<T>(string fileName)
         {
             ExceptionHandler.ArgumentNull("fileName", fileName);
-            var path = Environment.CurrentDirectory + "\\" + fileName + ".xml";
+            var path = Runtime.Root + fileName + ".xml";
             ExceptionHandler.FileNotFound(path);
-            var content = File.ReadAllText(path, Encoding.UTF8);
+            var content = SystemFile.ReadAllText(path, Encoding.UTF8);
             return Serializer.Xml.Deserialize<T>(content);
         }
     }

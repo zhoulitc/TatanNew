@@ -1,12 +1,12 @@
 ﻿namespace Tatan.Common.IO
 {
     using System;
-    using SystemPath = System.IO.Path;
+    using System.IO;
 
     /// <summary>
     /// 通用Path操作
     /// </summary>
-    public static class Path
+    public static class Runtime
     {
         #region 运行时根目录
         /// <summary>
@@ -15,22 +15,33 @@
         /// <exception cref="System.AppDomainUnloadedException">应用程序域被卸载时</exception>
         /// <exception cref="System.Security.SecurityException">没有权限时</exception>
         /// <exception cref="System.IO.IOException">发生I/O错误时</exception>
-        public static string GetRootDirectory()
+        public static string Root
         {
-            var path = AppDomain.CurrentDomain.BaseDirectory;
-            if (IsWebProject())
-                path += "bin" + Separator;
-            if (!path.EndsWith(Separator.ToString()))
-                path += Separator;
-            return path;
+            get
+            {
+                var path = AppDomain.CurrentDomain.BaseDirectory;
+                if (IsWebProject())
+                    path += "bin" + Separator;
+                if (!path.EndsWith(Separator))
+                    path += Separator;
+                return path;
+            }
         }
 
         /// <summary>
         /// 获取平台分隔符
         /// </summary>
-        public static char Separator
+        public static string Separator
         {
-            get { return SystemPath.DirectorySeparatorChar; }
+            get { return Path.DirectorySeparatorChar.ToString(); }
+        }
+
+        /// <summary>
+        /// 获取平台换行符
+        /// </summary>
+        public static string NewLine
+        {
+            get { return Environment.NewLine; }
         }
 
         private static bool IsWebProject()

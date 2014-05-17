@@ -1,11 +1,8 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Tatan.Common.UnitTest
 {
-    using Newtonsoft.Json;
-    using Tatan.Common;
-    using Tatan.Common.Serialization;
+    using Common;
 
     [TestClass]
     public class GuidTest

@@ -19,14 +19,12 @@
 
         public string Decrypt(string ciphertext, Encoding encoding = null)
         {
-            ExceptionHandler.NotSupported();
-            return string.Empty;
+            return ExceptionHandler.NotSupported<string>();
         }
 
         public string Decrypt(string ciphertext, string key, Encoding encoding = null)
         {
-            ExceptionHandler.NotSupported();
-            return string.Empty;
+            return ExceptionHandler.NotSupported<string>();
         }
     }
 }

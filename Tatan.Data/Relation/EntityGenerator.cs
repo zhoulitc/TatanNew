@@ -5,7 +5,7 @@
     using System.Text;
     using Common.Extension.String.Target;
     using Common.Exception;
-    using CommonPath = Common.IO.Path;
+    using CommonRuntime = Common.IO.Runtime;
 
     /// <summary>
     /// 实体生成器
@@ -40,7 +40,7 @@
         /// <param name="outputFolder"></param>
         public void Execute(string outputFolder)
         {
-            Execute(CommonPath.GetRootDirectory() + @"Template\Entity.template", outputFolder);
+            Execute(CommonRuntime.Root + @"Template\Entity.template", outputFolder);
         }
 
         /// <summary>

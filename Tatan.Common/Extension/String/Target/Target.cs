@@ -46,7 +46,7 @@ namespace Tatan.Common.Extension.String.Target
         }
 
         private static readonly Regex _regex = new Regex("{%([A-Za-z0-9_-])*%}");
-        private static readonly Regex _regexLetterOrDigit = new Regex("([A-Za-z0-9])");
+        private static readonly Regex _regexLetterOrDigit = new Regex("([^A-Za-z0-9])");
         private static string Replace(this string source, Regex regex, int leftLength, int rightLength, IDictionary<string, string> targets)
         {
             if (targets == null)

@@ -1,21 +1,13 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Tatan.Common.Collections;
 using Tatan.Common.IO;
-using Tatan.Data;
-using Tatan.Common.Serialization;
-using Tatan.Common.Configuration;
 using Tatan.Data.ObjectQuery;
 using Tatan.Data.Relation;
-using Tatan.Entities;
 
 
 namespace Tatan.Data.UnitTest
 {
-    using Tatan.Common.Cryptography;
-using Tatan.Common;
-
     [TestClass]
     public class DataConfigTest
     {
@@ -73,7 +65,7 @@ using Tatan.Common;
                 }
             };
             var gre = new EntityGenerator(st);
-            gre.Execute(Path.GetRootDirectory() + @"Template\Entity.template", @"D:\");
+            gre.Execute(Runtime.Root + @"Template\Entity.template", @"D:\");
             var oql = ObjectQuerier.
                 Select().
                 From("wahaha").

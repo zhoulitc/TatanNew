@@ -18,7 +18,7 @@
 
         static ExceptionHandler()
         {
-            var format = string.Format("{0}Exception{1}", Path.GetRootDirectory(), Path.Separator);
+            var format = string.Format("{0}Exception{1}", Runtime.Root, Runtime.Separator);
             _exception = new Languages(format);
         }
 
@@ -113,6 +113,15 @@
         /// </summary>
         /// <returns></returns>
         public static void NotSupported()
+        {
+            throw new NotSupportedException(_exception.GetText("NotSupported"));
+        }
+
+        /// <summary>
+        /// 不支持
+        /// </summary>
+        /// <returns></returns>
+        public static T NotSupported<T>()
         {
             throw new NotSupportedException(_exception.GetText("NotSupported"));
         }

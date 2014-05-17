@@ -21,7 +21,7 @@
         public PropertyCollection(Type type, params string[] names)
         {
             ExceptionHandler.ArgumentNull("type", type);
-            if (names == null || names.Length == 0)
+            if (names.Length == 0)
             {
                 var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
                 foreach (var property in properties)
@@ -47,7 +47,7 @@
         public bool IsString(string name)
         {
             ExceptionHandler.ArgumentNull("name", name);
-            return Collection[name].PropertyType.IsAssignableFrom(_stringType);
+            return Contains(name) && Collection[name].PropertyType.IsAssignableFrom(_stringType);
         }
 
         /// <summary>
@@ -63,6 +63,7 @@
         /// </summary>
         /// <param name="instance"></param>
         /// <param name="name"></param>
+        /// <exception cref="System.ArgumentException">属性无法设置或获取时抛出</exception>
         /// <exception cref="System.ArgumentNullException">参数为空时抛出</exception>
         /// <exception cref="System.Collections.Generic.KeyNotFoundException">键未找到时抛出</exception>
         /// <returns></returns>

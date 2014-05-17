@@ -80,7 +80,7 @@
 
         private string GetPath(LogLevel level)
         {
-            return string.Format("{0}log{1}{2}", Path.GetRootDirectory(), Path.Separator, _filenames[level]);
+            return string.Format("{0}log{1}{2}", Runtime.Root, Runtime.Separator, _filenames[level]);
         }
 
         private void Write(LogLevel level, Type logger, string message, Exception inner)

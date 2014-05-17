@@ -35,11 +35,12 @@
         /// 获取指定时间(DateTime)
         /// </summary>
         /// <param name="time">时间串</param>
+        /// <param name="format">格式</param>
         /// <returns>时间</returns>
-        public static DateTime? Parse(string time)
+        public static DateTime? Parse(string time, string format = null)
         {
             DateTime result;
-            if (!DateTime.TryParseExact(time, _format, null, DateTimeStyles.None, out result))
+            if (!DateTime.TryParseExact(time, format ?? _format, null, DateTimeStyles.None, out result))
                 return null;
             return result;
         }
