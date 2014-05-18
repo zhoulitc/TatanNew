@@ -1,4 +1,7 @@
-﻿// ReSharper disable once CheckNamespace
+﻿using Tatan.Common.Expression;
+// ReSharper disable once CheckNamespace
+
+
 namespace Tatan.Data
 {
     using System;

@@ -14,7 +14,7 @@
         /// <param name="identity"></param>
         /// <param name="fieldName"></param>
         /// <param name="tableName"></param>
-        internal RoleRelationCollection(IDentityObject identity, string fieldName, string tableName)
+        internal RoleRelationCollection(IDentifiable identity, string fieldName, string tableName)
             : base(identity, fieldName, tableName, "RoleId")
         {
         }

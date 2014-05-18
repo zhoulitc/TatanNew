@@ -9,7 +9,7 @@
     /// 角色
     /// </summary>
     [Serializable]
-    public partial class Role : DataEntity, IDentityObject
+    public partial class Role : DataEntity, IDentifiable, INameable
     {
         #region 构造函数
         /// <summary>

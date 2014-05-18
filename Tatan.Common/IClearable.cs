@@ -6,7 +6,7 @@
     public interface IClearable
     {
         /// <summary>
-        /// 清楚对象内数据
+        /// 清除对象内数据
         /// </summary>
         void Clear();
     }

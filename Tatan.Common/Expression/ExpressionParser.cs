@@ -1,10 +1,9 @@
-﻿using System.Reflection;
-
-namespace Tatan.Common
+﻿namespace Tatan.Common.Expression
 {
     using System;
     using System.Collections.Generic;
     using System.Linq.Expressions;
+    using System.Reflection;
     using System.Text;
     using Exception;
 

@@ -8,11 +8,11 @@
     /// <summary>
     /// 关联集合
     /// </summary>
-    public abstract class AbstractRelationCollection<T> where T : IDentityObject, IDataEntity, new()
+    public abstract class AbstractRelationCollection<T> where T : IDentifiable, INameable, IDataEntity, new()
     {
 // ReSharper disable once StaticFieldInGenericType
         protected static readonly Dictionary<string, string> Sqls;
-        protected readonly IDentityObject Identity;
+        protected readonly IDentifiable Identity;
         protected readonly string TableName;
         protected readonly string FieldName;
         protected readonly string ThisName;
@@ -36,7 +36,7 @@
         /// <param name="fieldName"></param>
         /// <param name="tableName"></param>
         /// <param name="thisName"></param>
-        protected AbstractRelationCollection(IDentityObject identity, string fieldName, string tableName, string thisName)
+        protected AbstractRelationCollection(IDentifiable identity, string fieldName, string tableName, string thisName)
         {
             TableName = tableName;
             FieldName = fieldName;

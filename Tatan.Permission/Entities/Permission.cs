@@ -8,7 +8,7 @@
     /// <summary>
     /// 权限
     /// </summary>
-    public partial class Permission : DataEntity, IDentityObject
+    public partial class Permission : DataEntity, IDentifiable, INameable
     {
         #region 构造函数
         /// <summary>

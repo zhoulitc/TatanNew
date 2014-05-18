@@ -9,7 +9,7 @@
     /// 用户
     /// </summary>
     [Serializable]
-    public partial class User : DataEntity, IDentityObject
+    public partial class User : DataEntity, IDentifiable, INameable
     {
         #region 构造函数
         /// <summary>

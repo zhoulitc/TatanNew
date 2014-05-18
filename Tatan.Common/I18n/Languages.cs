@@ -1,4 +1,6 @@
-﻿namespace Tatan.Common.I18n
+﻿using Tatan.Common.Xml;
+
+namespace Tatan.Common.I18n
 {
     using System;
     using System.Collections.Generic;

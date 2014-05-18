@@ -9,7 +9,7 @@
     /// 组
     /// </summary>
     [Serializable]
-    public partial class Group : DataEntity, IDentityObject
+    public partial class Group : DataEntity, IDentifiable, INameable
     {
         #region 构造函数
         /// <summary>

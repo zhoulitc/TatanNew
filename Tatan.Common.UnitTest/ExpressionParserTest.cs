@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Tatan.Common.Expression;
 
 namespace Tatan.Common.UnitTest
 {

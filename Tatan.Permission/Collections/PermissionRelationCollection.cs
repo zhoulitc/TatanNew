@@ -15,7 +15,7 @@
         /// <param name="identity"></param>
         /// <param name="fieldName"></param>
         /// <param name="tableName"></param>
-        internal PermissionRelationCollection(IDentityObject identity, string fieldName, string tableName)
+        internal PermissionRelationCollection(IDentifiable identity, string fieldName, string tableName)
             : base(identity, fieldName, tableName, "PermissionId")
         {
         }

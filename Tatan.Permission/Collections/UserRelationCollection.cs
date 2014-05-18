@@ -14,7 +14,7 @@
         /// <param name="identity"></param>
         /// <param name="fieldName"></param>
         /// <param name="tableName"></param>
-        internal UserRelationCollection(IDentityObject identity, string fieldName, string tableName)
+        internal UserRelationCollection(IDentifiable identity, string fieldName, string tableName)
             : base(identity, fieldName, tableName, "UserId")
         {
         }

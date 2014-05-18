@@ -84,7 +84,7 @@
         #endregion
 
         #region Utility
-        private static readonly Regex _isInt = new Regex(@"^-?[1-9]d*$");
+        private static readonly Regex _isInt = new Regex(@"^-?[1-9]\d*$");
         /// <summary>
         /// 字符串是否为整数
         /// </summary>
@@ -96,7 +96,7 @@
             return _isInt.IsMatch(value);
         }
 
-        private static readonly Regex _isUInt = new Regex(@"^[1-9]d*$");
+        private static readonly Regex _isUInt = new Regex(@"^[1-9]\d*$");
         /// <summary>
         /// 字符串是否为正整数
         /// </summary>
@@ -108,7 +108,7 @@
             return _isUInt.IsMatch(value);
         }
 
-        private static readonly Regex _isNumber = new Regex(@"^-?([1-9]d*.d*|0.d*[1-9]d*|0?.0+|0)$");
+        private static readonly Regex _isNumber = new Regex(@"^-?([1-9]\d*.\d*|0.\d*[1-9]\d*|0?.0+|0)$");
         /// <summary>
         /// 字符串是否为数字
         /// </summary>
@@ -156,7 +156,7 @@
             return _isDateTimeOffset.IsMatch(value);
         }
 
-        private static readonly Regex _isEmail = new Regex(@"^w+[-+.]w+)*@w+([-.]w+)*.w+([-.]w+)*$");
+        private static readonly Regex _isEmail = new Regex(@"^\w+([-+.]\w+)*\@\w+([-.]\w+)*.\w+([-.]\w+)*$");
         /// <summary>
         /// 字符串是否为邮箱
         /// </summary>
@@ -168,7 +168,7 @@
             return _isEmail.IsMatch(value);
         }
 
-        private static readonly Regex _isPhone = new Regex(@"^(\+86\-)?1[3458]\d{1}(\-)?\d{4}(\-)?\d{4$");
+        private static readonly Regex _isPhone = new Regex(@"^(\+86\-)?1[3458]\d{1}(\-)?\d{4}(\-)?\d{4}$");
         /// <summary>
         /// 字符串是否为电话
         /// </summary>

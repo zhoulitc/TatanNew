@@ -292,9 +292,6 @@
         {
             var ret = def;
             var type = typeof(T);
-            if (!type.IsValueType) //做了约束，也同时检查一遍
-                return ret;
-
             try
             {
                 //可能存在参数不匹配导致调用失败的情况，或者没有获取到方法
@@ -303,7 +300,7 @@
                     return ret;
 
                 //可能转换失败
-                ret = (T) mi.Invoke(Activator.CreateInstance(type), new object[] {value});
+                ret = (T) mi.Invoke(null, new object[] {value});
             }
             catch (Exception ex)
             {

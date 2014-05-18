@@ -1,8 +1,7 @@
-﻿namespace Tatan.Common
+﻿namespace Tatan.Common.Xml
 {
     using System.Xml;
     using Logging;
-
 
     /// <summary>
     /// Xml解析类
@@ -34,6 +33,7 @@
             }
             catch (System.Exception ex)
             {
+
                 Log.Default.Warn(typeof(XmlParser), ex.Message, ex);
                 return null;
             }
