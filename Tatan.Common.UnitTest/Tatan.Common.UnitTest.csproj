@@ -35,6 +35,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\testbin\Net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.XML" />
   </ItemGroup>
@@ -65,6 +68,7 @@
     <Compile Include="GuidTest.cs" />
     <Compile Include="ExpressionParserTest.cs" />
     <Compile Include="LanguageTest.cs" />
+    <Compile Include="LogTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Tatan.Common\Tatan.Common.csproj">

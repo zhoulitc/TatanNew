@@ -138,9 +138,7 @@ namespace Tatan.Common.UnitTest
         public void FileTestOpenWrite()
         {
             File.OpenWrite(file, a => a.Write(Encoding.UTF8.GetBytes("a"), 0, 1));
-            byte[] ss = new byte[512];
             File.OpenText(file, a => Assert.AreEqual(a.ReadToEnd(), "a"));
-            Assert.AreEqual(ss[0], 97);
 
             try
             {

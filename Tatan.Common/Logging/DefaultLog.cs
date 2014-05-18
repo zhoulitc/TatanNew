@@ -5,6 +5,7 @@
     using System.Collections.Generic;
     using System.Threading;
     using SystemFile = System.IO.File;
+    using SystemDirectory = System.IO.Directory;
     using SystemPath = System.IO.Path;
 
     /// <summary>
@@ -14,17 +15,20 @@
     {
         private readonly Type _type;
         private readonly IDictionary<LogLevel, string> _filenames;
+        private readonly string _fileFormat;
+        private readonly string _cententFormat;
         public DefaultLog()
         {
             _type = typeof(DefaultLog);
-            var datetime = Date.Now("yyyy-mm-dd");
+            _fileFormat = "yyyyMMdd";
+            _cententFormat = "yyyy-MM-dd hh:mm:ss.fff";
             _filenames = new Dictionary<LogLevel, string>(5)
             {
-                {LogLevel.Debug, string.Format("{0}.debug.log", datetime)},
-                {LogLevel.Info, string.Format("{0}.info.log", datetime)},
-                {LogLevel.Warn, string.Format("{0}.warn.log", datetime)},
-                {LogLevel.Error, string.Format("{0}.error.log", datetime)},
-                {LogLevel.Fatal, string.Format("{0}.fatal.log", datetime)}
+                {LogLevel.Debug, "{0}.debug.log"},
+                {LogLevel.Info, "{0}.info.log"},
+                {LogLevel.Warn, "{0}.warn.log"},
+                {LogLevel.Error, "{0}.error.log"},
+                {LogLevel.Fatal, "{0}.fatal.log"}
             };
         }
 
@@ -80,7 +84,9 @@
 
         private string GetPath(LogLevel level)
         {
-            return string.Format("{0}log{1}{2}", Runtime.Root, Runtime.Separator, _filenames[level]);
+            var dir = string.Format("{0}log{1}", Runtime.Root, Runtime.Separator);
+            if (!SystemDirectory.Exists(dir)) SystemDirectory.CreateDirectory(dir);
+            return dir + string.Format(_filenames[level], Date.Now(_fileFormat));
         }
 
         private void Write(LogLevel level, Type logger, string message, Exception inner)
@@ -89,7 +95,7 @@
             var path = GetPath(level);
             var content = GetContent(logger, message, inner);
             if (!SystemFile.Exists(path)) SystemFile.Create(path).Close();
-            File.AppendText(path, writer => writer.WriteAsync(content));
+            File.AppendText(path, writer => writer.Write(content));
         }
 
         /// <summary>
@@ -101,13 +107,14 @@
         /// <returns></returns>
         private string GetContent(Type logger, string message, Exception inner)
         {
-            return string.Format("[{0}] [{1}] [{2}] {3}{4}{5}", 
-                Date.Now("YYYY-MM-DD hh:mm:ss.fff"), 
-                Thread.CurrentThread.Name, 
+            return string.Format("[{0}] [{1}] [{2}] {3}{4}{5}{6}",
+                Date.Now(_cententFormat),
+                Thread.CurrentThread.Name ?? Thread.CurrentThread.ManagedThreadId.ToString(), 
                 (logger ?? _type).FullName,
                 message ?? string.Empty,
-                Environment.NewLine,
-                inner == null ? string.Empty : inner.ToString());
+                Runtime.NewLine,
+                inner == null ? string.Empty : inner.ToString(),
+                Runtime.NewLine);
         }
     }
 }

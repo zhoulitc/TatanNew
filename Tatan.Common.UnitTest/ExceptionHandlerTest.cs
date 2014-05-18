@@ -38,7 +38,7 @@ namespace Tatan.Common.UnitTest
             }
             catch (System.Exception ex)
             {
-                Assert.AreEqual(ex.Message, "参数为空。");
+                Assert.AreEqual(ex.Message, "参数为空。\r\n参数名: s");
             }
             ExceptionHandler.ArgumentNull("s", "s");
 
@@ -48,7 +48,7 @@ namespace Tatan.Common.UnitTest
             }
             catch (System.Exception ex)
             {
-                Assert.AreEqual(ex.Message, "参数为空。");
+                Assert.AreEqual(ex.Message, "参数为空。\r\n参数名: s");
             }
         }
 

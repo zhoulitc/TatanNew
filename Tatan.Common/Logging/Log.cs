@@ -19,6 +19,7 @@
                 {typeof (DefaultLog).FullName, new DefaultLog()}
             };
             _lock = new object();
+            Level = LogLevel.Debug; //默认级别
         }
 
         /// <summary>
@@ -37,13 +38,10 @@
             if (!_logs.ContainsKey(type.FullName))
             {
                 var constructor = type.GetConstructor(new Type[] {});
-                    if (constructor == null)
-                        return _logs[typeof (NullLog).FullName];
+                if (constructor == null)
+                    return _logs[typeof (NullLog).FullName];
 
-
-                    var log = constructor.Invoke(null) as ILog;
-                    if (log == null)
-                        return _logs[typeof(NullLog).FullName];
+                var log = constructor.Invoke(null) as ILog;
 
                 lock (_lock)
                 {

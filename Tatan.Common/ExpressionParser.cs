@@ -1,4 +1,6 @@
-﻿namespace Tatan.Common
+﻿using System.Reflection;
+
+namespace Tatan.Common
 {
     using System;
     using System.Collections.Generic;
@@ -11,146 +13,232 @@
     /// </summary>
     public static class ExpressionParser
     {
-        private static readonly ExpressionParserVisitor _visitor = new ExpressionParserVisitor();
-
         /// <summary>
-        /// 解析一个判断表达数，返回判断字符串
+        /// 解析一个判断表达数，返回判断字符串以及参数字典
         /// </summary>
         /// <param name="expression"></param>
+        /// <param name="symbol"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static string Parse<T>(Expression<Func<T, bool>> expression)
+        public static ParserResult Parse<T>(Expression<Func<T, bool>> expression, string symbol)
         {
-            _visitor.Reset();
-            _visitor.Visit(expression);
-            return _visitor.Result;
+            ExceptionHandler.ArgumentNull("symbol", symbol);
+            var visitor = new ExpressionParserVisitor(symbol);
+            visitor.Visit(expression);
+            return visitor.Result.Trim();
         }
 
         /// <summary>
         /// 解析一个赋值表达式，返回赋值字符串
         /// </summary>
         /// <param name="sets"></param>
+        /// <param name="symbol"></param>
         /// <returns></returns>
-        public static string Parse(IDictionary<string, object> sets)
+        public static ParserResult Parse(IDictionary<string, object> sets, string symbol)
         {
-            var set = new StringBuilder(sets.Count*20);
+            ExceptionHandler.ArgumentNull("sets", sets);
+            ExceptionHandler.ArgumentNull("symbol", symbol);
+            var set = new ParserResult(sets);
             foreach (var key in sets.Keys)
             {
-                set.AppendFormat("{0}={1}{2},", key, "", key);
+                set.AppendFormat("{0}={1}{2},", key, symbol, key);
             }
-            if (set.Length > 0)
-                set.Remove(set.Length - 1, 1);
-            return set.ToString();
+            return set.Trim();
         }
 
-        private class ExpressionParserVisitor : ExpressionVisitor
+        /// <summary>
+        /// 解析一个赋值表达式，返回赋值字符串
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="symbol"></param>
+        /// <returns></returns>
+        public static ParserResult Parse(object entity, string symbol)
         {
-            private readonly StringBuilder _builder = new StringBuilder();
-
-            public string Result 
+            ExceptionHandler.ArgumentNull("entity", entity);
+            ExceptionHandler.ArgumentNull("symbol", symbol);
+            var properties = entity.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public);
+            var set = new ParserResult();
+            foreach (var property in properties)
             {
-                get
+                set.AppendFormat("{0}={1}{2},", property.Name, symbol, property.Name);
+                set.Add(property.Name, property.GetValue(entity));
+            }
+            return set.Trim();
+        }
+
+        #region ParserResult
+        /// <summary>
+        /// 解析结果
+        /// </summary>
+        public class ParserResult
+        {
+// ReSharper disable once InconsistentNaming
+            internal StringBuilder _condition;
+// ReSharper disable once InconsistentNaming
+            internal IDictionary<string, object> _parameters;
+
+            internal ParserResult Trim()
+            {
+                var result = _condition.ToString();
+                if (result.StartsWith("(") && result.EndsWith(")"))
+                    _condition = _condition.Remove(0, 1).Remove(_condition.Length - 1, 1);
+                if (result.EndsWith(","))
+                    _condition = _condition.Remove(result.Length - 1, 1);
+                return this;
+            }
+
+            internal void SetNull()
+            {
+                if (_condition.ToString().EndsWith("!="))
                 {
-                    var result = _builder.ToString();
-                    if (result.StartsWith("(") && result.EndsWith(")"))
-                        result = result.Substring(1, result.Length - 2);
-                    return result;
+                    _condition = _condition.Remove(_condition.Length - 2, 2);
+                    _condition.Append(" IS NOT NULL");
+                }
+                else if (_condition.ToString().EndsWith("="))
+                {
+                    _condition = _condition.Remove(_condition.Length - 1, 1);
+                    _condition.Append(" IS NULL");
                 }
             }
 
-            public void Reset()
+            internal ParserResult Append(string value)
             {
-                _builder.Clear();
+                _condition.Append(value);
+                return this;
+            }
+
+            internal ParserResult AppendFormat(string format, params object[] values)
+            {
+                _condition.AppendFormat(format, values);
+                return this;
+            }
+
+            internal void Add(string key, object value)
+            {
+                if (!_parameters.ContainsKey(key))
+                    _parameters.Add(key, value);
+            }
+
+            internal int Count
+            {
+                get { return _parameters.Count; }
+            }
+
+            /// <summary>
+            /// 
+            /// </summary>
+            public ParserResult(IDictionary<string, object> parameters = null)
+            {
+                _condition = new StringBuilder();
+                _parameters = parameters == null ? 
+                    new Dictionary<string, object>() : 
+                    new Dictionary<string, object>(parameters);
+            }
+
+            /// <summary>
+            /// 表达式串
+            /// </summary>
+            public string Condition
+            {
+                get { return _condition.ToString(); }
+            }
+
+            /// <summary>
+            /// 参数集合
+            /// </summary>
+            public IEnumerable<KeyValuePair<string, object>> Parameters
+            {
+                get { return _parameters; }
+            }
+        }
+        #endregion
+
+        private class ExpressionParserVisitor : ExpressionVisitor
+        {
+            private readonly ParserResult _result;
+            private readonly Queue<string> _queue;
+            private readonly string _symbol;
+
+            private static readonly IDictionary<ExpressionType, string> _types;
+            private static readonly string _paramName;
+
+            static ExpressionParserVisitor()
+            {
+                _paramName = "param";
+                _types = new Dictionary<ExpressionType, string>(8)
+                {
+                    {ExpressionType.AndAlso, " AND "},
+                    {ExpressionType.OrElse, " OR "},
+                    {ExpressionType.Equal, "="},
+                    {ExpressionType.NotEqual, "!="},
+                    {ExpressionType.LessThan, "<"},
+                    {ExpressionType.LessThanOrEqual, "<="},
+                    {ExpressionType.GreaterThan, ">"},
+                    {ExpressionType.GreaterThanOrEqual, ">="}
+                };
+            }
+
+            public ParserResult Result 
+            {
+                get { return _result; }
+            }
+
+            public ExpressionParserVisitor(string symbol)
+            {
+                _result = new ParserResult();
+                _queue = new Queue<string>();
+                _symbol = symbol;
             }
 
             protected override Expression VisitBinary(BinaryExpression node)
             {
-                _builder.Append("(");
+                _result.Append("(");
                 Visit(node.Left);
-                switch (node.NodeType)
-                {
-                    case ExpressionType.AndAlso:
-                        _builder.Append(" AND ");
-                        break;
-                    case ExpressionType.OrElse:
-                        _builder.Append(" OR ");
-                        break;
-                    case ExpressionType.Equal:
-                        _builder.Append("=");
-                        break;
-                    case ExpressionType.NotEqual:
-                        _builder.Append("!=");
-                        break;
-                    case ExpressionType.LessThan:
-                        _builder.Append("<");
-                        break;
-                    case ExpressionType.LessThanOrEqual:
-                        _builder.Append("<=");
-                        break;
-                    case ExpressionType.GreaterThan:
-                        _builder.Append(">");
-                        break;
-                    case ExpressionType.GreaterThanOrEqual:
-                        _builder.Append(">=");
-                        break;
-                    default:
-                        ExceptionHandler.NotSupported();
-                        break;
-                }
+                if (!_types.ContainsKey(node.NodeType))
+                    ExceptionHandler.NotSupported();
+                _result.Append(_types[node.NodeType]);
                 Visit(node.Right);
-                _builder.Append(")");
+                _result.Append(")");
                 return node;
-            }
-
-            private bool EndsWithCompare()
-            {
-                var expression = _builder.ToString();
-                return expression.EndsWith("=") || expression.EndsWith("!=") ||
-                       expression.EndsWith(">") || expression.EndsWith(">=") ||
-                       expression.EndsWith("<") || expression.EndsWith("<=");
             }
 
             protected override Expression VisitConstant(ConstantExpression node)
             {
-                if (node.Value == null)
+                if (_queue.Count > 0)
                 {
-                    _builder.Append("NULL");
-                    return node;
-                }
-                if (EndsWithCompare())
-                {
-                    switch (Type.GetTypeCode(node.Value.GetType()))
+                    var name = _queue.Dequeue();
+                    if (node.Value == null)
                     {
-                        case TypeCode.Boolean:
-                            _builder.Append(((bool) node.Value) ? 1 : 0);
-                            break;
-                        case TypeCode.DBNull:
-                            _builder.Append("NULL");
-                            break;
-                        case TypeCode.String:
-                        case TypeCode.Char:
-                            _builder.Append("'");
-                            _builder.Append(node.Value);
-                            _builder.Append("'");
-                            break;
-                        case TypeCode.Object:
-                            ExceptionHandler.NotSupported();
-                            break;
-                        default:
-                            _builder.Append(node.Value);
-                            break;
+                        _result.SetNull();
+                        return node;
                     }
+                    _result.Append(_symbol).Append(name);
+                    _result.Add(name, GetValue(node.Value));
                     return node;
                 }
-                _builder.Append(node.Value);
+                _result.Append(node.Value.ToString());
+                _queue.Enqueue(node.Value.ToString());
                 return node;
+            }
+
+            private object GetValue(object value)
+            {
+                if (value is bool)
+                    return ((bool)value) ? 1 : 0;
+                return value;
             }
 
             protected override Expression VisitMember(MemberExpression node)
             {
                 if (node.Expression != null && node.Expression.NodeType == ExpressionType.Parameter)
                 {
-                    _builder.Append(node.Member.Name);
+                    _result.Append(node.Member.Name);
+                    _queue.Enqueue(_paramName + (_result.Count + 1));
+                    return node;
+                }
+                if (node.Type.Name == "DBNull")
+                {
+                    _result.SetNull();
                     return node;
                 }
                 ExceptionHandler.NotSupported();

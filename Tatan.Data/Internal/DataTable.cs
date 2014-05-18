@@ -106,8 +106,12 @@ namespace Tatan.Data
             ExceptionHandler.ArgumentNull("condition", condition);
             return DataSource.UseSession(Name, session =>
             {
-                var where = ExpressionParser.Parse(condition);
-                return session.Execute(_count + where);
+                var where = ExpressionParser.Parse(condition, DataSource.Provider.ParameterSymbol);
+                return session.Execute(_count + where.Condition, p =>
+                {
+                    foreach (var pair in where.Parameters)
+                        p[pair.Key] = pair.Value;
+                });
             });
         }
 
@@ -132,6 +136,25 @@ namespace Tatan.Data
             }) == 1);
         }
 
+        public int Update<T>(object entity, Expression<Func<T, bool>> condition)
+            where T : class, IDataEntity
+        {
+            ExceptionHandler.ArgumentNull("entity", entity);
+            ExceptionHandler.ArgumentNull("condition", condition);
+            return DataSource.UseSession(Name, session =>
+            {
+                var set = ExpressionParser.Parse(entity, DataSource.Provider.ParameterSymbol);
+                var where = ExpressionParser.Parse(condition, DataSource.Provider.ParameterSymbol);
+                return session.Execute(string.Format(_update, set.Condition) + where.Condition, p =>
+                {
+                    foreach (var pair in set.Parameters)
+                        p[pair.Key] = pair.Value;
+                    foreach (var pair in where.Parameters)
+                        p[pair.Key] = pair.Value;
+                });
+            });
+        }
+
         public int Update<T>(IDictionary<string, object> sets, Expression<Func<T, bool>> condition) 
             where T : class, IDataEntity
         {
@@ -139,17 +162,13 @@ namespace Tatan.Data
             ExceptionHandler.ArgumentNull("condition", condition);
             return DataSource.UseSession(Name, session =>
             {
-                var set = new StringBuilder(sets.Count * 20);
-                foreach (var key in sets.Keys)
+                var set = ExpressionParser.Parse(sets, DataSource.Provider.ParameterSymbol);
+                var where = ExpressionParser.Parse(condition, DataSource.Provider.ParameterSymbol);
+                return session.Execute(string.Format(_update, set.Condition) + where.Condition, p =>
                 {
-                    set.AppendFormat("{0}={1}{2},", key, DataSource.Provider.ParameterSymbol, key);
-                }
-                if (set.Length > 0)
-                    set.Remove(set.Length - 1, 1);
-                var where = ExpressionParser.Parse(condition);
-                return session.Execute(string.Format(_update, set) + where, p =>
-                {
-                    foreach (var pair in sets)
+                    foreach (var pair in set.Parameters)
+                        p[pair.Key] = pair.Value;
+                    foreach (var pair in where.Parameters)
                         p[pair.Key] = pair.Value;
                 });
             });
@@ -166,8 +185,12 @@ namespace Tatan.Data
             ExceptionHandler.ArgumentNull("condition", condition);
             return DataSource.UseSession(Name, session =>
             {
-                var where = ExpressionParser.Parse(condition);
-                return session.GetScalar<int>(_count + where);
+                var where = ExpressionParser.Parse(condition, DataSource.Provider.ParameterSymbol);
+                return session.GetScalar<int>(_count + where.Condition, p =>
+                {
+                    foreach (var pair in where.Parameters)
+                        p[pair.Key] = pair.Value;
+                });
             });
         }
 

@@ -8,12 +8,12 @@
         /// <summary>
         /// 调试
         /// </summary>
-        Debug = 0,
+        Debug = 4,
 
         /// <summary>
         /// 信息
         /// </summary>
-        Info = 1,
+        Info = 3,
 
         /// <summary>
         /// 警告
@@ -23,11 +23,11 @@
         /// <summary>
         /// 错误
         /// </summary>
-        Error = 3,
+        Error = 1,
 
         /// <summary>
         /// 致命错误
         /// </summary>
-        Fatal = 4
+        Fatal = 0
     }
 }

@@ -7,148 +7,79 @@ namespace Tatan.Common.UnitTest
 
     public enum TestState
     {
-        STAT_IN_WORD,
-        STAT_OUT_WORD
+        StatInWord,
+        StatOutWord
     }
 
     [TestClass]
-    public class DFATest
+    public class DfaTest
     {
         [TestMethod]
-        public void DFARunTest()
+        public void TestRun()
         {
             var count = 0;
             var dfa = new DFA(2);
-            dfa.AddState(TestState.STAT_IN_WORD, (c) =>
+            dfa.AddState(TestState.StatInWord, c =>
             {
                 if (Char.IsLetterOrDigit(c))
-                    return TestState.STAT_IN_WORD;
-                else
-                {
-                    count++;
-                    return TestState.STAT_OUT_WORD;
-                }
+                    return TestState.StatInWord;
+                count++;
+                return TestState.StatOutWord;
             });
-            dfa.AddState(TestState.STAT_OUT_WORD, (c) =>
+            dfa.AddState(TestState.StatOutWord, c =>
             {
                 if (Char.IsLetterOrDigit(c))
-                    return TestState.STAT_IN_WORD;
-                else
-                    return TestState.STAT_OUT_WORD;
+                    return TestState.StatInWord;
+                return TestState.StatOutWord;
             });
-            dfa.EndHandler = (s) => {
-                if (s.Equals(TestState.STAT_IN_WORD))
+            dfa.EndHandler = s => {
+                if (s.Equals(TestState.StatInWord))
                 {
                     count++;
                 }
             };
-            dfa.Run("i am a man", TestState.STAT_OUT_WORD);
+            dfa.Run("i am a man", TestState.StatOutWord);
 
             Assert.AreEqual(count, 4);
         }
 
         [TestMethod]
-        public void DFARunTest1()
+        public void Test1Run()
         {
             var count = 0;
             var dfa = new DFA();
-            dfa.AddState(TestState.STAT_IN_WORD, (c) =>
+            dfa.AddState(TestState.StatInWord, c =>
             {
                 if (Char.IsLetterOrDigit(c))
-                    return TestState.STAT_IN_WORD;
-                else
-                {
-                    count++;
-                    return TestState.STAT_OUT_WORD;
-                }
+                    return TestState.StatInWord;
+                count++;
+                return TestState.StatOutWord;
             });
-            dfa.AddState(TestState.STAT_OUT_WORD, (c) =>
+            dfa.AddState(TestState.StatOutWord, c =>
             {
                 if (Char.IsLetterOrDigit(c))
-                    return TestState.STAT_IN_WORD;
-                else
-                    return TestState.STAT_OUT_WORD;
+                    return TestState.StatInWord;
+                return TestState.StatOutWord;
             });
-            dfa.EndHandler = (s) =>
+            dfa.EndHandler = s =>
             {
-                if (s.Equals(TestState.STAT_IN_WORD))
+                if (s.Equals(TestState.StatInWord))
                 {
                     count++;
                 }
             };
-            dfa.Run("i am a man", TestState.STAT_OUT_WORD);
-
+            dfa.Run("i am a man", TestState.StatOutWord);
             Assert.AreEqual(count, 4);
-        }
 
-        [TestMethod]
-        public void DFARunArgumentNull1Test()
-        {
-            var count = 0;
-            var dfa = new DFA(2);
-            dfa.AddState(TestState.STAT_IN_WORD, (c) =>
-            {
-                if (Char.IsLetterOrDigit(c))
-                    return TestState.STAT_IN_WORD;
-                else
-                {
-                    count++;
-                    return TestState.STAT_OUT_WORD;
-                }
-            });
-            dfa.AddState(TestState.STAT_OUT_WORD, (c) =>
-            {
-                if (Char.IsLetterOrDigit(c))
-                    return TestState.STAT_IN_WORD;
-                else
-                    return TestState.STAT_OUT_WORD;
-            });
-            dfa.EndHandler = (s) =>
-            {
-                if (s.Equals(TestState.STAT_IN_WORD))
-                {
-                    count++;
-                }
-            };
             try
             {
-                dfa.Run(null, TestState.STAT_OUT_WORD);
+                dfa.Run(null, TestState.StatOutWord);
             }
             catch (System.Exception e)
             {
                 Assert.AreEqual(e.Message, "参数为空。\r\n参数名: tokens");
             }
-        }
 
-        [TestMethod]
-        public void DFARunArgumentNull2Test()
-        {
-            var count = 0;
-            var dfa = new DFA(2);
-            dfa.AddState(TestState.STAT_IN_WORD, (c) =>
-            {
-                if (Char.IsLetterOrDigit(c))
-                    return TestState.STAT_IN_WORD;
-                else
-                {
-                    count++;
-                    return TestState.STAT_OUT_WORD;
-                }
-            });
-            dfa.AddState(TestState.STAT_OUT_WORD, (c) =>
-            {
-                if (Char.IsLetterOrDigit(c))
-                    return TestState.STAT_IN_WORD;
-                else
-                    return TestState.STAT_OUT_WORD;
-            });
-            dfa.EndHandler = (s) =>
-            {
-                if (s.Equals(TestState.STAT_IN_WORD))
-                {
-                    count++;
-                }
-            };
             try
             {
                 dfa.Run("", null);
@@ -160,36 +91,32 @@ namespace Tatan.Common.UnitTest
         }
 
         [TestMethod]
-        public void DFAClearTest()
+        public void TestClear()
         {
             var count = 0;
             var dfa = new DFA(2);
-            dfa.AddState(TestState.STAT_IN_WORD, (c) =>
+            dfa.AddState(TestState.StatInWord, c =>
             {
                 if (Char.IsLetterOrDigit(c))
-                    return TestState.STAT_IN_WORD;
-                else
-                {
-                    count++;
-                    return TestState.STAT_OUT_WORD;
-                }
+                    return TestState.StatInWord;
+                count++;
+                return TestState.StatOutWord;
             });
-            dfa.AddState(TestState.STAT_OUT_WORD, (c) =>
+            dfa.AddState(TestState.StatOutWord, c =>
             {
                 if (Char.IsLetterOrDigit(c))
-                    return TestState.STAT_IN_WORD;
-                else
-                    return TestState.STAT_OUT_WORD;
+                    return TestState.StatInWord;
+                return TestState.StatOutWord;
             });
-            dfa.EndHandler = (s) =>
+            dfa.EndHandler = s =>
             {
-                if (s.Equals(TestState.STAT_IN_WORD))
+                if (s.Equals(TestState.StatInWord))
                 {
                     count++;
                 }
             };
             dfa.Clear();
-            dfa.Run("i am a man", TestState.STAT_OUT_WORD);
+            dfa.Run("i am a man", TestState.StatOutWord);
             Assert.AreEqual(count, 0);
         }
     }

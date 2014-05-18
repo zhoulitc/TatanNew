@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Newtonsoft.Json;
 
 namespace Tatan.Common.UnitTest
 {
@@ -28,17 +29,17 @@ namespace Tatan.Common.UnitTest
     }
 
     [TestClass]
-    public class JSONSerializerTest
+    public class JsonSerializerTest
     {
-        User user = new User()
+        readonly User _user = new User
         {
             Id = 1,
             Name = "wahaha",
-            Info = new UserInfo()
+            Info = new UserInfo
             {
                 Sex = true,
                 Address = "\"我也不知道\"",
-                Objs = new object[3]
+                Objs = new object[]
                     {
                         33,
                         "wuyu",
@@ -46,37 +47,38 @@ namespace Tatan.Common.UnitTest
                     }
             }
         };
-        string textd = "{\"Id\":1,\"Info\":{\"Address\":\"\\\"我也不知道\\\"\",\"Objs\":[33,\"wuyu\",false],\"Sex\":true},\"Name\":\"wahaha\"}";
-        string text = "{\"Id\":1,\"Name\":\"wahaha\",\"Info\":{\"Sex\":true,\"Address\":\"\\\"我也不知道\\\"\",\"Objs\":[33,\"wuyu\",false]}}";
+
+        private const string _textd = "{\"Id\":1,\"Info\":{\"Address\":\"\\\"我也不知道\\\"\",\"Objs\":[33,\"wuyu\",false],\"Sex\":true},\"Name\":\"wahaha\"}";
+        private const string _text = "{\"Id\":1,\"Name\":\"wahaha\",\"Info\":{\"Sex\":true,\"Address\":\"\\\"我也不知道\\\"\",\"Objs\":[33,\"wuyu\",false]}}";
 
         [TestMethod]
         public void JsonSerializeUsingExtension()
         {
             //使用第三方json序列化
-            var json = Serializer.Json;
-            //json.UsingExtension(
-            //    (o) => JsonConvert.SerializeObject(o), 
-            //    (s) => JsonConvert.DeserializeObject<User>(s));
-            var s1 = json.Serialize(user);
-            Assert.AreEqual(s1, text);
+            var json = Serializer.CreateJsonSerializer(
+                JsonConvert.SerializeObject,
+                JsonConvert.DeserializeObject<User>
+                );
+            var s1 = json.Serialize(_user);
+            Assert.AreEqual(s1, _text);
 
             var u = json.Deserialize<User>(s1);
-            Assert.AreEqual(u, user);
+            Assert.AreEqual(u, _user);
         }
 
         [TestMethod]
         public void JsonDeserializeUsingExtension()
         {
             //使用第三方json序列化
-            var json = Serializer.Json;
-            //json.UsingExtension(
-            //    (o) => JsonConvert.SerializeObject(o),
-            //    (s) => JsonConvert.DeserializeObject<User>(s));
-            var user1 = json.Deserialize<User>(text);
-            Assert.AreEqual(user1, user);
+            var json = Serializer.CreateJsonSerializer(
+                JsonConvert.SerializeObject,
+                JsonConvert.DeserializeObject<User>
+                );
+            var user1 = json.Deserialize<User>(_text);
+            Assert.AreEqual(user1, _user);
 
             var s1 = json.Serialize(user1);
-            Assert.AreEqual(s1, text);
+            Assert.AreEqual(s1, _text);
         }
 
         [TestMethod]
@@ -84,8 +86,8 @@ namespace Tatan.Common.UnitTest
         {
             var json = Serializer.Json;
             //json.UsingDefault();
-            var s1 = json.Serialize(user);
-            Assert.AreEqual(s1, textd);
+            var s1 = json.Serialize(_user);
+            Assert.AreEqual(s1, _textd);
         }
 
         [TestMethod]
@@ -94,7 +96,7 @@ namespace Tatan.Common.UnitTest
             var json = Serializer.Json;
             //json.UsingDefault();
             var user1 = json.Deserialize<UserInfo>("{\"Address\":\"\\\"我也不知道\\\"\",\"Objs\":[33,\"wuyu\",false],\"Sex\":true}");
-            Assert.AreEqual(user1.Address, user.Info.Address);
+            Assert.AreEqual(user1.Address, _user.Info.Address);
         }
 
         [TestMethod]
