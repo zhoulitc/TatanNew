@@ -3,6 +3,7 @@ namespace Tatan.Data
 {
     using System;
     using System.Collections.Generic;
+    using System.Data.Common;
     using Common.Exception;
 
     /// <summary>
@@ -12,14 +13,19 @@ namespace Tatan.Data
     {
         private readonly DataTableCollection _tables;
         private readonly DataProvider _dataProvider;
-        internal readonly IDictionary<string, DataSession> Sessions; //会话集
         private readonly DataSession _session;
+
+        internal readonly IDictionary<string, DataSession> Sessions; //会话集
 
         private static readonly IDictionary<DataProvider, IDataSource> _sources; //数据源集合
         private static readonly object _lock = new object();
+
+        internal static readonly IDictionary<string, DbProviderFactory> DbFactories; //工厂集
+
         static DataSource()
         {
             _sources = new Dictionary<DataProvider, IDataSource>();
+            DbFactories = new Dictionary<string, DbProviderFactory>(10);
         }
 
         /// <summary>
@@ -30,6 +36,8 @@ namespace Tatan.Data
         /// <returns></returns>
         public static IDataSource Connect(string providerName, string connectionString)
         {
+            ExceptionHandler.ArgumentNull("providerName", providerName);
+            ExceptionHandler.ArgumentNull("connectionString", connectionString);
             var provider = new DataProvider(providerName, connectionString);
             if (!_sources.ContainsKey(provider))
             {
@@ -49,17 +57,12 @@ namespace Tatan.Data
             _dataProvider = provider;
             _tables = new DataTableCollection(this);
             Sessions = new Dictionary<string, DataSession>();
-            _session = new DataSession(this, "0", _dataProvider.Name, _dataProvider.Connection);
+            _session = new DataSession(this, "0", _dataProvider.Connection);
         }
 
         /// <summary>
-        /// 析构
+        /// 返回一个循环访问集合的枚举器。
         /// </summary>
-        ~DataSource()
-        {
-            Dispose();
-        }
-
         public void Dispose()
         {
             _tables.Clear();
@@ -72,6 +75,18 @@ namespace Tatan.Data
             {
                 _session.Dispose();
             }
+        }
+
+        internal static DbProviderFactory Get(string name)
+        {
+            if (!DbFactories.ContainsKey(name))
+            {
+                lock (_lock)
+                {
+                    DbFactories.Add(name, DbProviderFactories.GetFactory(name));
+                }
+            }
+            return DbFactories[name];
         }
 
         #region IDataSource
@@ -99,7 +114,7 @@ namespace Tatan.Data
                 return function(_session);
             if (!Sessions.ContainsKey(identity))
             {
-                Sessions.Add(identity, new DataSession(this, identity, _dataProvider.Name, _dataProvider.Connection));
+                Sessions.Add(identity, new DataSession(this, identity, _dataProvider.Connection));
             }
             using (IDataSession session = Sessions[identity])
             {

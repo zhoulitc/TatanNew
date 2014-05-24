@@ -71,14 +71,14 @@ namespace Tatan.Data
         /// 获取此表的记录数
         /// </summary>
         /// <returns></returns>
-        int Count();
+        long Count();
 
         /// <summary>
         /// 获取此表的记录数
         /// </summary>
         /// <exception cref="System.ArgumentNullException">参数为空时抛出</exception>
         /// <returns></returns>
-        int Count<T>(Expression<Func<T, bool>> condition)
+        long Count<T>(Expression<Func<T, bool>> condition)
             where T : class, IDataEntity;
 
         /// <summary>

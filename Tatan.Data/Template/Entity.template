@@ -12,6 +12,16 @@
 	public partial class {%Entity%} : DataEntity
 	{
 		#region 构造函数
+
+		/// <summary>
+        /// 构造函数
+        /// </summary>
+        public {%Entity%}()
+            : base(-1)
+        {
+            
+        }
+
         /// <summary>
         /// 构造函数
         /// </summary>

@@ -11,11 +11,34 @@
     public abstract class AbstractRelationCollection<T> where T : IDentifiable, INameable, IDataEntity, new()
     {
 // ReSharper disable once StaticFieldInGenericType
+        /// <summary>
+        /// 
+        /// </summary>
         protected static readonly Dictionary<string, string> Sqls;
+
+        /// <summary>
+        /// 
+        /// </summary>
         protected readonly IDentifiable Identity;
+
+        /// <summary>
+        /// 
+        /// </summary>
         protected readonly string TableName;
+
+        /// <summary>
+        /// 
+        /// </summary>
         protected readonly string FieldName;
+
+        /// <summary>
+        /// 
+        /// </summary>
         protected readonly string ThisName;
+
+        /// <summary>
+        /// 
+        /// </summary>
         protected readonly string TypeName;
 
         static AbstractRelationCollection()

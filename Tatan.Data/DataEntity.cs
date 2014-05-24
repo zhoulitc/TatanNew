@@ -26,14 +26,6 @@ namespace Tatan.Data
         {
             Id = id;
         }
-        /// <summary>
-        /// 析构
-        /// </summary>
-        ~DataEntity()
-        {
-            Properties.Dispose();
-            Id = -1;
-        }
         #endregion
 
         /// <summary>
@@ -75,6 +67,10 @@ namespace Tatan.Data
         #endregion
 
         #region IEnumerable
+        /// <summary>
+        /// 返回一个循环访问集合的枚举器。
+        /// </summary>
+        /// <returns></returns>
         public IEnumerator<string> GetEnumerator()
         {
             return Properties.GetEnumerator();
@@ -122,6 +118,11 @@ namespace Tatan.Data
         #endregion
 
         #region Object
+        /// <summary>
+        /// 是否与另一个对象完全相等
+        /// </summary>
+        /// <param name="obj">另一个对象</param>
+        /// <returns>是否相等</returns>
         public override bool Equals(object obj)
         {
             if (obj == null)
@@ -129,11 +130,20 @@ namespace Tatan.Data
             return GetHashCode() == obj.GetHashCode();
         }
 
+        /// <summary>
+        /// 获取对象的hash码，如果两个对象相等，则hash码一定相等
+        /// </summary>
+        /// <returns>hash码</returns>
         public override int GetHashCode()
         {
             return Id.GetHashCode();
         }
 
+        /// <summary>
+        /// 获取对象的字符串描述
+        /// </summary>
+        /// <exception cref="System.ArgumentOutOfRangeException">当字符串超过最大长度时抛出</exception>
+        /// <returns>对象的字符串描述</returns>
         public override string ToString()
         {
             var builder = new StringBuilder(Properties.Count);

@@ -11,6 +11,10 @@ namespace Tatan.Data.ObjectQuery
         /// </summary>
         private readonly string _alias = string.Empty;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return base.ToString() + " AS " + _alias;

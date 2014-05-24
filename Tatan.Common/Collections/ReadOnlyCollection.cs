@@ -40,6 +40,9 @@
     /// </summary>
     public class ReadOnlyCollection<T> : AbstractReadOnlyCollection<string>
     {
+        /// <summary>
+        /// 只读集合的内部字典
+        /// </summary>
         protected readonly IDictionary<string, T> Collection;
 
         /// <summary>

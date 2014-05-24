@@ -6,6 +6,7 @@ namespace Tatan.Data
     using System.Collections.Generic;
     using System.Data;
     using System.Data.Common;
+    using System.Reflection;
     using System.Threading.Tasks;
     using Common.Exception;
     using Common.Logging;
@@ -16,23 +17,23 @@ namespace Tatan.Data
     internal sealed class DataSession : IDataSession
     {
         #region 私有变量
-        private readonly DbCommand _command;
+        private DbCommand _command;
         private readonly IDataParameters _parameters;
 
         #endregion
 
         #region 构造函数
-        public DataSession(IDataSource source, string id, string providerName, string connectionString)
+        public DataSession(DataSource source, string id, string connectionString)
         {
-            ExceptionHandler.ArgumentNull("providerName", providerName);
+            ExceptionHandler.ArgumentNull("source", source);
             ExceptionHandler.ArgumentNull("connectionString", connectionString);
 
             if (string.IsNullOrEmpty(id) || id.Length > 128)
                 id = "0";
             Id = id;
 
-            var dbProviderFactory = DbProviderFactories.GetFactory(providerName);
-            var conn = dbProviderFactory.CreateConnection();
+            var dbFactory = DataSource.Get(source.Provider.Name);
+            var conn = dbFactory.CreateConnection();
             ExceptionHandler.ArgumentNull("conn", conn);
 // ReSharper disable once PossibleNullReferenceException
             conn.ConnectionString = connectionString;
@@ -42,16 +43,7 @@ namespace Tatan.Data
 
         ~DataSession()
         {
-            if (_command != null)
-            {
-                if (_command.Transaction != null)
-                {
-                    _command.Transaction.Dispose();
-                    _command.Transaction = null;
-                }
-                _command.Connection.Dispose();
-                _command.Dispose();
-            }
+            _command = null;
         }
         #endregion
 
@@ -273,6 +265,8 @@ namespace Tatan.Data
         #region IDisposable
         public void Dispose()
         {
+            if (_command == null)
+                return;
             if (_command.Parameters.Count > 0)
                 _command.Parameters.Clear();
             if (_command.Transaction != null)
@@ -432,7 +426,9 @@ namespace Tatan.Data
                 var entity = new T();
                 for (var j = 0; j < reader.FieldCount; j++)
                 {
-                    if (!reader.IsDBNull(j))
+                    if (reader.GetName(j) == "Id")
+                        SetId(entity, reader.GetInt32(j));
+                    else if (!reader.IsDBNull(j))
                         entity[reader.GetName(j)] = reader.GetValue(j);
                 }
                 entities.Entities.Add(entity);
@@ -442,6 +438,14 @@ namespace Tatan.Data
                 entities.TotalCount = reader.GetInt32(0);
             }
             return entities;
+        }
+
+        private void SetId(object obj, int id)
+        {
+            if (obj is DataEntity)
+            {
+                obj.GetType().GetProperty("Id").SetValue(obj, id);
+            }
         }
         #endregion
     }

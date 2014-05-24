@@ -11,6 +11,16 @@
     public partial class Tables : DataEntity
     {
         #region 构造函数
+
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        public Tables()
+            : base(-1)
+        {
+            
+        }
+
         /// <summary>
         /// 构造函数
         /// </summary>

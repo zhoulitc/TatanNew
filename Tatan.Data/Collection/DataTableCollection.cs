@@ -49,7 +49,7 @@ namespace Tatan.Data
             Collection.Add(name, table);
             var dataProvider = _source.Provider as DataProvider;
             if (dataProvider != null)
-                _source.Sessions.Add(name, new DataSession(_source, name, dataProvider.Name, dataProvider.Connection));
+                _source.Sessions.Add(name, new DataSession(_source, name, dataProvider.Connection));
             return table;
         }
     }

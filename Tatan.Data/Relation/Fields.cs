@@ -11,6 +11,16 @@
     public partial class Fields : DataEntity
     {
         #region 构造函数
+
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        public Fields()
+            : base(-1)
+        {
+            
+        }
+
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -28,7 +38,7 @@
         static Fields()
         {
             _perproties = new PropertyCollection(typeof(Fields),
-                "Name", "Title", "Type", "Size", "Precision", "Scale", "DefaultValue", "TableName", "OrderID"
+                "Name", "Title", "Type", "Size", "Scale", "DefaultValue", "TableId", "OrderId"
             );
         }
         #endregion
@@ -53,7 +63,7 @@
             Size = default(int);
             Scale = default(int);
             DefaultValue = default(string);
-            TableName = default(string);
+            TableId = default(int);
             OrderId = default(int);
         }
         #endregion
@@ -77,12 +87,12 @@
         /// <summary>
         /// 字段长度/精度
         /// </summary>
-        public int Size { get; set; }
+        public long Size { get; set; }
 
         /// <summary>
         /// 字段小数位数
         /// </summary>
-        public int Scale { get; set; }
+        public long Scale { get; set; }
 
         /// <summary>
         /// 字段默认值
@@ -92,12 +102,12 @@
         /// <summary>
         /// 字段表名
         /// </summary>
-        public string TableName { get; set; }
+        public long TableId { get; set; }
 
         /// <summary>
         /// 字段排序编号
         /// </summary>
-        public int OrderId { get; set; }
+        public long OrderId { get; set; }
 
         #endregion
     }

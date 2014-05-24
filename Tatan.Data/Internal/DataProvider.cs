@@ -50,7 +50,7 @@ namespace Tatan.Data
                     FuzzyMatchingSymbol = "%";
                     break;
                 case "System.Data.SQLite":
-                    ParameterSymbol = "?";
+                    ParameterSymbol = "$";
                     StringSplicingSymbol = "||";
                     FuzzyMatchingSymbol = "%";
                     break;

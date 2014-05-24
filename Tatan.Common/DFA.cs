@@ -26,7 +26,7 @@ namespace Tatan.Common
     /// </summary>
     /// <typeparam name="T">token类型</typeparam>
 // ReSharper disable once InconsistentNaming
-    public class DFA<T>
+    public class DFA<T> : IDisposable
     {
         /// <summary>
         /// 构造函数
@@ -38,9 +38,9 @@ namespace Tatan.Common
         }
 
         /// <summary>
-        /// 析构
+        /// 销毁有穷状态机
         /// </summary>
-        ~DFA()
+        public void Dispose()
         {
             StateFunctions.Clear();
             StateFunctions = null;

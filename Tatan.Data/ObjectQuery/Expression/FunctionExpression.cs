@@ -44,6 +44,10 @@ namespace Tatan.Data.ObjectQuery
             _function = string.IsNullOrEmpty(function) ? _symbol : function;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return _function.Replace(_symbol, _field);

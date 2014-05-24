@@ -1,4 +1,5 @@
 ﻿using Tatan.Common.Expression;
+
 // ReSharper disable once CheckNamespace
 
 
@@ -8,7 +9,6 @@ namespace Tatan.Data
     using System.Collections.Generic;
     using System.Linq.Expressions;
     using System.Text;
-    using Common;
     using Common.Exception;
 
     internal class DataTable : IDataTable
@@ -177,19 +177,19 @@ namespace Tatan.Data
             });
         }
 
-        public int Count()
+        public long Count()
         {
-            return DataSource.UseSession(Name, session => session.GetScalar<int>(_counts));
+            return DataSource.UseSession(Name, session => session.GetScalar<long>(_counts));
         }
 
-        public int Count<T>(Expression<Func<T, bool>> condition) 
+        public long Count<T>(Expression<Func<T, bool>> condition) 
             where T : class, IDataEntity
         {
             ExceptionHandler.ArgumentNull("condition", condition);
             return DataSource.UseSession(Name, session =>
             {
                 var where = ExpressionParser.Parse(condition, DataSource.Provider.ParameterSymbol);
-                return session.GetScalar<int>(_count + where.Condition, p =>
+                return session.GetScalar<long>(_count + where.Condition, p =>
                 {
                     foreach (var pair in where.Parameters)
                         p[pair.Key] = pair.Value;

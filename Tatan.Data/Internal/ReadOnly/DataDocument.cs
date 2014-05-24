@@ -27,22 +27,18 @@ namespace Tatan.Data
         internal DataDocument(IDataReader reader)
             : this()
         {
-            if (reader.Read())
+            for (var i = 0; i < reader.FieldCount; i++)
             {
+                _schema.Add(reader.GetName(i), i);
+            }
+            while (reader.Read())
+            {
+                var record = new DataRecord(_schema);
                 for (var i = 0; i < reader.FieldCount; i++)
                 {
-                    _schema.Add(reader.GetName(i), i);
+                    record[reader.GetName(i)] = reader.GetValue(i);
                 }
-                do
-                {
-                    var record = new DataRecord(_schema);
-                    for (var i = 0; i < reader.FieldCount; i++)
-                    {
-                        record[reader.GetName(i)] = reader.GetValue(i);
-                    }
-                    _records.Add(record);
-                }
-                while (reader.Read());
+                _records.Add(record);
             }
         }
 

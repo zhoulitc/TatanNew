@@ -1,13 +1,14 @@
-﻿namespace Tatan.Data.Relation.Collections
+﻿using Tatan.Common;
+
+namespace Tatan.Data.Relation.Collections
 {
+    using System.Collections;
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-    using Common.Collections;
 
     /// <summary>
     /// Fields集合
     /// </summary>
-    public sealed class FieldsCollection : AbstractReadOnlyCollection<Fields>
+    public sealed class FieldsCollection : IEnumerable<Fields>, ICountable
     {
         private readonly ICollection<Fields> _fields; 
 
@@ -17,28 +18,27 @@
         /// <param name="fields"></param>
         public FieldsCollection(params Fields[] fields)
         {
-            _fields = new Collection<Fields>(fields);
+            _fields = new List<Fields>(fields);
         }
 
-        public override IEnumerator<Fields> GetEnumerator()
+        /// <summary>
+        /// 返回一个循环访问集合的枚举器。
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerator<Fields> GetEnumerator()
         {
             return _fields.GetEnumerator();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        public override bool Contains(Fields item)
+        IEnumerator IEnumerable.GetEnumerator()
         {
-            return item != null && _fields.Contains(item);
+            return GetEnumerator();
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public override int Count 
+        public int Count 
         {
             get { return _fields.Count; }
         }
