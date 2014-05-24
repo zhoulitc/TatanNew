@@ -52,12 +52,12 @@ namespace Tatan.Common.Extension.String.Target
             if (targets == null)
                 return source;
             var begin = 0;
-            var match = regex.Match(source, begin);
             var result = new StringBuilder();
+            var match = regex.Match(source, begin);
             while (match.Success)
             {
                 result.Append(source.Substring(begin, match.Index - begin));
-                string target = source.Substring(match.Index + leftLength, match.Length - leftLength - rightLength);
+                var target = source.Substring(match.Index + leftLength, match.Length - leftLength - rightLength);
                 if (targets.ContainsKey(target))
                     result.Append(targets[target]);
                 begin = match.Index + match.Length;

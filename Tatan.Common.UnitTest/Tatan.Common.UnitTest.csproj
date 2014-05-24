@@ -35,24 +35,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.QualityTools.Testing.Fakes, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
-    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework.10.0.0.0.Fakes">
-      <HintPath>FakesAssemblies\Microsoft.VisualStudio.QualityTools.UnitTestFramework.10.0.0.0.Fakes.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\testbin\Net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Web" />
-    <Reference Include="System.Web.4.0.0.0.Fakes">
-      <HintPath>FakesAssemblies\System.Web.4.0.0.0.Fakes.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.XML" />
-    <Reference Include="UIAutomationTypes" />
-    <Reference Include="WindowsBase" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -82,17 +71,12 @@
     <Compile Include="ExpressionParserTest.cs" />
     <Compile Include="LanguageTest.cs" />
     <Compile Include="LogTest.cs" />
-    <Compile Include="GroupHandlerTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Tatan.Common\Tatan.Common.csproj">
       <Project>{bdbc7a1b-c33f-4d6f-8ffe-be6fc1b929ca}</Project>
       <Name>Tatan.Common</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Fakes Include="Fakes\Microsoft.VisualStudio.QualityTools.UnitTestFramework.fakes" />
-    <Fakes Include="Fakes\System.Web.fakes" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

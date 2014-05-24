@@ -46,7 +46,6 @@
     <Compile Include="Collections\ReadOnlyCollection.cs" />
     <Compile Include="Collections\PropertyCollection.cs" />
     <Compile Include="Expression\ExpressionParser.cs" />
-    <Compile Include="GroupHandler.cs" />
     <Compile Include="IDentifiable.cs" />
     <Compile Include="IO\Runtime.cs" />
     <Compile Include="IReplicable.cs" />

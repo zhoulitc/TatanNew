@@ -33,7 +33,6 @@
             }
             catch (System.Exception ex)
             {
-
                 Log.Default.Warn(typeof(XmlParser), ex.Message, ex);
                 return null;
             }
