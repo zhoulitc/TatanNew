@@ -46,8 +46,9 @@
     <Compile Include="Collections\ReadOnlyCollection.cs" />
     <Compile Include="Collections\PropertyCollection.cs" />
     <Compile Include="Expression\ExpressionParser.cs" />
+    <Compile Include="GroupHandler.cs" />
     <Compile Include="IDentifiable.cs" />
-    <Compile Include="IO\Path.cs" />
+    <Compile Include="IO\Runtime.cs" />
     <Compile Include="IReplicable.cs" />
     <Compile Include="Configuration\ConfigFactory.cs" />
     <Compile Include="Cryptography\CipherFactory.cs" />
