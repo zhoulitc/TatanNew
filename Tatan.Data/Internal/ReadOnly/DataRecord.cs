@@ -37,7 +37,7 @@ namespace Tatan.Data
                 ExceptionHandler.KeyNotFound(_schema, key);
                 return this[_schema[key]];
             }
-            set
+            internal set
             {
                 ExceptionHandler.ArgumentNull("key", key);
                 ExceptionHandler.KeyNotFound(_schema, key);
@@ -52,7 +52,7 @@ namespace Tatan.Data
                 ExceptionHandler.IndexOutOfRange(index);
                 return _values[index];
             }
-            set
+            internal set
             {
                 ExceptionHandler.IndexOutOfRange(index);
                 _values[index] = value;

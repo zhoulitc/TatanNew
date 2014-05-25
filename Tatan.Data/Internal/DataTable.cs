@@ -31,7 +31,7 @@ namespace Tatan.Data
         private readonly string _deleteIdentity;
 
         //DELETE FROM [tableName] WHERE [condition]
-// ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
+        // ReSharper disable once PrivateFieldCanBeConvertedToLocalVariable
         private readonly string _delete;
 
         //UPDATE [tableName] SET [entity] WHERE [identity]
@@ -51,10 +51,10 @@ namespace Tatan.Data
         {
             Name = tableName;
             DataSource = dataSource;
-            var constructorInfo = type.GetConstructor(new[] {typeof (int)});
+            var constructorInfo = type.GetConstructor(new[] { typeof(int) });
             if (constructorInfo != null)
                 _entityPrototype = (IDataEntity)constructorInfo.Invoke(new object[] { DataEntity.DefaultId });
-            
+
             //初始化SQL语句
             _insert = string.Format("INSERT INTO {0}({1}) VALUES({2})", Name, GetFields(_entityPrototype), GetParameters(_entityPrototype));
             _delete = string.Format("DELETE FROM {0} WHERE ", Name);
@@ -82,7 +82,7 @@ namespace Tatan.Data
         }
 
         #region IDataTable
-        public bool Insert<T>(T entity) 
+        public bool Insert<T>(T entity)
             where T : class, IDataEntity
         {
             ExceptionHandler.ArgumentNull("entity", entity);
@@ -93,7 +93,7 @@ namespace Tatan.Data
             }) == 1);
         }
 
-        public bool Delete<T>(T entity) 
+        public bool Delete<T>(T entity)
             where T : class, IDataEntity
         {
             ExceptionHandler.ArgumentNull("entity", entity);
@@ -103,7 +103,7 @@ namespace Tatan.Data
             }) == 1);
         }
 
-        public int Delete<T>(Expression<Func<T, bool>> condition) 
+        public int Delete<T>(Expression<Func<T, bool>> condition)
             where T : class, IDataEntity
         {
             ExceptionHandler.ArgumentNull("condition", condition);
@@ -118,7 +118,7 @@ namespace Tatan.Data
             });
         }
 
-        public bool Update<T>(T entity) 
+        public bool Update<T>(T entity)
             where T : class, IDataEntity
         {
             ExceptionHandler.ArgumentNull("entity", entity);
@@ -134,7 +134,7 @@ namespace Tatan.Data
                 p[_identityName] = entity.Id;
                 foreach (var name in entity)
                 {
-                    p[_identityName] = entity[name];
+                    p[name] = entity[name];
                 }
             }) == 1);
         }
@@ -158,7 +158,7 @@ namespace Tatan.Data
             });
         }
 
-        public int Update<T>(IDictionary<string, object> sets, Expression<Func<T, bool>> condition) 
+        public int Update<T>(IDictionary<string, object> sets, Expression<Func<T, bool>> condition)
             where T : class, IDataEntity
         {
             ExceptionHandler.ArgumentNull("sets", sets);
@@ -182,7 +182,7 @@ namespace Tatan.Data
             return DataSource.UseSession(Name, session => session.GetScalar<long>(_counts));
         }
 
-        public long Count<T>(Expression<Func<T, bool>> condition) 
+        public long Count<T>(Expression<Func<T, bool>> condition)
             where T : class, IDataEntity
         {
             ExceptionHandler.ArgumentNull("condition", condition);
@@ -197,7 +197,7 @@ namespace Tatan.Data
             });
         }
 
-        public T NewEntity<T>(int id) 
+        public T NewEntity<T>(int id)
             where T : class, IDataEntity
         {
             var entity = (DataEntity)_entityPrototype.Clone();

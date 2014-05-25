@@ -55,13 +55,13 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="DataConfig.cs" />
-    <Compile Include="EntityTest.cs" />
+    <Compile Include="DataSessionTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DataConfigTest.cs" />
-    <Compile Include="EntityFactoryTest.cs" />
+    <Compile Include="DataEntityTest.cs" />
+    <Compile Include="EntityGeneratorTest.cs" />
     <Compile Include="DataSourceTest.cs" />
     <Compile Include="DataTableTest.cs" />
+    <Compile Include="DataDocumentTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Tatan.Common\Tatan.Common.csproj">

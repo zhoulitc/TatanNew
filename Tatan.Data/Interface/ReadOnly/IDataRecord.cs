@@ -7,7 +7,7 @@ namespace Tatan.Data
     /// <summary>
     /// 数据记录
     /// </summary>
-    public interface IDataRecord : IObject, IDentifiable<string>, IEnumerable<string>
+    public interface IDataRecord : IObject, IEnumerable<string>
     {
         /// <summary>
         /// 获取数据记录中的数据个数

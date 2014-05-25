@@ -4,7 +4,6 @@ namespace Tatan.Data
     using System.Collections;
     using System.Collections.Generic;
     using System.Data;
-    using System.Linq;
     using System.Text;
     using Common.Exception;
 
@@ -17,16 +16,11 @@ namespace Tatan.Data
 
         private readonly IDictionary<string, int> _schema;
 
-        public DataDocument(int capacity = 0)
-        {
-            _records = capacity == 0 ? new List<IDataRecord>() : new List<IDataRecord>(capacity);
-            Id = Common.Guid.New();
-            _schema = new Dictionary<string, int>();
-        }
-
         internal DataDocument(IDataReader reader)
-            : this()
         {
+            _records = new List<IDataRecord>();
+            _schema = new Dictionary<string, int>();
+
             for (var i = 0; i < reader.FieldCount; i++)
             {
                 _schema.Add(reader.GetName(i), i);
@@ -45,15 +39,6 @@ namespace Tatan.Data
         #region IDataDocument
         public int Count { get { return _records.Count; } }
 
-        public IDataRecord this[string id]
-        {
-            get
-            {
-                ExceptionHandler.ArgumentNull("id", id);
-                return _records.First(record => record.Id == id);
-            }
-        }
-
         public IDataRecord this[int index]
         {
             get
@@ -62,10 +47,6 @@ namespace Tatan.Data
                 return _records[index];
             }
         }
-        #endregion
-
-        #region IDentifiable
-        public string Id { get; internal set; }
         #endregion
 
         #region IEnumerable

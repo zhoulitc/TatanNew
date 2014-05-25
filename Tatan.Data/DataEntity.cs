@@ -92,6 +92,7 @@ namespace Tatan.Data
             var entity = (DataEntity)MemberwiseClone();
             entity.Clear();
             entity.Id = DefaultId;
+            entity.PropertyChanged = null;
             return entity;
         }
 

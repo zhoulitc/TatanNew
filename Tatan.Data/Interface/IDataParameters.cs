@@ -7,16 +7,6 @@ namespace Tatan.Data
     public interface IDataParameters
     {
         /// <summary>
-        /// 清空参数集
-        /// </summary>
-        void Clear();
-
-        /// <summary>
-        /// 获取参数个数
-        /// </summary>
-        int Count { get; }
-
-        /// <summary>
         /// 设置一个非数字型参数
         /// </summary>
         /// <param name="index">参数索引</param>

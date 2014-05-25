@@ -6,7 +6,6 @@ namespace Tatan.Data
     using System.Collections.Generic;
     using System.Data;
     using System.Data.Common;
-    using System.Reflection;
     using System.Threading.Tasks;
     using Common.Exception;
     using Common.Logging;
@@ -96,12 +95,17 @@ namespace Tatan.Data
 
         public T GetScalar<T>(string request, Action<IDataParameters> action = null)
         {
-            return (T)_Execute(request, action, () => _command.ExecuteScalar());
+            var value = _Execute(request, action, () => _command.ExecuteScalar());
+            if (value == null)
+                return default(T);
+            return (T)value;
         }
 
         public async Task<T> GetScalarAsync<T>(string request, Action<IDataParameters> action = null)
         {
             var value = await _Execute(request, action, () => _command.ExecuteScalarAsync());
+            if (value == null)
+                return default(T);
             return (T)value;
         }
 
@@ -119,6 +123,8 @@ namespace Tatan.Data
         #region 事务处理
         public IDbTransaction BeginTransaction(IsolationLevel lockLevel = IsolationLevel.Unspecified)
         {
+            if (_command.Connection.State != ConnectionState.Open)
+                _command.Connection.Open();
             _command.Transaction = _command.Connection.BeginTransaction(lockLevel);
             return _command.Transaction;
         }
@@ -148,19 +154,6 @@ namespace Tatan.Data
             {
                 _command = command;
                 _symbol = source.Provider.ParameterSymbol;
-            }
-
-            public void Clear()
-            {
-                _command.Parameters.Clear();
-            }
-
-            public int Count 
-            {
-                get 
-                {
-                    return _command.Parameters.Count;
-                }
             }
 
             public object this[int index, DataType type = DataType.Object, int size = 0] 

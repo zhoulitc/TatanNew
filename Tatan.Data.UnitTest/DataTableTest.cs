@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tatan.Data;
 using Tatan.Common.Serialization;
@@ -9,6 +10,7 @@ using Tatan.Data.Relation;
 namespace Tatan.Data.UnitTest
 {
     using Tatan.Common.Cryptography;
+    using Tatan.Common.Collections;
 
     [TestClass]
     public class DataTableTest
@@ -23,7 +25,7 @@ namespace Tatan.Data.UnitTest
             _source = DataSource.Connect(p, c);
             _source.Tables.Add(typeof(Tatan.Data.Relation.Fields));
             _source.Tables.Add(typeof(Tatan.Data.Relation.Tables));
-            _source.UseSession("Fields", session => session.Execute("DELETE FROM Fields"));
+            _source.UseSession("Fields1", session => session.Execute("DELETE FROM Fields"));
             _source.UseSession("Tables", session => session.Execute("DELETE FROM Tables"));
         }
 
@@ -67,6 +69,63 @@ namespace Tatan.Data.UnitTest
             foreach (var field in fields)
             {
                 Assert.IsNotNull(field.Name);
+            }
+
+            Assert.AreEqual(_source.Tables["Tables"].Update(new Tables(1) {Name = "table2"}), false);
+
+            Assert.AreEqual(_source.Tables["Tables"].Count<Tables>(table => table.Id == 0), 0);
+
+            Assert.AreEqual(_source.Tables["Tables"].Update<Tables>(new{Title="wahaha1"}, table=>table.Name=="table1"), 1);
+
+            Assert.AreEqual(_source.Tables["Tables"].Update<Tables>(
+                new Dictionary<string, object>{{"Title","walala"}}, 
+                table => table.Name == "table1"), 1);
+
+            Assert.AreEqual(_source.Tables["Tables"].Delete(new Tables(1)), false);
+
+            Assert.AreEqual(_source.Tables["Fields"].Delete<Fields>(field=>field.Id==1), 0);
+        }
+
+        [TestMethod]
+        public void TestTableNew()
+        {
+            var table = _source.Tables.Add(typeof(TestDataEntity));
+            var entity = table.NewEntity<TestDataEntity>(1);
+            Assert.IsNotNull(entity);
+        }
+
+        public class TestDataEntity : DataEntity
+        {
+            private static readonly PropertyCollection _perproties;
+
+            static TestDataEntity()
+            {
+                _perproties = new PropertyCollection(typeof(TestDataEntity),
+                    "Name", "Age");
+            }
+
+            public TestDataEntity() : base(-1)
+            {
+            }
+
+            public TestDataEntity(int id)
+                : base(id)
+            {
+            }
+
+            public string Name { get; set; }
+
+            public int Age { get; set; }
+
+            public override void Clear()
+            {
+                Name = default(string);
+                Age = default(int);
+            }
+
+            protected override PropertyCollection Properties
+            {
+                get { return _perproties; }
             }
         }
     }

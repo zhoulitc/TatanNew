@@ -40,18 +40,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ObjectQuery\Enum\Aggregate.cs" />
-    <Compile Include="ObjectQuery\Expression\CaseWhenExpression.cs" />
-    <Compile Include="ObjectQuery\Expression\FunctionExpression.cs" />
-    <Compile Include="ObjectQuery\Interface\IExpression.cs" />
-    <Compile Include="ObjectQuery\Interface\IFrom.cs" />
-    <Compile Include="ObjectQuery\Interface\IOQL.cs" />
-    <Compile Include="ObjectQuery\Interface\ISelect.cs" />
-    <Compile Include="ObjectQuery\Interface\IWhere.cs" />
-    <Compile Include="ObjectQuery\Enum\Join.cs" />
-    <Compile Include="ObjectQuery\ObjectQuerier.cs" />
-    <Compile Include="ObjectQuery\Enum\SetMerge.cs" />
-    <Compile Include="ObjectQuery\Expression\WhereExpression.cs" />
     <Compile Include="Collection\DataTableCollection.cs" />
     <Compile Include="DataEntity.cs">
       <SubType>Code</SubType>

@@ -12,8 +12,10 @@
     /// </summary>
     public class EntityGenerator : IGenerator
     {
-        private readonly IDictionary<string, object> _data;
-        private readonly IDictionary<string, string> _types = new Dictionary<string, string>(6)
+        private readonly IEnumerable<Tables> _tables;
+        private readonly IDataSource _source;
+        private readonly string _projectName;
+        private readonly static IDictionary<string, string> _types = new Dictionary<string, string>(6)
             {
                 {"I", "int"},
                 {"L", "long"},
@@ -24,13 +26,18 @@
             };
 
         #region 构造函数
+
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="data"></param>
-        public EntityGenerator(Dictionary<string, object> data)
+        /// <param name="tables"></param>
+        /// <param name="projectName"></param>
+        /// <param name="source"></param>
+        public EntityGenerator(IEnumerable<Tables> tables, string projectName = null, IDataSource source = null)
         {
-            _data = data ?? new Dictionary<string, object>();
+            _tables = tables ?? new List<Tables>();
+            _projectName = projectName ?? "Tatan.Entities";
+            _source = source;
         }
         #endregion
 
@@ -53,20 +60,17 @@
             ExceptionHandler.FileNotFound(inputFile);
             ExceptionHandler.DirectoryNotFound(outputFolder);
 
-            var tables = GetProperty<IDictionary<string, IList<Fields>>>("Tables");
-            if (tables == null || tables.Count <= 0)
+            if (_source == null)
                 return;
-            if (!outputFolder.EndsWith(Path.DirectorySeparatorChar.ToString()))
-                outputFolder += Path.DirectorySeparatorChar;
+            if (!outputFolder.EndsWith(CommonRuntime.Separator))
+                outputFolder += CommonRuntime.Separator;
 
-            var names = new StringBuilder();
-            var fields = new StringBuilder();
-            var clears = new StringBuilder();
-            foreach (var name in tables.Keys)
+            foreach (var table in _tables)
             {
-                fields.Clear();
-                clears.Clear();
-                foreach (var column in tables[name])
+                var names = new StringBuilder();
+                var fields = new StringBuilder();
+                var clears = new StringBuilder();
+                foreach (var column in table.GetFields(_source))
                 {
                     names.AppendFormat("\"{0}\",", column.Name);
                     fields.AppendFormat("\n\t\t/// <summary>\n\t\t/// {0}\n\t\t/// </summary>", column.Title);
@@ -76,22 +80,15 @@
 
                 var targets = new Dictionary<string, string>
                 {
-                    {"ProjectName", (GetProperty<string>("ProjectName") ?? "Tatan.Entities")},
-                    {"Entity", name},
-                    {"Names", names.Remove(names.Length - 1, 1).ToString()},
+                    {"ProjectName", _projectName},
+                    {"Entity", table.Name},
+                    {"Names", names.Length > 0 ? names.Remove(names.Length - 1, 1).ToString() : string.Empty},
                     {"Fields", fields.ToString()},
-                    {"Clear", clears.Remove(0, 4).ToString()}
+                    {"Clear", clears.Length > 4 ? clears.Remove(0, 4).ToString() : string.Empty}
                 };
 
                 WriteCSharpCode(inputFile, outputFolder, targets);
             }
-        }
-
-        private T GetProperty<T>(string key) where T : class
-        {
-            if (!_data.ContainsKey(key)) 
-                return default(T);
-            return _data[key] as T;
         }
 
         private static void WriteCSharpCode(string inPath, string outPath, IDictionary<string, string> targets)

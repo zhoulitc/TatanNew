@@ -60,6 +60,16 @@ namespace Tatan.Data
         /// <summary>
         /// 根据模式表达式，更新指定的记录
         /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="condition"></param>
+        /// <exception cref="System.ArgumentNullException">参数为空时抛出</exception>
+        /// <returns></returns>
+        int Update<T>(object entity, Expression<Func<T, bool>> condition)
+            where T : class, IDataEntity;
+
+        /// <summary>
+        /// 根据模式表达式，更新指定的记录
+        /// </summary>
         /// <param name="sets"></param>
         /// <param name="condition"></param>
         /// <exception cref="System.ArgumentNullException">参数为空时抛出</exception>
