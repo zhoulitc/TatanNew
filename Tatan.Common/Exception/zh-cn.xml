@@ -6,6 +6,7 @@
   <IndexOutOfRange>索引超出范围。</IndexOutOfRange>
   <KeyNotFound>键不存在。</KeyNotFound>
   <NotSupported>此操作没有实现。</NotSupported>
+  <ObjectDisposed>对象已经释放。</ObjectDisposed>
   
   <!--System.IO异常-->
   <DirectoryNotFound>目录不存在。</DirectoryNotFound>

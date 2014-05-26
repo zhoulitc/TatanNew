@@ -60,22 +60,38 @@ namespace Tatan.Data
             _session = new DataSession(this, "0", _dataProvider.Connection);
         }
 
+        #region IDisposable
+        ~DataSource()
+        {
+            Dispose(false);
+        }
+
         /// <summary>
-        /// 返回一个循环访问集合的枚举器。
+        /// 销毁对象
         /// </summary>
         public void Dispose()
         {
-            _tables.Clear();
-            foreach (var session in Sessions.Values)
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        private void Dispose(bool disposable)
+        {
+            if (disposable)
             {
-                session.Dispose();
-            }
-            Sessions.Clear();
-            if (_session != null)
-            {
-                _session.Dispose();
+                _tables.Clear();
+                foreach (var session in Sessions.Values)
+                {
+                    session.Dispose();
+                }
+                Sessions.Clear();
+                if (_session != null)
+                {
+                    _session.Dispose();
+                }
             }
         }
+        #endregion
 
         internal static DbProviderFactory Get(string name)
         {

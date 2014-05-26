@@ -46,17 +46,41 @@
         /// <returns></returns>
         public bool IsString(string name)
         {
+            ExceptionHandler.ObjectDisposed(_isDisposed);
             ExceptionHandler.ArgumentNull("name", name);
             return Contains(name) && Collection[name].PropertyType.IsAssignableFrom(_stringType);
         }
+
+        #region IDisposable
+
+        ~PropertyCollection()
+        {
+            Dispose(false);
+        }
+
+        private bool _isDisposed;
 
         /// <summary>
         /// 销毁属性集合
         /// </summary>
         public void Dispose()
         {
-            Collection.Clear();
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
+
+        private void Dispose(bool disposable)
+        {
+            if (_isDisposed)
+                return;
+            if (disposable)
+            {
+                Collection.Clear();
+            }
+            _isDisposed = true;
+        }
+
+        #endregion
 
         /// <summary>
         /// 获取或设置属性集合中的某个属性值
@@ -71,6 +95,7 @@
         {
             get
             {
+                ExceptionHandler.ObjectDisposed(_isDisposed);
                 ExceptionHandler.ArgumentNull("instance", instance);
                 ExceptionHandler.ArgumentNull("name", name);
                 ExceptionHandler.KeyNotFound(Collection, name);
@@ -78,6 +103,7 @@
             }
             set
             {
+                ExceptionHandler.ObjectDisposed(_isDisposed);
                 ExceptionHandler.ArgumentNull("instance", instance);
                 ExceptionHandler.ArgumentNull("name", name);
                 ExceptionHandler.ArgumentNull("value", value);

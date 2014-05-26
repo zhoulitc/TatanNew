@@ -127,6 +127,17 @@
         }
 
         /// <summary>
+        /// 对象已经销毁
+        /// </summary>
+        /// <param name="isDisposed"></param>
+        /// <exception cref="ObjectDisposedException"></exception>
+        public static void ObjectDisposed(bool isDisposed)
+        {
+            if (isDisposed)
+                throw new ObjectDisposedException(_exception.GetText("ObjectDisposed"));
+        }
+
+        /// <summary>
         /// 目录不存在
         /// </summary>
         /// <param name="path"></param>

@@ -39,11 +39,6 @@ namespace Tatan.Data
             _command = conn.CreateCommand();
             _parameters = new DataParameters(_command, source);
         }
-
-        ~DataSession()
-        {
-            _command = null;
-        }
         #endregion
 
         #region IDataSession
@@ -256,18 +251,35 @@ namespace Tatan.Data
         #endregion
 
         #region IDisposable
+        ~DataSession()
+        {
+            Dispose(false);
+        }
+
+        /// <summary>
+        /// 销毁属性集合
+        /// </summary>
         public void Dispose()
         {
-            if (_command == null)
-                return;
-            if (_command.Parameters.Count > 0)
-                _command.Parameters.Clear();
-            if (_command.Transaction != null)
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        private void Dispose(bool disposable)
+        {
+            if (disposable)
             {
-                _command.Transaction.Dispose();
-                _command.Transaction = null;
+                if (_command == null)
+                    return;
+                if (_command.Parameters.Count > 0)
+                    _command.Parameters.Clear();
+                if (_command.Transaction != null)
+                {
+                    _command.Transaction.Dispose();
+                    _command.Transaction = null;
+                }
+                _command.Connection.Close();
             }
-            _command.Connection.Close();
         }
         #endregion
 
