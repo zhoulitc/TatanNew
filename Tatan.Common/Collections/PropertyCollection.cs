@@ -52,7 +52,9 @@
         }
 
         #region IDisposable
-
+        /// <summary>
+        /// 析构函数
+        /// </summary>
         ~PropertyCollection()
         {
             Dispose(false);

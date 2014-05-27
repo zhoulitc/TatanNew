@@ -61,6 +61,9 @@ namespace Tatan.Data
         }
 
         #region IDisposable
+        /// <summary>
+        /// 析构函数
+        /// </summary>
         ~DataSource()
         {
             Dispose(false);
@@ -82,12 +85,12 @@ namespace Tatan.Data
                 _tables.Clear();
                 foreach (var session in Sessions.Values)
                 {
-                    session.Dispose();
+                    ((IDisposable)session).Dispose();
                 }
                 Sessions.Clear();
                 if (_session != null)
                 {
-                    _session.Dispose();
+                    ((IDisposable)_session).Dispose();
                 }
             }
         }
@@ -120,6 +123,17 @@ namespace Tatan.Data
         /// 使用数据会话对象
         /// </summary>
         /// <typeparam name="T"></typeparam>
+        /// <param name="function"></param>
+        /// <returns></returns>
+        public T UseSession<T>(Func<IDataSession, T> function)
+        {
+            return UseSession(null, function);
+        }
+
+        /// <summary>
+        /// 使用数据会话对象
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
         /// <param name="identity"></param>
         /// <param name="function"></param>
         /// <returns></returns>
@@ -132,7 +146,7 @@ namespace Tatan.Data
             {
                 Sessions.Add(identity, new DataSession(this, identity, _dataProvider.Connection));
             }
-            using (IDataSession session = Sessions[identity])
+            using (DataSession session = Sessions[identity])
             {
                 return function(session);
             }

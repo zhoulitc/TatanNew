@@ -9,7 +9,7 @@ namespace Tatan.Data
     /// <summary>
     /// 数据会话接口
     /// </summary>
-    public interface IDataSession : IDentifiable<string>, IDisposable
+    public interface IDataSession : IDentifiable<string>
     {
         #region 数据处理
         /// <summary>

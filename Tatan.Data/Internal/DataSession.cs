@@ -13,7 +13,7 @@ namespace Tatan.Data
     /// <summary>
     /// 数据库抽象会话类，处理一些通用的会话操作
     /// </summary>
-    internal sealed class DataSession : IDataSession
+    internal sealed class DataSession : IDataSession, IDisposable
     {
         #region 私有变量
         private DbCommand _command;
@@ -253,33 +253,26 @@ namespace Tatan.Data
         #region IDisposable
         ~DataSession()
         {
-            Dispose(false);
+            if (_command == null)
+                return;
+            _command.Dispose();
         }
 
         /// <summary>
         /// 销毁属性集合
         /// </summary>
-        public void Dispose()
+        void IDisposable.Dispose()
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        private void Dispose(bool disposable)
-        {
-            if (disposable)
+            if (_command == null)
+                return;
+            if (_command.Parameters.Count > 0)
+                _command.Parameters.Clear();
+            if (_command.Transaction != null)
             {
-                if (_command == null)
-                    return;
-                if (_command.Parameters.Count > 0)
-                    _command.Parameters.Clear();
-                if (_command.Transaction != null)
-                {
-                    _command.Transaction.Dispose();
-                    _command.Transaction = null;
-                }
-                _command.Connection.Close();
+                _command.Transaction.Dispose();
+                _command.Transaction = null;
             }
+            _command.Connection.Close();
         }
         #endregion
 
