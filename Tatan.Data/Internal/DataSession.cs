@@ -42,6 +42,9 @@ namespace Tatan.Data
         #endregion
 
         #region IDataSession
+
+        public int Timeout { get; set; }
+
         #region 数据处理
         public IDataDocument GetData(string request, Action<IDataParameters> action = null)
         {
@@ -328,6 +331,7 @@ namespace Tatan.Data
         {
             _command.CommandText = text; //TODO 检查SQL
             _command.CommandType = _IsStoredProcedure(text) ? CommandType.StoredProcedure : CommandType.Text;
+            _command.CommandTimeout = Timeout <= 0 ? 30 : Timeout;
             if (_command.Parameters.Count > 0)
                 _command.Parameters.Clear();
             if (_command.Connection.State != ConnectionState.Open)

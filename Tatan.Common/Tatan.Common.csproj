@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Collections\AbstractReadOnlyCollection.cs" />
     <Compile Include="Collections\ReadOnlyCollection.cs" />
     <Compile Include="Collections\PropertyCollection.cs" />
     <Compile Include="Expression\ExpressionParser.cs" />
@@ -59,7 +60,7 @@
     <Compile Include="Cryptography\Internal\Sha1Cipher.cs" />
     <Compile Include="Cryptography\Internal\SymmetricCipher.cs" />
     <Compile Include="Extension\String\Convert\Convert.cs" />
-    <Compile Include="Extension\String\Regex\Regex.cs" />
+    <Compile Include="Extension\String\Regex\RegularExpression.cs" />
     <Compile Include="Exception\ExceptionHandler.cs" />
     <Compile Include="I18n\Languages.cs" />
     <Compile Include="IO\File.cs" />

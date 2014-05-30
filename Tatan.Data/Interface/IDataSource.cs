@@ -21,6 +21,14 @@ namespace Tatan.Data
         /// <summary>
         /// 使用库的session
         /// </summary>
+        /// <param name="function"></param>
+        /// <exception cref="System.ArgumentNullException">参数为空时抛出</exception>
+        /// <returns>想要的结果</returns>
+        T UseSession<T>(Func<IDataSession, T> function);
+
+        /// <summary>
+        /// 使用库的session
+        /// </summary>
         /// <param name="identity">session标识符</param>
         /// <param name="function"></param>
         /// <exception cref="System.ArgumentNullException">参数为空时抛出</exception>

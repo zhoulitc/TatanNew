@@ -46,7 +46,7 @@ namespace Tatan.Data.UnitTest
         [TestMethod]
         public void TestUseSession()
         {
-            var doc = _source.UseSession(null, session => session.GetData("select * from fields"));
+            var doc = _source.UseSession(session => session.GetData("select * from fields"));
             Assert.AreEqual(doc.Count>=0,true);
         }
     }

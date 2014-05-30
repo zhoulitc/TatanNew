@@ -1,4 +1,5 @@
 ﻿// ReSharper disable once CheckNamespace
+using System;
 namespace Tatan.Data
 {
     internal sealed class DataProvider : IDataProvider
@@ -81,7 +82,7 @@ namespace Tatan.Data
 
         public override string ToString()
         {
-            return Name + "[" + Connection + "]";
+            return String.Format("{0}[{1}]", Name, Connection);
         }
     }
 }

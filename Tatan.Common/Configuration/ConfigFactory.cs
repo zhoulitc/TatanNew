@@ -1,4 +1,5 @@
-﻿namespace Tatan.Common.Configuration
+﻿using System;
+namespace Tatan.Common.Configuration
 {
     using System.Text;
     using Serialization;
@@ -31,7 +32,7 @@
         public static T GetXmlConfig<T>(string fileName)
         {
             ExceptionHandler.ArgumentNull("fileName", fileName);
-            var path = Runtime.Root + fileName + ".xml";
+            var path = String.Format("{0}{1}.xml", Runtime.Root, fileName);
             ExceptionHandler.FileNotFound(path);
             var content = SystemFile.ReadAllText(path, Encoding.UTF8);
             return Serializer.Xml.Deserialize<T>(content);

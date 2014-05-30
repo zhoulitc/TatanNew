@@ -157,7 +157,7 @@ namespace Tatan.Data
                 else
                     builder.AppendFormat(",\"{0}\":{1}", property, Properties[this, property]);
             }
-            return "{" + builder + "}";
+            return String.Format("{{{0}}}", builder);
         }
         #endregion
     }

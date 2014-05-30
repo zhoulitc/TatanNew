@@ -11,6 +11,11 @@ namespace Tatan.Data
     /// </summary>
     public interface IDataSession : IDentifiable<string>
     {
+        /// <summary>
+        /// 获取或设置命令的超时时间
+        /// </summary>
+        int Timeout { get; set; }
+
         #region 数据处理
         /// <summary>
         /// 获取一个数据集
