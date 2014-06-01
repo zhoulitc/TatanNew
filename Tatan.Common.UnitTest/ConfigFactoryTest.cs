@@ -64,6 +64,22 @@ namespace Tatan.Common.UnitTest
         }
 
         [TestMethod]
+        public void TestAppConfig()
+        {
+            var o = ConfigFactory.AppConfig;
+            Assert.AreEqual(o["key"], string.Empty);
+            Assert.AreEqual(o["s"], "1");
+        }
+
+        [TestMethod]
+        public void TestConnectionConfig()
+        {
+            var o = ConfigFactory.ConnectionConfig;
+            Assert.AreEqual(o["key"].ConnectionString, string.Empty);
+            Assert.AreEqual(o["LocalSqlServer"].ProviderName, "System.Data.SqlClient");
+        }
+
+        [TestMethod]
         public void TestXmlSerializerExtension()
         {
             var xml = Serializer.CreateXmlSerializer(

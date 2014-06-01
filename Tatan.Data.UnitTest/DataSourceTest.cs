@@ -34,6 +34,9 @@ namespace Tatan.Data.UnitTest
             string c = @"Db\test.db3";
             var source = DataSource.Connect(p, c);
             Assert.IsNotNull(source);
+
+            source = DataSource.Connect("sqlite");
+            Assert.IsNotNull(source);
         }
 
         [TestMethod]
@@ -46,7 +49,7 @@ namespace Tatan.Data.UnitTest
         [TestMethod]
         public void TestUseSession()
         {
-            var doc = _source.UseSession(session => session.GetData("select * from fields"));
+            var doc = _source.UseSession(session => session.GetDocument("select * from fields"));
             Assert.AreEqual(doc.Count>=0,true);
         }
     }

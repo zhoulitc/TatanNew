@@ -10,9 +10,5 @@ namespace Tatan.Data
     public interface IDataEntities<out T> : IReadOnlyList<T>
         where T : IDataEntity, new()
     {
-        /// <summary>
-        /// 获取总记录数
-        /// </summary>
-        int TotalCount { get; }
     }
 }

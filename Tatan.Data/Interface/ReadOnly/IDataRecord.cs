@@ -15,7 +15,7 @@ namespace Tatan.Data
         int Count { get; }
 
         /// <summary>
-        /// 通过name来获取或者设置value
+        /// 通过name来获取value
         /// </summary>
         /// <param name="name">数据名</param>
         /// <exception cref="System.ArgumentNullException">参数为空时抛出</exception>
@@ -24,7 +24,7 @@ namespace Tatan.Data
         object this[string name] { get; }
 
         /// <summary>
-        /// 通过索引来获取或者设置value
+        /// 通过索引来获取value
         /// </summary>
         /// <param name="index">数据索引</param>
         /// <exception cref="System.IndexOutOfRangeException">索引越界时抛出</exception>

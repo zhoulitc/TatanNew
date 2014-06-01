@@ -12,9 +12,9 @@ namespace Tatan.Data
     public interface IDataSession : IDentifiable<string>
     {
         /// <summary>
-        /// 获取或设置命令的超时时间
+        /// 设置命令的超时时间
         /// </summary>
-        int Timeout { get; set; }
+        int Timeout { set; }
 
         #region 数据处理
         /// <summary>
@@ -23,7 +23,7 @@ namespace Tatan.Data
         /// <param name="request">请求串，向数据源请求数据，例如SQL、存储过程等</param>
         /// <param name="action">参数设置行为</param>
         /// <returns>数据集</returns>
-        IDataDocument GetData(string request, Action<IDataParameters> action = null);
+        IDataDocument GetDocument(string request, Action<IDataParameters> action = null);
 
         /// <summary>
         /// 获取一个数据集（异步版本）
@@ -31,7 +31,7 @@ namespace Tatan.Data
         /// <param name="request">请求串，向数据源请求数据，例如SQL、存储过程等</param>
         /// <param name="action">参数设置行为</param>
         /// <returns>数据集</returns>
-        Task<IDataDocument> GetDataAsync(string request, Action<IDataParameters> action = null);
+        Task<IDataDocument> GetDocumentAsync(string request, Action<IDataParameters> action = null);
 
         /// <summary>
         /// 获取一个数据实体集
@@ -40,10 +40,8 @@ namespace Tatan.Data
         /// </summary>
         /// <param name="request">请求串，向数据源请求数据，例如SQL、存储过程等</param>
         /// <param name="action">参数设置行为</param>
-        /// <param name="begin">起始行</param>
-        /// <param name="end">停止行</param>
         /// <returns>泛型列表</returns>
-        IDataEntities<T> GetEntities<T>(string request, Action<IDataParameters> action = null, int begin = 0, int end = 0) 
+        IDataEntities<T> GetEntities<T>(string request, Action<IDataParameters> action = null) 
             where T : IDataEntity, new();
 
         /// <summary>
@@ -53,10 +51,8 @@ namespace Tatan.Data
         /// </summary>
         /// <param name="request">请求串，向数据源请求数据，例如SQL、存储过程等</param>
         /// <param name="action">参数设置行为</param>
-        /// <param name="begin">起始行</param>
-        /// <param name="end">停止行</param>
         /// <returns>泛型列表</returns>
-        Task<IDataEntities<T>> GetEntitiesAsync<T>(string request, Action<IDataParameters> action = null, int begin = 0, int end = 0) 
+        Task<IDataEntities<T>> GetEntitiesAsync<T>(string request, Action<IDataParameters> action = null) 
             where T : IDataEntity, new();
 
         /// <summary>

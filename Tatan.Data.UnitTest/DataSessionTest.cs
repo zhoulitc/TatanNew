@@ -45,44 +45,6 @@ namespace Tatan.Data.UnitTest
                 return s;
             });
             Assert.AreEqual(ss, 0);
-            // IDataDocument doc = new DataDocument();
-            // doc.NewProperty("key1", DataType.Date);
-            // doc.NewProperty("key2", DataType.Binary);
-            // doc.NewProperty("key3", DataType.Record);
-            // IDataRecord rec = doc.NewRecord();
-            // IDataRecord rec1 = new DataRecord("name", "age");
-            // rec1["name"] = "周立";
-            // rec1["age"] = 26;
-
-            // rec["key1"] = DateTime.Now;
-            // rec["key2"] = Encoding.UTF8.GetBytes("wahaha");
-            // rec["key3"] = DataValue.ValueOf(rec1);
-            // //string sssss = (string)rec["key1"];
-            // doc.Add(rec);
-
-            // IDataDocument doc1 = doc.Clone();
-            // IDataDocument doc2 = doc.Copy();
-            // foreach (var r in doc2)
-            // {
-            //     r["key2"] = Encoding.UTF8.GetBytes("ceshi");
-            // }
-            // rec1["name"] = "何丹";
-            // rec1["age"] = 22;
-            // rec["key1"] = DateTime.Now.AddDays(3);
-
-            //// SQLEntity sql = SQLManager.Get("select_test");
-            // TablesInfo a = new TablesInfo();
-            // a.Name = "table1";
-            // a.Title = "表1";
-            // a.Remark = "测试表1";
-            // try
-            // {
-            //     DataAccess.Add(a);
-            // }
-            // catch (Exception ex)
-            // {
-            //     Assert.AreNotEqual(ex.Message, "执行数据库操作错误。");
-            // }
         }
 
         [TestMethod]
@@ -91,7 +53,7 @@ namespace Tatan.Data.UnitTest
             Assert.AreEqual(_source.UseSession("sdsa1", session => 
                 session.Execute("UPDATE Fields SET Name='Column1' WHERE Id=38")), 0);
             Assert.AreEqual(_source.UseSession("sdsa1", session => 
-                session.GetData("SELECT * FROM Fields")).Count>=0, true);
+                session.GetDocument("SELECT * FROM Fields")).Count>=0, true);
             Assert.AreEqual(_source.UseSession("sdsa1", session => 
                 session.GetScalar<long>("SELECT Size FROM Fields WHERE Id=1")), 0);
             Assert.AreEqual(_source.UseSession("sdsa1", session => 
@@ -123,7 +85,7 @@ namespace Tatan.Data.UnitTest
 
         private async Task<IDataDocument> GetResult1()
         {
-            var ss = await _source.UseSession("sdsa1", session => session.GetDataAsync("SELECT * FROM Fields"));
+            var ss = await _source.UseSession("sdsa1", session => session.GetDocumentAsync("SELECT * FROM Fields"));
             Assert.AreNotEqual(ss, null);
             return ss;
         }

@@ -24,15 +24,15 @@ namespace Tatan.Data.UnitTest
             _source = DataSource.Connect(p, c);
             _source.Tables.Add(typeof(Tatan.Data.Relation.Fields));
             _source.Tables.Add(typeof(Tatan.Data.Relation.Tables));
-            _source.UseSession("Fields", session => session.ExecuteAsync("TRUNCATE TABLE Fields"));
-            _source.UseSession("Tables", session => session.ExecuteAsync("TRUNCATE TABLE Tables"));
+            _source.UseSession("Fields", session => session.ExecuteAsync("DELETE FROM Fields"));
+            _source.UseSession("Tables", session => session.ExecuteAsync("DELETE FROM Tables"));
         }
 
         [TestMethod]
         public void TestDataIndex()
         {
             var doc = _source.UseSession("sdsa1", session =>
-                session.GetData("SELECT * FROM Fields"));
+                session.GetDocument("SELECT * FROM Fields"));
             if (doc.Count == 0)
             {
                 var f = new Fields
@@ -46,7 +46,7 @@ namespace Tatan.Data.UnitTest
                     TableId = 1
                 };
                 _source.Tables["Fields"].Insert(f);
-                doc = _source.UseSession("sdsa1", session => session.GetData("SELECT * FROM Fields"));
+                doc = _source.UseSession("sdsa1", session => session.GetDocument("SELECT * FROM Fields"));
             }
             Assert.AreEqual(doc.ToString().Length > 0, true);
             Assert.AreEqual(doc[0]["Name"], "col1");
@@ -68,7 +68,7 @@ namespace Tatan.Data.UnitTest
         public void TestDataEqual()
         {
             var doc = _source.UseSession("sdsa1", session =>
-                session.GetData("SELECT * FROM Fields"));
+                session.GetDocument("SELECT * FROM Fields"));
             Assert.IsTrue(doc.Equals(doc));
             Assert.IsFalse(doc.Equals(null));
         }

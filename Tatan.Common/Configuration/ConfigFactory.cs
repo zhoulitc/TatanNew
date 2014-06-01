@@ -1,11 +1,13 @@
-﻿using System;
-namespace Tatan.Common.Configuration
+﻿namespace Tatan.Common.Configuration
 {
+    using System;
     using System.Text;
     using Serialization;
     using Exception;
     using IO;
     using SystemFile = System.IO.File;
+    using System.Configuration;
+    using System.Collections.Generic;
 
     /// <summary>
     /// 配置文件工厂
@@ -36,6 +38,104 @@ namespace Tatan.Common.Configuration
             ExceptionHandler.FileNotFound(path);
             var content = SystemFile.ReadAllText(path, Encoding.UTF8);
             return Serializer.Xml.Deserialize<T>(content);
+        }
+
+        private static AppSettingsConfig _appConfig = new AppSettingsConfig();
+
+        /// <summary>
+        /// 获取默认配置文件项
+        /// </summary>
+        /// <returns></returns>
+        public static IConfig AppConfig
+        {
+            get { return _appConfig; }
+        }
+
+        private static ConnectionStringsConfig _connectionConfig = new ConnectionStringsConfig();
+
+        /// <summary>
+        /// 获取默认配置文件项
+        /// </summary>
+        /// <returns></returns>
+        public static IConfig<DbConfig> ConnectionConfig
+        {
+            get { return _connectionConfig; }
+        }
+
+        private class AppSettingsConfig : IConfig
+        {
+            private readonly IDictionary<string, string> _configs;
+            public AppSettingsConfig()
+            {
+                _configs = new Dictionary<string, string>(ConfigurationManager.AppSettings.Count);
+                foreach (var key in ConfigurationManager.AppSettings.Keys)
+                {
+                    _configs.Add(key.ToString(), ConfigurationManager.AppSettings[key.ToString()]);
+                }
+            }
+
+            public string this[string key] 
+            {
+                get
+                {
+                    ExceptionHandler.ArgumentNull("key", key);
+                    if (!_configs.ContainsKey(key)) return string.Empty;
+                    return _configs[key];
+                }
+            }
+        }
+
+        private class ConnectionStringsConfig : IConfig<DbConfig>
+        {
+            private static readonly DbConfig _nullDbConfig = new DbConfig(string.Empty, string.Empty);
+            private readonly IDictionary<string, DbConfig> _configs;
+            public ConnectionStringsConfig()
+            {
+                _configs = new Dictionary<string, DbConfig>(ConfigurationManager.ConnectionStrings.Count);
+                foreach (var obj in ConfigurationManager.ConnectionStrings)
+                {
+                    var setting = obj as ConnectionStringSettings;
+                    if (setting == null) continue;
+                    _configs.Add(setting.Name, new DbConfig(setting.ProviderName, setting.ConnectionString));
+                }
+            }
+
+            public DbConfig this[string key]
+            {
+                get
+                {
+                    ExceptionHandler.ArgumentNull("key", key);
+                    if (!_configs.ContainsKey(key)) return _nullDbConfig;
+                    return _configs[key];
+                }
+            }
+        }
+
+        /// <summary>
+        /// 数据库配置项
+        /// </summary>
+        public struct DbConfig
+        {
+            /// <summary>
+            /// 连接串
+            /// </summary>
+            public readonly string ConnectionString;
+
+            /// <summary>
+            /// 供应商
+            /// </summary>
+            public readonly string ProviderName;
+
+            /// <summary>
+            /// 构造函数
+            /// </summary>
+            /// <param name="providerName"></param>
+            /// <param name="connectionString"></param>
+            public DbConfig(string providerName, string connectionString)
+            {
+                ProviderName = providerName;
+                ConnectionString = connectionString;
+            }
         }
     }
 }

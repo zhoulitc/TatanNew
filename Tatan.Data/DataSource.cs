@@ -5,6 +5,7 @@ namespace Tatan.Data
     using System.Collections.Generic;
     using System.Data.Common;
     using Common.Exception;
+    using Common.Configuration;
 
     /// <summary>
     /// 数据源
@@ -50,6 +51,18 @@ namespace Tatan.Data
                 }
             }
             return _sources[provider];
+        }
+
+        /// <summary>
+        /// 连接一个数据源对象
+        /// </summary>
+        /// <param name="configName"></param>
+        /// <returns></returns>
+        public static IDataSource Connect(string configName)
+        {
+            ExceptionHandler.ArgumentNull("configName", configName);
+            var config = ConfigFactory.ConnectionConfig[configName];
+            return Connect(config.ProviderName, config.ConnectionString);
         }
 
         private DataSource(DataProvider provider)
