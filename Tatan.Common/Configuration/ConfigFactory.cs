@@ -40,7 +40,7 @@
             return Serializer.Xml.Deserialize<T>(content);
         }
 
-        private static AppSettingsConfig _appConfig = new AppSettingsConfig();
+        private static readonly AppSettingsConfig _appConfig = new AppSettingsConfig();
 
         /// <summary>
         /// 获取默认配置文件项
@@ -51,7 +51,7 @@
             get { return _appConfig; }
         }
 
-        private static ConnectionStringsConfig _connectionConfig = new ConnectionStringsConfig();
+        private static readonly ConnectionStringsConfig _connectionConfig = new ConnectionStringsConfig();
 
         /// <summary>
         /// 获取默认配置文件项

@@ -8,23 +8,23 @@
     /// </summary>
     internal abstract class AsymmetricCipher : ICipher
     {
-        private static readonly string _key = string.Empty;
+        protected static readonly string Key = string.Empty;
 
         public string Encrypt(string expressly, Encoding encoding = null)
         {
-            return Encrypt(expressly, _key, encoding);
+            return Encrypt(expressly, Key, encoding);
         }
 
         public abstract string Encrypt(string expressly, string key, Encoding encoding = null);
 
         public string Decrypt(string ciphertext, Encoding encoding = null)
         {
-            return ExceptionHandler.NotSupported<string>();
+            return ciphertext;
         }
 
         public string Decrypt(string ciphertext, string key, Encoding encoding = null)
         {
-            return ExceptionHandler.NotSupported<string>();
+            return ciphertext;
         }
     }
 }

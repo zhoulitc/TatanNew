@@ -16,7 +16,7 @@ namespace Tatan.Data
     internal sealed class DataSession : IDataSession, IDisposable
     {
         #region 私有变量
-        private DbCommand _command;
+        private readonly DbCommand _command;
         private readonly string _symbol;
 
         #endregion
@@ -34,6 +34,7 @@ namespace Tatan.Data
             var dbFactory = DataSource.Get(source.Provider.Name);
             var conn = dbFactory.CreateConnection();
             ExceptionHandler.ArgumentNull("conn", conn);
+// ReSharper disable once PossibleNullReferenceException
             conn.ConnectionString = connectionString;
             _command = conn.CreateCommand();
             _symbol = source.Provider.ParameterSymbol;

@@ -5,20 +5,23 @@
     using System.Security.Cryptography;
     using System.Text;
 
-    internal sealed class DesCipher : SymmetricCipher
+    internal sealed class AesCipher : SymmetricCipher
     {
         #region 单例
-        private static readonly DesCipher _instance = new DesCipher();
-        private DesCipher()
+        private static readonly AesCipher _instance = new AesCipher();
+        private AesCipher()
         {
         }
-        public static DesCipher Instance
+        public static AesCipher Instance
         {
             get
             {
                 return _instance;
             }
         }
+
+        private const string _aseKey = "what are you talking ? nothing .";
+
         #endregion
 
         #region ICipher
@@ -27,12 +30,20 @@
             if (string.IsNullOrEmpty(expressly))
                 return string.Empty;
             byte[] bytes;
-            var data = (encoding ?? Encoding.Default).GetBytes(expressly);
             key = string.IsNullOrEmpty(key) ? Key : key;
-            using (SymmetricAlgorithm sa = new DESCryptoServiceProvider())
+            if (key.Length < 32)
+            {
+                key += _aseKey.Substring(key.Length);
+            }
+            else if (key.Length > 32)
+            {
+                key = key.Substring(0, 32);
+            }
+            var data = (encoding ?? Encoding.Default).GetBytes(expressly);
+            using (SymmetricAlgorithm sa = new AesCryptoServiceProvider())
             {
                 sa.Key = Encoding.ASCII.GetBytes(key);
-                sa.IV = Encoding.ASCII.GetBytes(key);
+                sa.IV = Encoding.ASCII.GetBytes(key.Substring(16));
 
                 var ms = new MemoryStream();
                 using (var cs = new CryptoStream(ms, sa.CreateEncryptor(), CryptoStreamMode.Write))
@@ -55,14 +66,22 @@
             if (string.IsNullOrEmpty(ciphertext))
                 return result;
             key = string.IsNullOrEmpty(key) ? Key : key;
+            if (key.Length < 32)
+            {
+                key += _aseKey.Substring(key.Length);
+            }
+            else if (key.Length > 32)
+            {
+                key = key.Substring(0, 32);
+            }
             var len = ciphertext.Length / 2;
             var data = new byte[len];
             for (var i = 0; i < len; i++)
                 data[i] = Convert.ToByte(Convert.ToInt32(ciphertext.Substring(i * 2, 2), 16));
-            using (SymmetricAlgorithm sa = new DESCryptoServiceProvider())
+            using (SymmetricAlgorithm sa = new AesCryptoServiceProvider())
             {
                 sa.Key = Encoding.ASCII.GetBytes(key);
-                sa.IV = Encoding.ASCII.GetBytes(key);
+                sa.IV = Encoding.ASCII.GetBytes(key.Substring(16));
 
                 var ms = new MemoryStream();
                 using (var cs = new CryptoStream(ms, sa.CreateDecryptor(), CryptoStreamMode.Write))

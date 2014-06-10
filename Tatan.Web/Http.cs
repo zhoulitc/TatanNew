@@ -14,7 +14,7 @@
 
         static Http()
         {
-            Context = HttpContext.Current;
+            _context = HttpContext.Current;
         }
 
         #region HttpContext

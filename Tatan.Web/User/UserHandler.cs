@@ -29,24 +29,6 @@
         public static DataSource Source { private get; set; }
 
         /// <summary>
-        /// 检查用户密码是否正确(参数符为@)
-        /// </summary>
-        /// <param name="username">用户名(可以是邮箱或手机号)</param>
-        /// <param name="password">密码(密文)</param>
-        /// <returns>用户ID</returns>
-        private static string Check(string username, string password)
-        {
-            return Source.UseSession(_userLogin, session => session.GetScalar<string>(
-                string.Format(_checkSql, 
-                    Source.Provider.ParameterSymbol, 
-                    Source.Provider.ParameterSymbol), p =>
-            {
-                p["Name"] = username;
-                p["Password"] = password;
-            }));
-        }
-
-        /// <summary>
         /// 登录
         /// </summary>
         /// <param name="username">用户名</param>
@@ -62,12 +44,20 @@
             var cipher = CipherFactory.GetCipher("md5");
             var result = Source.UseSession(Http.Session.Id, session =>
             {
-                var id = Check(username, password);
+                var flag = false;
+                var trans = session.BeginTransaction(System.Data.IsolationLevel.ReadUncommitted);
+                var id = session.GetScalar<string>(string.Format(_checkSql, 
+                    Source.Provider.ParameterSymbol, 
+                    Source.Provider.ParameterSymbol), p =>
+                {
+                    p["Name"] = username;
+                    p["Password"] = password;
+                });
                 if (!string.IsNullOrEmpty(id))
                 {
                     us.Id = id.AsInt();
                     us.Guid = cipher.Encrypt(id + username);
-                    return session.Execute(string.Format(_updateSql, 
+                    flag = session.Execute(string.Format(_updateSql, 
                         Source.Provider.ParameterSymbol, 
                         Source.Provider.ParameterSymbol, 
                         Source.Provider.ParameterSymbol), p =>
@@ -78,7 +68,15 @@
 
                     }) == 1;
                 }
-                return false;
+                if (flag)
+                {
+                    trans.Commit();
+                }
+                else
+                {
+                    trans.Rollback();
+                }
+                return flag;
             });
             if (!result) return us;
             us.IsLogin = true;

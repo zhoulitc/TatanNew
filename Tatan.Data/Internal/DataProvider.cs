@@ -1,7 +1,8 @@
 ﻿// ReSharper disable once CheckNamespace
-using System;
 namespace Tatan.Data
 {
+    using System;
+
     internal sealed class DataProvider : IDataProvider
     {
         public string Name { get; set; }

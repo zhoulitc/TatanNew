@@ -101,6 +101,46 @@ namespace Tatan.Common.UnitTest
         }
 
         [TestMethod]
+        public void TestAesEncrypt()
+        {
+            var ic = CipherFactory.GetCipher("aes");
+            var s1 = ic.Encrypt("wahahasdsalkjflsakflkjfsaaslfkjsal");
+            Assert.AreEqual(s1, "A7FFA2A5E4B8669D530072F95593C4115DD2C27B92DF8EFD93A432DAE4632A4446B0A8018347B639780FAC440C9C4B66");
+            s1 = ic.Encrypt(null);
+            Assert.AreEqual(s1, string.Empty);
+        }
+
+        [TestMethod]
+        public void TestAesDecrypt()
+        {
+            var ic = CipherFactory.GetCipher("aes");
+            var s1 = ic.Decrypt("A7FFA2A5E4B8669D530072F95593C4115DD2C27B92DF8EFD93A432DAE4632A4446B0A8018347B639780FAC440C9C4B66");
+            Assert.AreEqual(s1, "wahahasdsalkjflsakflkjfsaaslfkjsal");
+            s1 = ic.Decrypt(null);
+            Assert.AreEqual(s1, string.Empty);
+        }
+
+        [TestMethod]
+        public void TestBase64Encrypt()
+        {
+            var ic = CipherFactory.GetCipher("base64");
+            var s1 = ic.Encrypt("wahahasdsalkjflsakflkjfsaaslfkjsal");
+            Assert.AreEqual(s1, "d2FoYWhhc2RzYWxramZsc2FrZmxramZzYWFzbGZranNhbFoxbDJ0M2M0");
+            s1 = ic.Encrypt(null);
+            Assert.AreEqual(s1, string.Empty);
+        }
+
+        [TestMethod]
+        public void TestBase64Decrypt()
+        {
+            var ic = CipherFactory.GetCipher("base64");
+            var s1 = ic.Decrypt("d2FoYWhhc2RzYWxramZsc2FrZmxramZzYWFzbGZranNhbFoxbDJ0M2M0");
+            Assert.AreEqual(s1, "wahahasdsalkjflsakflkjfsaaslfkjsal");
+            s1 = ic.Decrypt(null);
+            Assert.AreEqual(s1, string.Empty);
+        }
+
+        [TestMethod]
         public void TestNullEncrypt()
         {
             var ic = CipherFactory.GetCipher(null);

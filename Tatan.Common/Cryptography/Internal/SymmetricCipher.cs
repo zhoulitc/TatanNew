@@ -7,18 +7,18 @@
     /// </summary>
     internal abstract class SymmetricCipher : ICipher
     {
-        private const string _key = "Z1l2t3c4";
+        protected const string Key = "Z1l2t3c4";
 
         public string Encrypt(string expressly, Encoding encoding = null)
         {
-            return Encrypt(expressly, _key, encoding);
+            return Encrypt(expressly, Key, encoding);
         }
 
         public abstract string Encrypt(string expressly, string key, Encoding encoding = null);
 
         public string Decrypt(string ciphertext, Encoding encoding = null)
         {
-            return Decrypt(ciphertext, _key, encoding);
+            return Decrypt(ciphertext, Key, encoding);
         }
 
         public abstract string Decrypt(string ciphertext, string key, Encoding encoding = null);

@@ -26,6 +26,7 @@
             if (string.IsNullOrEmpty(expressly))
                 return string.Empty;
             byte[] data;
+            key = string.IsNullOrEmpty(key) ? Key : key;
             using (var sha1 = new SHA1CryptoServiceProvider())
             {
                 data = sha1.ComputeHash((encoding ?? Encoding.Default).GetBytes(key + expressly));

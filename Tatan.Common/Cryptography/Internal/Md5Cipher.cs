@@ -25,9 +25,10 @@
             if (string.IsNullOrEmpty(expressly))
                 return string.Empty;
             byte[] data;
+            key = string.IsNullOrEmpty(key) ? Key : key;
             using (var md5 = new MD5CryptoServiceProvider())
             {
-                data = md5.ComputeHash((encoding ?? Encoding.Default).GetBytes((key ?? string.Empty) + expressly));
+                data = md5.ComputeHash((encoding ?? Encoding.Default).GetBytes(key + expressly));
                 md5.Clear();
             }
             var sb = new StringBuilder();

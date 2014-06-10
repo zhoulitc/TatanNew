@@ -48,6 +48,8 @@
     <Compile Include="Collections\ReadOnlyCollection.cs" />
     <Compile Include="Collections\PropertyCollection.cs" />
     <Compile Include="Configuration\IConfig.cs" />
+    <Compile Include="Cryptography\Internal\Base64Cipher.cs" />
+    <Compile Include="Cryptography\Internal\AesCipher.cs" />
     <Compile Include="Expression\ExpressionParser.cs" />
     <Compile Include="IDentifiable.cs" />
     <Compile Include="IO\Runtime.cs" />

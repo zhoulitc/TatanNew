@@ -32,6 +32,12 @@
                     case "des":
                         cipher = DesCipher.Instance;
                         break;
+                    case "aes":
+                        cipher = AesCipher.Instance;
+                        break;
+                    case "base64":
+                        cipher = Base64Cipher.Instance;
+                        break;
                     default:
                         cipher = NullCipher.Instance;
                         break;

@@ -3,7 +3,7 @@
     /// <summary>
     /// 配置文件对象
     /// </summary>
-    public interface IConfig<T>
+    public interface IConfig<out T>
     {
         /// <summary>
         /// 获取或设置某个配置
