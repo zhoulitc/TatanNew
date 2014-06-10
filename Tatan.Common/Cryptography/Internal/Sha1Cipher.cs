@@ -21,21 +21,9 @@
         #endregion
 
         #region ICipher
-        public override string Encrypt(string expressly, string key, Encoding encoding = null)
+        protected override HashAlgorithm CreateAsymmetricCipher()
         {
-            if (string.IsNullOrEmpty(expressly))
-                return string.Empty;
-            byte[] data;
-            key = string.IsNullOrEmpty(key) ? Key : key;
-            using (var sha1 = new SHA1CryptoServiceProvider())
-            {
-                data = sha1.ComputeHash((encoding ?? Encoding.Default).GetBytes(key + expressly));
-                sha1.Clear();
-            }
-            var sb = new StringBuilder();
-            foreach (var b in data)
-                sb.Append(b.ToString("x"));
-            return sb.ToString();
+            return new SHA1CryptoServiceProvider();
         }
         #endregion
     }

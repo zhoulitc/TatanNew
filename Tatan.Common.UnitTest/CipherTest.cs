@@ -36,9 +36,9 @@ namespace Tatan.Common.UnitTest
             var ic = CipherFactory.GetCipher("md5");
             var s1 = ic.Encrypt("wahahasdsalkjflsakflkjfsaaslfkjsal");
             Assert.AreEqual(s1, "c86fdd4105b631118cfa7e4a06c21");
-            s1 = ic.Encrypt("wahahasdsalkjflsakflkjfsaaslfkjsal", null, Encoding.Default);
+            s1 = ic.Encrypt("wahahasdsalkjflsakflkjfsaaslfkjsal", null);
             Assert.AreEqual(s1, "c86fdd4105b631118cfa7e4a06c21");
-            s1 = ic.Encrypt(null, null, Encoding.Default);
+            s1 = ic.Encrypt(null, null);
             Assert.AreEqual(s1, string.Empty);
             s1 = ic.Encrypt(null);
             Assert.AreEqual(s1, string.Empty);
