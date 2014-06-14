@@ -98,5 +98,14 @@ namespace Tatan.Data
         /// <returns></returns>
         T NewEntity<T>(int id)
             where T : class, IDataEntity;
+
+
+        /// <summary>
+        /// 查询实体集合
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        IDataResult<T> Query<T>(Func<IDataQuery<T>, IDataQuery<T>> queryFunction)
+            where T : class, IDataEntity, new();
     }
 }

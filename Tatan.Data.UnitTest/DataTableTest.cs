@@ -51,6 +51,13 @@ namespace Tatan.Data.UnitTest
             _source.Tables["Fields"].Insert(f);
             f.Clear();
 
+            var result = _source.Tables["Fields"].Query<Fields>(query => query.
+               Where(tde => tde.Name == "col1").
+               OrderBy("Name", DataSort.Descending));
+
+            Assert.AreEqual(result.TotalCount, 1);
+            Assert.AreEqual(result.Entities.Count, 1);
+            Assert.AreEqual(result.Entities[0].Name, "col1");
             Assert.AreEqual(_source.Tables["Fields"].Count(),1);
 
             var t = new Tables

@@ -1,8 +1,5 @@
-﻿using Tatan.Common.Expression;
-
+﻿using System.Collections;
 // ReSharper disable once CheckNamespace
-
-
 namespace Tatan.Data
 {
     using System;
@@ -10,6 +7,7 @@ namespace Tatan.Data
     using System.Linq.Expressions;
     using System.Text;
     using Common.Exception;
+    using Common.Expression;
 
     internal class DataTable : IDataTable
     {
@@ -203,6 +201,161 @@ namespace Tatan.Data
             var entity = (DataEntity)_entityPrototype.Clone();
             entity.Id = id;
             return entity as T;
+        }
+
+        public IDataResult<T> Query<T>(Func<IDataQuery<T>, IDataQuery<T>> queryFunction) 
+            where T : class, IDataEntity, new()
+        {
+            if (queryFunction == null)
+                return new DataResult<T>();
+            using (var query = queryFunction(new DataQuery<T>(DataSource, Name)))
+            {
+                return query.Execute();
+            }
+        }
+        #endregion
+
+        #region IDataResult
+        private class DataResult<T> : IDataResult<T> where T : IDataEntity, new()
+        {
+            public IDataEntities<T> Entities { get; set; }
+            public long TotalCount { get; set; }
+            public IEnumerator<T> GetEnumerator()
+            {
+                return Entities.GetEnumerator();
+            }
+
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                return GetEnumerator();
+            }
+        }
+        #endregion
+
+        #region IDataQuery
+        private class DataQuery<T> : IDataQuery<T>
+            where T : IDataEntity, new()
+        {
+            private string _from;
+
+            private Expression<Func<T, bool>> _where;
+
+            private Dictionary<string, DataSort> _orderBy;
+
+            private uint _begin;
+
+            private uint _end;
+
+            private IDataSource _source;
+
+            public DataQuery(IDataSource source, string name)
+            {
+                _source = source;
+                _from = name;
+                _orderBy = new Dictionary<string, DataSort>();
+            }
+
+            public void Dispose()
+            {
+                _source = null;
+                _from = null;
+                _where = null;
+                _orderBy.Clear();
+                _orderBy = null;
+            }
+
+            public IDataQuery<T> Where(Expression<Func<T, bool>> condition)
+            {
+                _where = condition;
+                return this;
+            }
+
+            public IDataQuery<T> OrderBy(string name, DataSort sort = DataSort.Ascending)
+            {
+                if (_orderBy.ContainsKey(name))
+                    _orderBy[name] = sort;
+                else
+                    _orderBy.Add(name, sort);
+                return this;
+            }
+
+            public IDataQuery<T> Range(uint begin, uint end)
+            {
+                if (begin > end)
+                {
+                    _begin = 0;
+                    _end = 0;
+                }
+                else
+                {
+                    _begin = begin < 1 ? 1 : begin;
+                    _end = end;
+                }
+                return this;
+            }
+
+            public IDataResult<T> Execute()
+            {
+                return _source.UseSession(_from, session =>
+                {
+                    var where = ExpressionParser.Parse(_where, _source.Provider.ParameterSymbol);
+                    var result = new DataResult<T>();
+
+                    if (_begin > 0 && _end > 0)
+                    {
+                        var count = string.Format(@"SELECT COUNT(1) FROM {0} {1}", 
+                            _from, GetWhere(where.Condition)).Trim();
+                        result.TotalCount = session.GetScalar<long>(count, p =>
+                        {
+                            foreach (var pair in where.Parameters)
+                                p[pair.Key] = pair.Value;
+                        });
+
+                        var query = string.Format(@"SELECT * FROM {0} {1} {2}", 
+                            _from, GetWhere(where.Condition), GetOrderBy()).Trim();
+                        result.Entities = session.GetEntities<T>(query, p =>
+                        {
+                            foreach (var pair in where.Parameters)
+                                p[pair.Key] = pair.Value;
+                        });
+                    }
+                    else
+                    {
+                        var query = string.Format(@"SELECT * FROM {0} {1} {2}", 
+                            _from, GetWhere(where.Condition), GetOrderBy()).Trim();
+                        result.Entities = session.GetEntities<T>(query, p =>
+                        {
+                            foreach (var pair in where.Parameters)
+                                p[pair.Key] = pair.Value;
+                        });
+
+                        result.TotalCount = result.Entities.Count;
+                    }
+
+                    return result;
+                });
+            }
+
+            private static string GetWhere(string condition)
+            {
+                if (string.IsNullOrEmpty(condition))
+                    return string.Empty;
+                return " WHERE " + condition;
+            }
+
+            private string GetOrderBy()
+            {
+                if (_orderBy.Count == 0)
+                    return string.Empty;
+                var builder = new StringBuilder(" ORDER BY ");
+                foreach (var order in _orderBy)
+                {
+                    builder.AppendFormat("{0} {1},", order.Key, (order.Value == DataSort.Ascending ? "ASC" : "DESC"));
+                }
+                if (builder.Length > 0)
+                    builder.Remove(builder.Length - 1, 1);
+                return builder.ToString();
+            }
         }
         #endregion
     }

@@ -71,6 +71,7 @@
     <Compile Include="ExpressionParserTest.cs" />
     <Compile Include="LanguageTest.cs" />
     <Compile Include="LogTest.cs" />
+    <Compile Include="ListMapTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Tatan.Common\Tatan.Common.csproj">

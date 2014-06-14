@@ -47,6 +47,8 @@
     <Compile Include="DataSource.cs" />
     <Compile Include="Enum\DataSort.cs" />
     <Compile Include="Interface\IDataProvider.cs" />
+    <Compile Include="Interface\IDataResult.cs" />
+    <Compile Include="Interface\IDataQuery.cs" />
     <Compile Include="Internal\DataProvider.cs" />
     <Compile Include="Internal\DataTable.cs" />
     <Compile Include="Internal\ReadOnly\DataRecord.cs" />

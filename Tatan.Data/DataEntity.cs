@@ -1,5 +1,4 @@
-﻿// ReSharper disable once CheckNamespace
-namespace Tatan.Data
+﻿namespace Tatan.Data
 {
     using System;
     using System.Collections;
@@ -147,7 +146,7 @@ namespace Tatan.Data
         /// <returns>对象的字符串描述</returns>
         public override string ToString()
         {
-            var builder = new StringBuilder(Properties.Count);
+            var builder = new StringBuilder(Properties.Count * 20);
             builder.AppendFormat("\"id\":{0}", Id);
             foreach (var property in Properties)
             {

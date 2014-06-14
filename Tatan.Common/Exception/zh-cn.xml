@@ -20,7 +20,7 @@
   <DuplicateRecords>重复记录。</DuplicateRecords>
   <NotExistRecords>不存在此记录。</NotExistRecords>
   <EM004>数据会话池已经没有多余的会话对象了。</EM004>
-  <EM006>值设置错误。类型必须为"{0}"。</EM006>
+  <IsNotAllow>不允许有更多元素。</IsNotAllow>
   <EM007>值设置错误。类型必须为"{0}"，且Precision不能大于{1}，Scale不能大于{2}。</EM007>
   <EM008>值设置错误。类型必须为"{0}"，且Size不能大于{1}。</EM008>
 </ExceptionMessage> 

@@ -71,7 +71,17 @@ namespace Tatan.Data
 
         public override int GetHashCode()
         {
-            return _records.GetHashCode() ^ _schema.GetHashCode();
+            var hash = 0;
+            foreach (var record in _records)
+            {
+                hash ^= record.GetHashCode();
+            }
+            foreach (var pair in _schema)
+            {
+                hash ^= pair.Key.GetHashCode();
+                hash ^= pair.Value.GetHashCode();
+            }
+            return hash;
         }
 
         public override string ToString()

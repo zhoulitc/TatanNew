@@ -194,6 +194,18 @@
         {
             throw new Exception(_exception.GetText("NotExistRecords"));
         }
+
+        /// <summary>
+        /// 不允许有更多元素
+        /// </summary>
+        /// <param name="count"></param>
+        /// <param name="max"></param>
+        /// <exception cref="Exception"></exception>
+        public static void IsNotAllow(int count, int max)
+        {
+            if (count > max)
+                throw new Exception(_exception.GetText("IsNotAllow"));
+        }
         #endregion
     }
     #endregion
