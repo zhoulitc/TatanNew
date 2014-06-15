@@ -1,8 +1,8 @@
-﻿using System.Collections;
-// ReSharper disable once CheckNamespace
+﻿// ReSharper disable once CheckNamespace
 namespace Tatan.Data
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Linq.Expressions;
     using System.Text;
@@ -208,7 +208,7 @@ namespace Tatan.Data
         {
             if (queryFunction == null)
                 return new DataResult<T>();
-            using (var query = queryFunction(new DataQuery<T>(DataSource, Name)))
+            using (var query = queryFunction(new DataQuery<T>(DataSource, Name, _counts)))
             {
                 return query.Execute();
             }
@@ -236,6 +236,10 @@ namespace Tatan.Data
         private class DataQuery<T> : IDataQuery<T>
             where T : IDataEntity, new()
         {
+            private string _select;
+
+            private string _counts;
+
             private string _from;
 
             private Expression<Func<T, bool>> _where;
@@ -248,10 +252,12 @@ namespace Tatan.Data
 
             private IDataSource _source;
 
-            public DataQuery(IDataSource source, string name)
+            public DataQuery(IDataSource source, string name, string counts)
             {
                 _source = source;
                 _from = name;
+                _select = string.Format("SELECT * FROM {0}", name);
+                _counts = counts;
                 _orderBy = new Dictionary<string, DataSort>();
             }
 
@@ -259,6 +265,8 @@ namespace Tatan.Data
             {
                 _source = null;
                 _from = null;
+                _select = null;
+                _counts = null;
                 _where = null;
                 _orderBy.Clear();
                 _orderBy = null;
@@ -303,16 +311,16 @@ namespace Tatan.Data
 
                     if (_begin > 0 && _end > 0)
                     {
-                        var count = string.Format(@"SELECT COUNT(1) FROM {0} {1}", 
-                            _from, GetWhere(where.Condition)).Trim();
+                        var count = string.Format("{0} {1}",
+                            _counts, GetWhere(where.Condition)).Trim();
                         result.TotalCount = session.GetScalar<long>(count, p =>
                         {
                             foreach (var pair in where.Parameters)
                                 p[pair.Key] = pair.Value;
                         });
 
-                        var query = string.Format(@"SELECT * FROM {0} {1} {2}", 
-                            _from, GetWhere(where.Condition), GetOrderBy()).Trim();
+                        var query = string.Format("{0} {1} {2}",
+                            _select, GetWhere(where.Condition), GetOrderBy()).Trim();
                         result.Entities = session.GetEntities<T>(query, p =>
                         {
                             foreach (var pair in where.Parameters)
@@ -321,8 +329,8 @@ namespace Tatan.Data
                     }
                     else
                     {
-                        var query = string.Format(@"SELECT * FROM {0} {1} {2}", 
-                            _from, GetWhere(where.Condition), GetOrderBy()).Trim();
+                        var query = string.Format(@"{0} {1} {2}",
+                            _select, GetWhere(where.Condition), GetOrderBy()).Trim();
                         result.Entities = session.GetEntities<T>(query, p =>
                         {
                             foreach (var pair in where.Parameters)

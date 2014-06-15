@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tatan", "Tatan", "{FB7B21F9-2F74-497C-99AE-0795C15746E1}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tatan.Test", "Tatan.Test", "{E36DC19E-F355-4E7D-A25F-B6A9DB1D9FA4}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tatan.UnitTest", "Tatan.UnitTest", "{E36DC19E-F355-4E7D-A25F-B6A9DB1D9FA4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tatan.Common", "Tatan.Common\Tatan.Common.csproj", "{BDBC7A1B-C33F-4D6F-8FFE-BE6FC1B929CA}"
 EndProject

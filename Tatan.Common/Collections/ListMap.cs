@@ -40,8 +40,11 @@ namespace Tatan.Common.Collections
         /// <param name="collection"></param>
         public ListMap(IEnumerable<KeyValuePair<TKey, TValue>> collection)
         {
-            ExceptionHandler.ArgumentNull("collection", collection);
-             _map = new List<KeyValuePair<TKey, TValue>>(collection);
+// ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
+            if (collection == null)
+                _map = new List<KeyValuePair<TKey, TValue>>(10);
+            else
+                _map = new List<KeyValuePair<TKey, TValue>>(collection);
         }
 
         /// <summary>

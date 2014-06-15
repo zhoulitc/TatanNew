@@ -105,8 +105,7 @@
                 get
                 {
                     ExceptionHandler.ArgumentNull("key", key);
-                    if (!_configs.ContainsKey(key)) return _nullDbConfig;
-                    return _configs[key];
+                    return !_configs.ContainsKey(key) ? _nullDbConfig : _configs[key];
                 }
             }
         }

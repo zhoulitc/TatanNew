@@ -16,7 +16,7 @@ namespace Tatan.Data.Relation.Collections
         /// 构造函数
         /// </summary>
         /// <param name="fields"></param>
-        public FieldsCollection(params Fields[] fields)
+        public FieldsCollection(IEnumerable<Fields> fields)
         {
             _fields = new List<Fields>(fields);
         }
@@ -41,11 +41,6 @@ namespace Tatan.Data.Relation.Collections
         public int Count 
         {
             get { return _fields.Count; }
-        }
-
-        internal void Add(Fields field)
-        {
-            _fields.Add(field);
         }
     }
 }

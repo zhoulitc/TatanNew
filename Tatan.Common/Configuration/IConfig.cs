@@ -6,7 +6,7 @@
     public interface IConfig<out T>
     {
         /// <summary>
-        /// 获取或设置某个配置
+        /// 获取某个配置
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>

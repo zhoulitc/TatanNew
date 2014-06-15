@@ -25,6 +25,7 @@
         {
             get
             {
+                ExceptionHandler.ArgumentNull("context", _context);
                 return _context;
             }
             set
@@ -43,6 +44,7 @@
         {
             get 
             {
+                ExceptionHandler.ArgumentNull("context", _context);
                 return _context.Request;
             }
         }
@@ -54,6 +56,7 @@
         {
             get
             {
+                ExceptionHandler.ArgumentNull("context", _context);
                 return _context.Response;
             }
         }
@@ -145,16 +148,25 @@
 
             public void Clear()
             {
+                ExceptionHandler.ArgumentNull("context", _context);
                 _context.Response.Cookies.Clear();
             }
 
-            public int Count { get { return _context.Request.Cookies.Count; } }
+            public int Count 
+            {
+                get
+                {
+                    ExceptionHandler.ArgumentNull("context", _context);
+                    return _context.Request.Cookies.Count;
+                } 
+            }
 
             public string this[string key] 
             {
                 get //从Request中读取
                 {
                     ExceptionHandler.ArgumentNull("key", key);
+                    ExceptionHandler.ArgumentNull("context", _context);
                     var cookie = _context.Request.Cookies[key];
                     if (cookie == null)
                         return string.Empty;
@@ -163,6 +175,7 @@
                 set //从Response中写入
                 {
                     ExceptionHandler.ArgumentNull("key", key);
+                    ExceptionHandler.ArgumentNull("context", _context);
                     var cookie = _context.Response.Cookies[key];
                     if (cookie == null) //Add
                     {
@@ -192,6 +205,7 @@
             public void SetExpires(string key, double expires)
             {
                 ExceptionHandler.ArgumentNull("key", key);
+                ExceptionHandler.ArgumentNull("context", _context);
                 var cookie = _context.Response.Cookies[key];
                 if (cookie != null)
                 {
@@ -221,11 +235,13 @@
 
             public void Abandon()
             {
+                ExceptionHandler.ArgumentNull("context", _context);
                 _context.Session.Abandon();
             }
 
             public void Clear()
             {
+                ExceptionHandler.ArgumentNull("context", _context);
                 lock (_context.Session.SyncRoot)
                 {
                     _context.Session.Clear();
@@ -236,6 +252,7 @@
             {
                 get
                 {
+                    ExceptionHandler.ArgumentNull("context", _context);
                     return _context.Session.Count;
                 }
             }
@@ -244,6 +261,7 @@
             {
                 get
                 {
+                    ExceptionHandler.ArgumentNull("context", _context);
                     return _context.Session.SessionID;
                 }
             }
@@ -252,6 +270,7 @@
             {
                 get
                 {
+                    ExceptionHandler.ArgumentNull("context", _context);
                     return _context.Session.IsNewSession;
                 }
             }
@@ -259,6 +278,7 @@
             public T Get<T>(string key)
             {
                 ExceptionHandler.ArgumentNull("key", key);
+                ExceptionHandler.ArgumentNull("context", _context);
                 return (T)_context.Session[key];
             }
 
@@ -267,6 +287,7 @@
                 set
                 {
                     ExceptionHandler.ArgumentNull("key", key);
+                    ExceptionHandler.ArgumentNull("context", _context);
                     var oldValue = _context.Session[key];
                     lock (_context.Session.SyncRoot)
                     {
@@ -294,10 +315,12 @@
             {
                 get
                 {
+                    ExceptionHandler.ArgumentNull("context", _context);
                     return _context.Session.Timeout;
                 }
                 set
                 {
+                    ExceptionHandler.ArgumentNull("context", _context);
                     lock (_context.Session.SyncRoot)
                     {
                         _context.Session.Timeout = value;
