@@ -2,11 +2,11 @@
 {
     using IO;
     using System;
-    using System.Collections.Generic;
     using System.Threading;
     using SystemFile = System.IO.File;
     using SystemDirectory = System.IO.Directory;
     using SystemPath = System.IO.Path;
+    using Collections;
 
     /// <summary>
     /// 默认日志类，所有文件都是一个不切分
@@ -14,7 +14,7 @@
     internal class DefaultLog : ILog
     {
         private readonly Type _type;
-        private readonly IDictionary<LogLevel, string> _filenames;
+        private readonly ListMap<LogLevel, string> _filenames;
         private readonly string _fileFormat;
         private readonly string _cententFormat;
         public DefaultLog()
@@ -22,7 +22,7 @@
             _type = typeof(DefaultLog);
             _fileFormat = "yyyyMMdd";
             _cententFormat = "yyyy-MM-dd hh:mm:ss.fff";
-            _filenames = new Dictionary<LogLevel, string>(5)
+            _filenames = new ListMap<LogLevel, string>(5)
             {
                 {LogLevel.Debug, "{0}.debug.log"},
                 {LogLevel.Info, "{0}.info.log"},

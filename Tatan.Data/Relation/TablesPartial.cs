@@ -10,7 +10,7 @@
     public partial class Tables
     {
         private const string _getFields = "SELECT * FROM Fields WHERE TableId={0}TableId";
-        private FieldsCollection _fields = null;
+        private FieldsCollection _fields;
 
         /// <summary>
         /// 从属表的字段集合

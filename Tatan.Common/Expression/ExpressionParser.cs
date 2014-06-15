@@ -5,6 +5,7 @@
     using System.Linq.Expressions;
     using System.Reflection;
     using System.Text;
+    using Collections;
     using Exception;
 
     /// <summary>
@@ -158,13 +159,13 @@
             private readonly Queue<string> _queue;
             private readonly string _symbol;
 
-            private static readonly IDictionary<ExpressionType, string> _types;
+            private static readonly ListMap<ExpressionType, string> _types;
             private static readonly string _paramName;
 
             static ExpressionParserVisitor()
             {
                 _paramName = "param";
-                _types = new Dictionary<ExpressionType, string>(8)
+                _types = new ListMap<ExpressionType, string>(8)
                 {
                     {ExpressionType.AndAlso, " AND "},
                     {ExpressionType.OrElse, " OR "},
@@ -193,7 +194,7 @@
             {
                 _result.Append("(");
                 Visit(node.Left);
-                if (!_types.ContainsKey(node.NodeType))
+                if (!_types.Contains(node.NodeType))
                     ExceptionHandler.NotSupported();
                 _result.Append(_types[node.NodeType]);
                 Visit(node.Right);

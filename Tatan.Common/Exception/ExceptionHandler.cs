@@ -7,6 +7,7 @@
     using IO;
     using Directory = System.IO.Directory;
     using File = System.IO.File;
+    using Collections;
 
     #region 异常处理类
     /// <summary>
@@ -84,6 +85,18 @@
         public static void KeyNotFound<T>(IDictionary<string, T> map, string key)
         {
             if (!map.ContainsKey(key))
+                throw new KeyNotFoundException(_exception.GetText("KeyNotFound"));
+        }
+
+        /// <summary>
+        /// 键不存在
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="map"></param>
+        /// <param name="key"></param>
+        public static void KeyNotFound<T>(ListMap<string, T> map, string key)
+        {
+            if (!map.Contains(key))
                 throw new KeyNotFoundException(_exception.GetText("KeyNotFound"));
         }
 

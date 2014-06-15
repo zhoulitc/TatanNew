@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-// ReSharper disable once CheckNamespace
-
-
+﻿// ReSharper disable once CheckNamespace
 namespace Tatan.Data
 {
+    using System.Collections.Generic;
+
     /// <summary>
     /// 实体结果接口
     /// </summary>

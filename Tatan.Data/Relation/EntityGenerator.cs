@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Text;
+    using Common.Collections;
     using Common.Extension.String.Target;
     using Common.Exception;
     using CommonRuntime = Common.IO.Runtime;
@@ -15,7 +16,7 @@
         private readonly IEnumerable<Tables> _tables;
         private readonly IDataSource _source;
         private readonly string _projectName;
-        private readonly static IDictionary<string, string> _types = new Dictionary<string, string>(6)
+        private readonly static ListMap<string, string> _types = new ListMap<string, string>(6)
             {
                 {"I", "int"},
                 {"L", "long"},

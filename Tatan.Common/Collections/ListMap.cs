@@ -1,9 +1,8 @@
-using System.Text;
-
 namespace Tatan.Common.Collections
 {
     using System.Collections.Generic;
     using System.Collections;
+    using System.Text;
     using Exception;
 
     /// <summary>
@@ -11,15 +10,10 @@ namespace Tatan.Common.Collections
     /// </summary>
     /// <typeparam name="TKey"></typeparam>
     /// <typeparam name="TValue"></typeparam>
-    public class ListMap<TKey, TValue> : IEnumerable<KeyValuePair<TKey, TValue>>, ICountable, IObject
+    public class ListMap<TKey, TValue> : IEnumerable<TKey>, ICountable, IObject
     {
-        private readonly List<KeyValuePair<TKey, TValue>> _map;
-        private static readonly KeyValuePair<TKey, TValue> _empty;
-
-        static ListMap()
-        {
-            _empty = new KeyValuePair<TKey, TValue>(default(TKey), default(TValue));
-        }
+        private readonly List<TKey> _keys;
+        private readonly TValue[] _values;
 
         /// <summary>
         /// 构造函数
@@ -27,11 +21,16 @@ namespace Tatan.Common.Collections
         /// <param name="capacity"></param>
         public ListMap(int capacity = 0)
         {
-// ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
             if (capacity <= 10)
-                _map = new List<KeyValuePair<TKey, TValue>>(10);
+            {
+                _keys = new List<TKey>(10);
+                _values = new TValue[10];
+            }
             else
-                _map = new List<KeyValuePair<TKey, TValue>>(capacity > 100 ? 100 : capacity);
+            {
+                _keys = new List<TKey>(capacity > 100 ? 100 : capacity);
+                _values = new TValue[capacity > 100 ? 100 : capacity];
+            }
         }
 
         /// <summary>
@@ -40,11 +39,22 @@ namespace Tatan.Common.Collections
         /// <param name="collection"></param>
         public ListMap(IEnumerable<KeyValuePair<TKey, TValue>> collection)
         {
-// ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
             if (collection == null)
-                _map = new List<KeyValuePair<TKey, TValue>>(10);
+            {
+                _keys = new List<TKey>(10);
+                _values = new TValue[10];
+            }
             else
-                _map = new List<KeyValuePair<TKey, TValue>>(collection);
+            {
+                _keys = new List<TKey>();
+                var values = new List<TValue>();
+                foreach (var element in collection)
+                {
+                    _keys.Add(element.Key);
+                    values.Add(element.Value);
+                }
+                _values = values.ToArray();
+            }
         }
 
         /// <summary>
@@ -56,7 +66,7 @@ namespace Tatan.Common.Collections
         {
 // ReSharper disable once CompareNonConstrainedGenericWithNull
             if (key == null) return false;
-            return !_empty.Equals(Find(key));
+            return Find(key) >= 0;
         }
 
         /// <summary>
@@ -67,13 +77,14 @@ namespace Tatan.Common.Collections
         /// <returns></returns>
         public bool Add(TKey key, TValue value)
         {
-            ExceptionHandler.IsNotAllow(_map.Count, _map.Capacity);
+            ExceptionHandler.IsNotAllow(_keys.Count, _keys.Capacity);
 
 // ReSharper disable once CompareNonConstrainedGenericWithNull
             if (value == null) return false;
-            var pair = Find(key);
-            if (!_empty.Equals(pair)) return false;
-            _map.Add(new KeyValuePair<TKey, TValue>(key, value));
+            var index = Find(key);
+            if (index >= 0) return false;
+            _keys.Add(key);
+            _values[_keys.Count - 1] = value;
             return true;
         }
 
@@ -84,9 +95,11 @@ namespace Tatan.Common.Collections
         /// <returns></returns>
         public bool Remove(TKey key)
         {
-            var pair = Find(key);
-            if (_empty.Equals(pair)) return false;
-            return _map.Remove(pair);
+            var index = Find(key);
+            if (index < 0) return false;
+            _keys.RemoveAt(index);
+            _values[index] = default(TValue);
+            return true;
         }
 
         /// <summary>
@@ -97,34 +110,29 @@ namespace Tatan.Common.Collections
         {
             get
             {
-                var pair = Find(key);
-                if (_empty.Equals(pair))
+                var index = Find(key);
+                if (index < 0)
                     ExceptionHandler.KeyNotFound<object>(null);
-                return pair.Value;
+                return _values[index];
             }
             set
             {
 // ReSharper disable once CompareNonConstrainedGenericWithNull
                 if (value == null)
                     ExceptionHandler.KeyNotFound<object>(null);
-                var pair = Find(key);
-                if (!_empty.Equals(pair))
-                    Remove(key);
-                Add(key, value);
+                var index = Find(key);
+                if (index < 0)
+                    ExceptionHandler.KeyNotFound<object>(null);
+                _values[_keys.Count - 1] = value;
             }
         }
 
-        private KeyValuePair<TKey, TValue> Find(TKey key)
+        private int Find(TKey key)
         {
 // ReSharper disable once CompareNonConstrainedGenericWithNull
             if (key == null)
                 ExceptionHandler.KeyNotFound<object>(null);
-            foreach (var pair in _map)
-            {
-                if (pair.Key.Equals(key))
-                    return pair;
-            }
-            return _empty;
+            return _keys.IndexOf(key);
         }
 
         /// <summary>
@@ -132,7 +140,7 @@ namespace Tatan.Common.Collections
         /// </summary>
         public int Count 
         {
-            get { return _map.Count; }
+            get { return _keys.Count; }
         }
 
         /// <summary>
@@ -140,7 +148,10 @@ namespace Tatan.Common.Collections
         /// </summary>
         public void Clear()
         {
-            _map.Clear();
+           
+            for (var i = 0; i < Count; i++)
+                _values[i] = default(TValue);
+            _keys.Clear();
         }
 
         #region IEnumerable
@@ -149,9 +160,9 @@ namespace Tatan.Common.Collections
         /// 获取此集合的迭代
         /// </summary>
         /// <returns></returns>
-        public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
+        public IEnumerator<TKey> GetEnumerator()
         {
-            return _map.GetEnumerator();
+            return _keys.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -179,10 +190,10 @@ namespace Tatan.Common.Collections
         public override int GetHashCode()
         {
             var hash = 0;
-            foreach (var pair in _map)
+            for (var i = 0; i < Count; i++)
             {
-                hash ^= pair.Key.GetHashCode();
-                hash ^= pair.Value.GetHashCode();
+                hash ^= _keys[i].GetHashCode();
+                hash ^= _values[i].GetHashCode();
             }
             return hash;
         }
@@ -190,11 +201,11 @@ namespace Tatan.Common.Collections
         ///
         public override string ToString()
         {
-            var builder = new StringBuilder(_map.Count * 10);
+            var builder = new StringBuilder(Count * 10);
             builder.Append("{");
-            foreach (var pair in _map)
+            for (var i = 0; i < Count; i++)
             {
-                builder.AppendFormat("\"{0}\":{1},", pair.Key.ToString(), pair.Value.ToString());
+                builder.AppendFormat("\"{0}\":{1},", _keys[i].ToString(), _values[i].ToString());
             }
             if (builder[builder.Length - 1] == ',')
                 builder[builder.Length - 1] = '}';

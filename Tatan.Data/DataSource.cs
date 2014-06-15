@@ -4,6 +4,7 @@ namespace Tatan.Data
     using System;
     using System.Collections.Generic;
     using System.Data.Common;
+    using Common.Collections;
     using Common.Exception;
     using Common.Configuration;
 
@@ -21,12 +22,12 @@ namespace Tatan.Data
         private static readonly IDictionary<DataProvider, IDataSource> _sources; //数据源集合
         private static readonly object _lock = new object();
 
-        internal static readonly IDictionary<string, DbProviderFactory> DbFactories; //工厂集
+        internal static readonly ListMap<string, DbProviderFactory> DbFactories; //工厂集
 
         static DataSource()
         {
             _sources = new Dictionary<DataProvider, IDataSource>();
-            DbFactories = new Dictionary<string, DbProviderFactory>(10);
+            DbFactories = new ListMap<string, DbProviderFactory>(50);
         }
 
         /// <summary>
@@ -111,7 +112,7 @@ namespace Tatan.Data
 
         internal static DbProviderFactory Get(string name)
         {
-            if (!DbFactories.ContainsKey(name))
+            if (!DbFactories.Contains(name))
             {
                 lock (_lock)
                 {

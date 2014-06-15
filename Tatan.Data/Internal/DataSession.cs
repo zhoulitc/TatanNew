@@ -9,6 +9,7 @@ namespace Tatan.Data
     using System.Threading.Tasks;
     using Common.Exception;
     using Common.Logging;
+    using Common.Collections;
 
     /// <summary>
     /// 数据库抽象会话类，处理一些通用的会话操作
@@ -125,11 +126,11 @@ namespace Tatan.Data
         {
             private IDbCommand _command;
             private readonly string _symbol;
-            private static readonly IDictionary<DataType, DbType> _mapping;
+            private static readonly ListMap<DataType, DbType> _mapping;
 
             static DataParameters()
             {
-                _mapping = new Dictionary<DataType, DbType>
+                _mapping = new ListMap<DataType, DbType>
                 {
                     { DataType.Binary, DbType.Binary },
                     { DataType.Boolean, DbType.Boolean },

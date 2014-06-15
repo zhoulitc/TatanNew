@@ -1,7 +1,7 @@
 ﻿namespace Tatan.Permission.Collections
 {
-    using System.Collections.Generic;
     using Common;
+    using Common.Collections;
     using Common.Exception;
     using Data;
 
@@ -14,7 +14,7 @@
         /// <summary>
         /// 
         /// </summary>
-        protected static readonly Dictionary<string, string> Sqls;
+        protected static readonly ListMap<string, string> Sqls;
 
         /// <summary>
         /// 
@@ -43,7 +43,7 @@
 
         static AbstractRelationCollection()
         {
-            Sqls = new Dictionary<string, string>(4)
+            Sqls = new ListMap<string, string>(4)
             {
                 {"constains", "SELECT COUNT(1) FROM {0} WHERE {5}={1}{6} AND {3}={2}{4}"},
                 {"add", "INSERT INTO {0}({5}, {3}) VALUES({1}{6}, {2}{4}})"},

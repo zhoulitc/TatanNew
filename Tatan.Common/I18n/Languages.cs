@@ -1,12 +1,11 @@
-﻿using Tatan.Common.Xml;
-
-namespace Tatan.Common.I18n
+﻿namespace Tatan.Common.I18n
 {
     using System;
     using System.Collections.Generic;
     using System.Globalization;
     using System.Xml;
     using IO;
+    using Xml;
 
     #region 多语言国际化处理
     /// <summary>

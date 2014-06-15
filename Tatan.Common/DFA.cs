@@ -1,9 +1,8 @@
-﻿using Tatan.Common.Exception;
-
-namespace Tatan.Common
+﻿namespace Tatan.Common
 {
     using System;
     using System.Collections.Generic;
+    using Exception;
 
     /// <summary>
     /// 有穷状态机，默认字符型
@@ -34,7 +33,9 @@ namespace Tatan.Common
         /// <param name="capacity">状态个数</param>
         public DFA(int capacity = 0)
         {
-            StateFunctions = capacity == 0 ? new Dictionary<Enum, Func<T, Enum>>() : new Dictionary<Enum, Func<T, Enum>>(capacity);
+            StateFunctions = capacity == 0 ? 
+                new Dictionary<Enum, Func<T, Enum>>() : 
+                new Dictionary<Enum, Func<T, Enum>>(capacity);
         }
 
         /// <summary>

@@ -1,7 +1,6 @@
 ﻿namespace Tatan.Common.Cryptography.Internal
 {
     using System.Security.Cryptography;
-    using System.Text;
 
     internal sealed class Sha1Cipher : AsymmetricCipher
     {

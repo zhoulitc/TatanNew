@@ -1,9 +1,8 @@
-﻿using Tatan.Common;
-
-namespace Tatan.Data.Relation.Collections
+﻿namespace Tatan.Data.Relation.Collections
 {
     using System.Collections;
     using System.Collections.Generic;
+    using Common;
 
     /// <summary>
     /// Fields集合

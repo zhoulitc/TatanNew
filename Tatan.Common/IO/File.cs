@@ -1,10 +1,9 @@
-﻿using Tatan.Common.Exception;
-
-namespace Tatan.Common.IO
+﻿namespace Tatan.Common.IO
 {
     using System;
     using System.IO;
     using SystemFile = System.IO.File;
+    using Exception;
 
     /// <summary>
     /// 通用File操作，用于处理System.IO.File中返回值为IDispose借口对象的方法
