@@ -59,8 +59,9 @@
         /// </summary>
         /// <param name="argName"></param>
         /// <param name="arg"></param>
-        public static void ArgumentNull(string argName, object arg)
+        public static void ArgumentNull<T>(string argName, T arg)
         {
+// ReSharper disable once CompareNonConstrainedGenericWithNull
             if (arg == null)
                 throw new ArgumentNullException(argName, _exception.GetText("ArgumentNull"));
         }

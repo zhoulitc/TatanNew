@@ -8,14 +8,8 @@
     /// </summary>
     public sealed class GroupRelationCollection : AbstractRelationCollection<Group>
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="identity"></param>
-        /// <param name="fieldName"></param>
-        /// <param name="tableName"></param>
-        internal GroupRelationCollection(IDentifiable identity, string fieldName, string tableName)
-            : base(identity, fieldName, tableName, "GroupId")
+        internal GroupRelationCollection(IDentifiable identity, string tableName, string thatName)
+            : base(identity, tableName, thatName, "GroupId")
         {
         }
     }

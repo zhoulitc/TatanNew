@@ -146,10 +146,11 @@
         /// <returns>对象的字符串描述</returns>
         public override string ToString()
         {
-            var builder = new StringBuilder(Properties.Count * 20);
-            builder.AppendFormat("\"id\":{0}", Id);
+            var builder = new StringBuilder(Properties.Count * 20);         
+            builder.AppendFormat("\"Id\":{0}", Id);
             foreach (var property in Properties)
             {
+                if (property == "Id") continue;
 // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
                 if (Properties.IsString(property))
                     builder.AppendFormat(",\"{0}\":\"{1}\"", property, Properties[this, property]);

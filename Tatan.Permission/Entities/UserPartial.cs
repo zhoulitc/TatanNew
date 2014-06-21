@@ -22,7 +22,7 @@
         /// </summary>
         public GroupRelationCollection Groups
         {
-            get { return _groups ?? (_groups = new GroupRelationCollection(this, "UserId", "UserGroup")); }
+            get { return _groups ?? (_groups = new GroupRelationCollection(this, "UserGroup", "UserId")); }
         }
 
         /// <summary>
@@ -30,7 +30,7 @@
         /// </summary>
         public RoleRelationCollection Roles
         {
-            get { return _roles ?? (_roles = new RoleRelationCollection(this, "UserId", "UserRole")); }
+            get { return _roles ?? (_roles = new RoleRelationCollection(this, "UserRole", "UserId")); }
         }
 
         /// <summary>
@@ -38,7 +38,7 @@
         /// </summary>
         public PermissionRelationCollection Permissions
         {
-            get { return _permissions ?? (_permissions = new PermissionRelationCollection(this, "UserId", "UserPermission")); }
+            get { return _permissions ?? (_permissions = new PermissionRelationCollection(this, "UserPermission", "UserId")); }
         }
     }
 }

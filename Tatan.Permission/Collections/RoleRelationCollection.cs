@@ -8,14 +8,8 @@
     /// </summary>
     public sealed class RoleRelationCollection : AbstractRelationCollection<Role>
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="identity"></param>
-        /// <param name="fieldName"></param>
-        /// <param name="tableName"></param>
-        internal RoleRelationCollection(IDentifiable identity, string fieldName, string tableName)
-            : base(identity, fieldName, tableName, "RoleId")
+        internal RoleRelationCollection(IDentifiable identity, string tableName, string thatName)
+            : base(identity, tableName, thatName, "RoleId")
         {
         }
     }

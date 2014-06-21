@@ -2,8 +2,8 @@
 namespace Tatan.Data
 {
     using System;
-    using Common.Exception;
     using Common.Collections;
+    using Common.Exception;
 
     /// <summary>
     /// 数据记录
@@ -15,7 +15,12 @@ namespace Tatan.Data
         {
             _source = source;
         }
-        
+
+        internal void Clear()
+        {
+            Collection.Clear();
+        }
+
         /// <summary>
         /// 根据表名获取数据表
         /// </summary>
@@ -29,11 +34,6 @@ namespace Tatan.Data
                 ExceptionHandler.KeyNotFound(Collection, name);
                 return Collection[name];
             }
-        }
-
-        internal void Clear()
-        {
-            Collection.Clear();
         }
 
         /// <summary>

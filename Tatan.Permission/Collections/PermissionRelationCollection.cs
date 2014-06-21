@@ -1,6 +1,7 @@
-﻿namespace Tatan.Permission.Collections
+﻿using Tatan.Common.Collections;
+
+namespace Tatan.Permission.Collections
 {
-    using System.Collections.Generic;
     using Common;
     using Entities;
 
@@ -9,14 +10,8 @@
     /// </summary>
     public sealed class PermissionRelationCollection : AbstractRelationCollection<Permission>
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="identity"></param>
-        /// <param name="fieldName"></param>
-        /// <param name="tableName"></param>
-        internal PermissionRelationCollection(IDentifiable identity, string fieldName, string tableName)
-            : base(identity, fieldName, tableName, "PermissionId")
+        internal PermissionRelationCollection(IDentifiable identity, string tableName, string thatName)
+            : base(identity, tableName, thatName, "PermissionId")
         {
         }
 
@@ -34,7 +29,7 @@
             if (Identity is Group) //组的权限，组的权限还包含组关联的角色权限
                 return GroupRoleContains(relation);
             if (Identity is User) //用户的权限，用户的权限还包含关联的角色权限以及
-                return UserGroupContains(relation) || UserRoleContains(relation);
+                return UserGroupRoleContains(relation);
             return false;
         }
 
@@ -53,23 +48,21 @@
             if (Identity is Group) //组的权限，组的权限还包含组关联的角色权限
                 return GetByGroupRoleId(id);
             if (Identity is User) //用户的权限，用户的权限还包含关联的角色权限以及
-                return GetByUserGroup(id) ?? GetByUserRoleId(id);
+                return GetByUserGroupRoleId(id);
             return null;
         }
 
-        private static readonly Dictionary<string, string> _sqlsExtension;
+        private static readonly ListMap<string, string> _sqlsExtension;
 
         static PermissionRelationCollection()
         {
-            _sqlsExtension = new Dictionary<string, string>(6)
+            _sqlsExtension = new ListMap<string, string>(6)
             {
-                {"UsersGroupsContains", "SELECT COUNT(1) FROM UserGroup AS t1 LEFT JOIN GroupPermission AS t2 ON t1.GroupId=t2.GroupId WHERE t1.UserId={0}UserId AND t2.PermissionId={1}PermissionId"},
-                {"UsersRolesContains", "SELECT COUNT(1) FROM UsersRole AS t1 LEFT JOIN RolePermission AS t2 ON t1.RoleId=t2.RoleId WHERE t1.UserId={0}UserId AND t2.PermissionId={1}PermissionId"},
+                {"UsersGroupsRolesContains", "SELECT COUNT(1) FROM UserGroup AS t1 INNER JOIN GroupPermission AS t2 ON t1.GroupId=t2.GroupId INNER JOIN UserRole AS t3 ON t1.UserId=t3.UserId INNER JOIN RolePermission AS t4 ON t3.RoleId=t4.RoleId WHERE t1.UserId={0}UserId AND (t2.PermissionId={0}PermissionId OR t4.PermissionId={0}PermissionId);"},
                 {"GroupsRolesContains", "SELECT COUNT(1) FROM GroupRole AS t1 LEFT JOIN RolePermission AS t2 ON t1.RoleId=t2.RoleId WHERE t1.GroupId={0}GroupId AND t2.PermissionId={1}PermissionId"},
                 
-                {"UsersGroupsGetById", "SELECT * FROM User WHERE Id=(SELECT * FROM UserGroup AS t1 LEFT JOIN GroupPermission AS t2 ON t1.GroupId=t2.GroupId WHERE t1.UserId={0}UserId AND t2.PermissionId={1}PermissionId)"},
-                {"UsersRolesGetById", "SELECT * FROM User WHERE Id=(SELECT * FROM UsersRole AS t1 LEFT JOIN RolePermission AS t2 ON t1.RoleId=t2.RoleId WHERE t1.UserId={0}UserId AND t2.PermissionId={1}PermissionId)"},
-                {"GroupsRolesGetById", "SELECT * FROM Group WHERE Id=(SELECT * FROM GroupRole AS t1 LEFT JOIN RolePermission AS t2 ON t1.RoleId=t2.RoleId WHERE t1.GroupId={0}GroupId AND t2.PermissionId={1}PermissionId)"}
+                {"UsersGroupsRolesGetById", "SELECT * FROM Permission WHERE Id=(SELECT t2.PermissionId FROM UserRole AS t1 LEFT JOIN RolePermission AS t2 ON t1.RoleId=t2.RoleId WHERE t1.UserId={0}UserId AND t2.PermissionId={0}PermissionId) UNION SELECT * FROM Permission WHERE Id=(SELECT t2.PermissionId FROM UserGroup AS t1 LEFT JOIN GroupPermission AS t2 ON t1.GroupId=t2.GroupId WHERE t1.UserId={0}UserId AND t2.PermissionId={0}PermissionId)"},
+                {"GroupsRolesGetById", "SELECT * FROM Permission WHERE Id=(SELECT t2.PermissionId FROM GroupRole AS t1 LEFT JOIN RolePermission AS t2 ON t1.RoleId=t2.RoleId WHERE t1.GroupId={0}GroupId AND t2.PermissionId={1}PermissionId)"}
             };
         }
 
@@ -77,64 +70,34 @@
         {
             var sql = string.Format(_sqlsExtension["GroupsRolesContains"],
                 Source.Provider.ParameterSymbol, Source.Provider.ParameterSymbol);
-            return Source.UseSession(TableName, session => session.GetScalar<int>(sql, parameters =>
+            return Source.UseSession(TableName, session => session.GetScalar<long>(sql, parameters =>
             {
                 parameters[ThisName] = relation.Id;
-                parameters[FieldName] = Identity.Id;
-            }) == 1);
+                parameters[ThatName] = Identity.Id;
+            }) > 0);
         }
 
-        private bool UserRoleContains(Permission relation)
+        private bool UserGroupRoleContains(Permission relation)
         {
-            var sqlUserRole = string.Format(_sqlsExtension["UsersRolesContains"],
-                Source.Provider.ParameterSymbol, Source.Provider.ParameterSymbol);
-            return (Source.UseSession(TableName, session => session.GetScalar<int>(sqlUserRole, parameters =>
+            var sql = string.Format(_sqlsExtension["UsersGroupsRolesContains"], Source.Provider.ParameterSymbol);
+            return (Source.UseSession(TableName, session => session.GetScalar<long>(sql, parameters =>
             {
                 parameters[ThisName] = relation.Id;
-                parameters[FieldName] = Identity.Id;
-            }) == 1));
+                parameters[ThatName] = Identity.Id;
+            }) > 0));
         }
 
-        private bool UserGroupContains(Permission relation)
+        private Permission GetByUserGroupRoleId(int id)
         {
-            var sqlUserGroup = string.Format(_sqlsExtension["UsersGroupsContains"],
-                Source.Provider.ParameterSymbol, Source.Provider.ParameterSymbol);
-            return Source.UseSession(TableName, session => session.GetScalar<int>(sqlUserGroup, parameters =>
-            {
-                parameters[ThisName] = relation.Id;
-                parameters[FieldName] = Identity.Id;
-            }) == 1);
-        }
-
-        private Permission GetByUserRoleId(int id)
-        {
-            var sqlUserRole = string.Format(_sqlsExtension["UsersRolesGetById"],
-                Source.Provider.ParameterSymbol, Source.Provider.ParameterSymbol);
+            var sql = string.Format(_sqlsExtension["UsersGroupsRolesGetById"], Source.Provider.ParameterSymbol);
             return Source.UseSession(TableName, session =>
             {
-                var entities = session.GetEntities<Permission>(sqlUserRole, parameters =>
+                var entities = session.GetEntities<Permission>(sql, parameters =>
                 {
                     parameters[ThisName] = id;
-                    parameters[FieldName] = Identity.Id;
+                    parameters[ThatName] = Identity.Id;
                 });
-                if (entities == null || entities.Count != 1)
-                    return null;
-                return entities[0];
-            });
-        }
-
-        private Permission GetByUserGroup(int id)
-        {
-            var sqlUserGroup = string.Format(_sqlsExtension["UsersGroupsGetById"],
-                Source.Provider.ParameterSymbol, Source.Provider.ParameterSymbol);
-            return Source.UseSession(TableName, session =>
-            {
-                var entities = session.GetEntities<Permission>(sqlUserGroup, parameters =>
-                {
-                    parameters[ThisName] = id;
-                    parameters[FieldName] = Identity.Id;
-                });
-                if (entities == null || entities.Count != 1)
+                if (entities == null || entities.Count <= 0)
                     return null;
                 return entities[0];
             });
@@ -149,9 +112,9 @@
                 var entities = session.GetEntities<Permission>(sql, parameters =>
                 {
                     parameters[ThisName] = id;
-                    parameters[FieldName] = Identity.Id;
+                    parameters[ThatName] = Identity.Id;
                 });
-                if (entities == null || entities.Count != 1)
+                if (entities == null || entities.Count <= 0)
                     return null;
                 return entities[0];
             });

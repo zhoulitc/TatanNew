@@ -8,14 +8,8 @@
     /// </summary>
     public sealed class UserRelationCollection : AbstractRelationCollection<User>
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="identity"></param>
-        /// <param name="fieldName"></param>
-        /// <param name="tableName"></param>
-        internal UserRelationCollection(IDentifiable identity, string fieldName, string tableName)
-            : base(identity, fieldName, tableName, "UserId")
+        internal UserRelationCollection(IDentifiable identity, string tableName, string thatName)
+            : base(identity, tableName, thatName, "UserId")
         {
         }
     }
