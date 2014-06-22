@@ -12,8 +12,8 @@ namespace Tatan.Common.UnitTest
         [TestMethod]
         public void TestGetText()
         {
-            var s = ExceptionHandler.GetText("EM004");
-            Assert.AreEqual(s, "数据会话池已经没有多余的会话对象了。");
+            var s = ExceptionHandler.GetText("IllegalSql");
+            Assert.AreEqual(s, "非法的数据库命令。数据库命令只支持Select、Insert、Update、Delete、Truncate和存储过程调用。");
         }
 
         [TestMethod]

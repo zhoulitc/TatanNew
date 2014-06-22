@@ -1,12 +1,14 @@
-﻿namespace Tatan.Data.Relation
+﻿namespace Tatan.Data.Generator
 {
     using System.Collections.Generic;
     using System.IO;
     using System.Text;
     using Common.Collections;
-    using Common.Extension.String.Target;
     using Common.Exception;
-    using CommonRuntime = Common.IO.Runtime;
+    using Common.Extension.String.Target;
+    using Common.IO;
+    using Relation;
+    using File = System.IO.File;
 
     /// <summary>
     /// 实体生成器
@@ -34,7 +36,7 @@
         /// <param name="tables"></param>
         /// <param name="projectName"></param>
         /// <param name="source"></param>
-        public EntityGenerator(IEnumerable<Tables> tables, string projectName = null, IDataSource source = null)
+        public EntityGenerator(IEnumerable<Tables> tables, IDataSource source, string projectName = null)
         {
             _tables = tables ?? new List<Tables>();
             _projectName = projectName ?? "Tatan.Entities";
@@ -48,7 +50,7 @@
         /// <param name="outputFolder"></param>
         public void Execute(string outputFolder)
         {
-            Execute(CommonRuntime.Root + @"Template\Entity.template", outputFolder);
+            Execute(Runtime.Root + @"Template\Entity.template", outputFolder);
         }
 
         /// <summary>
@@ -60,11 +62,10 @@
         {
             ExceptionHandler.FileNotFound(inputFile);
             ExceptionHandler.DirectoryNotFound(outputFolder);
+            ExceptionHandler.ArgumentNull("DataSource", _source);
 
-            if (_source == null)
-                return;
-            if (!outputFolder.EndsWith(CommonRuntime.Separator))
-                outputFolder += CommonRuntime.Separator;
+            if (!outputFolder.EndsWith(Runtime.Separator))
+                outputFolder += Runtime.Separator;
 
             foreach (var table in _tables)
             {

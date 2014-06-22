@@ -17,7 +17,7 @@
         /// <param name="fields"></param>
         public FieldsCollection(IEnumerable<Fields> fields)
         {
-            _fields = new List<Fields>(fields);
+            _fields = fields == null ? new List<Fields>() : new List<Fields>(fields);
         }
 
         /// <summary>

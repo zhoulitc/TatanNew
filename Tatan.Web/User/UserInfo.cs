@@ -13,7 +13,7 @@
         /// <summary>
         /// 用户Id
         /// </summary>
-        public int Id { get; set; }
+        public long Id { get; set; }
 
         /// <summary>
         /// 用户Guid
@@ -41,8 +41,8 @@
         /// <returns></returns>
         public override string ToString()
         {
-            return string.Format("IsLogin={0}&Name={1}&Token={2}&State={3}",
-                IsLogin, Name, Token, State);
+            return string.Format("Id={0}&IsLogin={1}&Name={2}&Token={3}&State={4}",
+                Id.ToString(), IsLogin, Name, Token, State);
         }
     }
 }

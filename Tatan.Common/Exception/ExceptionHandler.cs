@@ -1,4 +1,6 @@
-﻿namespace Tatan.Common.Exception
+﻿using System.IO;
+
+namespace Tatan.Common.Exception
 {
     using System;
     using System.Collections.Generic;
@@ -179,7 +181,24 @@
         public static void IllegalMatch(Regex regex, string input)
         {
             if (!regex.IsMatch(input))
-                throw new System.IO.FileNotFoundException(_exception.GetText("IllegalMatch"));
+                throw new FileNotFoundException(_exception.GetText("IllegalMatch"));
+        }
+
+        /// <summary>
+        /// 非法的数据库命令。
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <param name="call"></param>
+        /// <exception cref="Exception"></exception>
+        public static void IllegalSql(string sql, string call)
+        {
+            if (!sql.StartsWith("SELECT", StringComparison.OrdinalIgnoreCase) &&
+                !sql.StartsWith("UPDATE", StringComparison.OrdinalIgnoreCase) &&
+                !sql.StartsWith("INSERT", StringComparison.OrdinalIgnoreCase) &&
+                !sql.StartsWith("DELETE", StringComparison.OrdinalIgnoreCase) &&
+                !sql.StartsWith("TRUNCATE", StringComparison.OrdinalIgnoreCase) &&
+                !sql.StartsWith(call, StringComparison.OrdinalIgnoreCase))
+                throw new Exception(_exception.GetText("IllegalSql"));
         }
 
         /// <summary>

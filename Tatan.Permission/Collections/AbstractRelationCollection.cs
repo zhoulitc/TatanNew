@@ -45,10 +45,10 @@
         {
             Sqls = new ListMap<string, string>(4)
             {
-                {"contains", "SELECT COUNT(1) FROM [{0}] WHERE {2}={1}{2} AND {3}={1}{3};"},
-                {"add", "INSERT INTO [{0}]({2},{3}) VALUES({1}{2},{1}{3});"},
-                {"remove", "DELETE FROM [{0}] WHERE {2}={1}{2} AND {3}={1}{3};"},
-                {"getById", "SELECT * FROM [{0}] WHERE Id=(SELECT {3} FROM [{1}] WHERE {3}={2}{3} AND {4}={2}{4});"}
+                {"contains", "SELECT COUNT(1) FROM [{0}] WHERE {2}={1}{2} AND {3}={1}{3}"},
+                {"add", "INSERT INTO [{0}]({2},{3}) VALUES({1}{2},{1}{3})"},
+                {"remove", "DELETE FROM [{0}] WHERE {2}={1}{2} AND {3}={1}{3}"},
+                {"getById", "SELECT * FROM [{0}] WHERE Id=(SELECT {3} FROM [{1}] WHERE {3}={2}{3} AND {4}={2}{4})"}
             };
         }
 
@@ -130,7 +130,7 @@
         /// 根据Id获取关联对象
         /// </summary>
         /// <param name="id"></param>
-        public virtual T GetById(int id)
+        public virtual T GetById(long id)
         {
             ExceptionHandler.ArgumentNull("Source", Source);
             var sql = string.Format(Sqls["getById"], TypeName, TableName, Source.Provider.ParameterSymbol, ThisName, ThatName);

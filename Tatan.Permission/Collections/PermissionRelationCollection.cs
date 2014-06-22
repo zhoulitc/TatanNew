@@ -38,7 +38,7 @@ namespace Tatan.Permission.Collections
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public override Permission GetById(int id)
+        public override Permission GetById(long id)
         {
             var permission = base.GetById(id);
             if (permission != null) 
@@ -56,20 +56,19 @@ namespace Tatan.Permission.Collections
 
         static PermissionRelationCollection()
         {
-            _sqlsExtension = new ListMap<string, string>(6)
+            _sqlsExtension = new ListMap<string, string>(4)
             {
-                {"UsersGroupsRolesContains", "SELECT COUNT(1) FROM UserGroup AS t1 INNER JOIN GroupPermission AS t2 ON t1.GroupId=t2.GroupId INNER JOIN UserRole AS t3 ON t1.UserId=t3.UserId INNER JOIN RolePermission AS t4 ON t3.RoleId=t4.RoleId WHERE t1.UserId={0}UserId AND (t2.PermissionId={0}PermissionId OR t4.PermissionId={0}PermissionId);"},
-                {"GroupsRolesContains", "SELECT COUNT(1) FROM GroupRole AS t1 LEFT JOIN RolePermission AS t2 ON t1.RoleId=t2.RoleId WHERE t1.GroupId={0}GroupId AND t2.PermissionId={1}PermissionId"},
+                {"UsersGroupsRolesContains", "SELECT COUNT(1) FROM UserGroup AS t1 INNER JOIN GroupPermission AS t2 ON t1.GroupId=t2.GroupId INNER JOIN UserRole AS t3 ON t1.UserId=t3.UserId INNER JOIN RolePermission AS t4 ON t3.RoleId=t4.RoleId WHERE t1.UserId={0}UserId AND (t2.PermissionId={0}PermissionId OR t4.PermissionId={0}PermissionId)"},
+                {"GroupsRolesContains", "SELECT COUNT(1) FROM GroupRole AS t1 LEFT JOIN RolePermission AS t2 ON t1.RoleId=t2.RoleId WHERE t1.GroupId={0}GroupId AND t2.PermissionId={0}PermissionId"},
                 
                 {"UsersGroupsRolesGetById", "SELECT * FROM Permission WHERE Id=(SELECT t2.PermissionId FROM UserRole AS t1 LEFT JOIN RolePermission AS t2 ON t1.RoleId=t2.RoleId WHERE t1.UserId={0}UserId AND t2.PermissionId={0}PermissionId) UNION SELECT * FROM Permission WHERE Id=(SELECT t2.PermissionId FROM UserGroup AS t1 LEFT JOIN GroupPermission AS t2 ON t1.GroupId=t2.GroupId WHERE t1.UserId={0}UserId AND t2.PermissionId={0}PermissionId)"},
-                {"GroupsRolesGetById", "SELECT * FROM Permission WHERE Id=(SELECT t2.PermissionId FROM GroupRole AS t1 LEFT JOIN RolePermission AS t2 ON t1.RoleId=t2.RoleId WHERE t1.GroupId={0}GroupId AND t2.PermissionId={1}PermissionId)"}
+                {"GroupsRolesGetById", "SELECT * FROM Permission WHERE Id=(SELECT t2.PermissionId FROM GroupRole AS t1 LEFT JOIN RolePermission AS t2 ON t1.RoleId=t2.RoleId WHERE t1.GroupId={0}GroupId AND t2.PermissionId={0}PermissionId)"}
             };
         }
 
         private bool GroupRoleContains(Permission relation)
         {
-            var sql = string.Format(_sqlsExtension["GroupsRolesContains"],
-                Source.Provider.ParameterSymbol, Source.Provider.ParameterSymbol);
+            var sql = string.Format(_sqlsExtension["GroupsRolesContains"], Source.Provider.ParameterSymbol);
             return Source.UseSession(TableName, session => session.GetScalar<long>(sql, parameters =>
             {
                 parameters[ThisName] = relation.Id;
@@ -87,7 +86,7 @@ namespace Tatan.Permission.Collections
             }) > 0));
         }
 
-        private Permission GetByUserGroupRoleId(int id)
+        private Permission GetByUserGroupRoleId(long id)
         {
             var sql = string.Format(_sqlsExtension["UsersGroupsRolesGetById"], Source.Provider.ParameterSymbol);
             return Source.UseSession(TableName, session =>
@@ -103,10 +102,9 @@ namespace Tatan.Permission.Collections
             });
         }
 
-        private Permission GetByGroupRoleId(int id)
+        private Permission GetByGroupRoleId(long id)
         {
-            var sql = string.Format(_sqlsExtension["GroupsRolesGetById"],
-                Source.Provider.ParameterSymbol, Source.Provider.ParameterSymbol);
+            var sql = string.Format(_sqlsExtension["GroupsRolesGetById"], Source.Provider.ParameterSymbol);
             return Source.UseSession(TableName, session =>
             {
                 var entities = session.GetEntities<Permission>(sql, parameters =>

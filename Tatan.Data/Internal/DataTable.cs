@@ -108,7 +108,7 @@ namespace Tatan.Data
             return DataSource.UseSession(Name, session =>
             {
                 var where = ExpressionParser.Parse(condition, DataSource.Provider.ParameterSymbol);
-                return session.Execute(_count + where.Condition, p =>
+                return session.Execute(_delete + where.Condition, p =>
                 {
                     foreach (var pair in where.Parameters)
                         p[pair.Key] = pair.Value;

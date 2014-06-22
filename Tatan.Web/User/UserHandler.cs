@@ -4,7 +4,6 @@
     using Common;
     using Common.Cryptography;
     using Common.Exception;
-    using Common.Extension.String.Convert;
     using Common.Logging;
     using Data;
 
@@ -15,13 +14,13 @@
     {
         private const string _userLogin = "UserLogin";
 
-        private const string _checkSql = "SELECT Id FROM UserLogin WHERE Password={0}Password AND Name={1}Name";
+        private const string _checkSql = "SELECT Id FROM UserLogin WHERE Password={0}Password AND Name={0}Name";
 
-        private const string _changedPasswordSql = "UPDATE UserLogin SET Password={0}New_Password WHERE Id={1}Id AND Password={2}Password";
+        private const string _changedPasswordSql = "UPDATE UserLogin SET Password={0}New_Password WHERE Id={0}Id AND Password={0}Password";
 
-        private const string _logoutSql = "UPDATE UserLogin SET LastLoginTime={0}LastLoginTime WHERE Id={1}Id";
+        private const string _logoutSql = "UPDATE UserLogin SET LastLogoutTime={0}LastLogoutTime WHERE Id={0}Id";
 
-        private const string _updateSql = "UPDATE UserLogin SET LoginCount=LoginCount+1, LastLoginTime={0}LastLoginTime, LastLoginIp={1}LastLoginIp WHERE Id={2}Id";
+        private const string _updateSql = "UPDATE UserLogin SET LoginCount=LoginCount+1, LastLoginTime={0}LastLoginTime, LastLoginIp={0}LastLoginIp WHERE Id={0}Id";
 
         /// <summary>
         /// 设置数据源，只有设置了源才能做关联操作
@@ -45,25 +44,20 @@
             var result = Source.UseSession(Http.Session.Id, session =>
             {
                 var flag = false;
-                var trans = session.BeginTransaction(System.Data.IsolationLevel.ReadUncommitted);
-                var id = session.GetScalar<string>(string.Format(_checkSql, 
-                    Source.Provider.ParameterSymbol, 
-                    Source.Provider.ParameterSymbol), p =>
+                var trans = session.BeginTransaction(System.Data.IsolationLevel.ReadCommitted);
+                var id = session.GetScalar<long>(string.Format(_checkSql, Source.Provider.ParameterSymbol), p =>
                 {
                     p["Name"] = username;
-                    p["Password"] = password;
+                    p["Password"] = cipher.Encrypt(password);
                 });
-                if (!string.IsNullOrEmpty(id))
+                if (id > 0)
                 {
-                    us.Id = id.AsInt();
+                    us.Id = id;
                     us.Guid = cipher.Encrypt(id + username);
-                    flag = session.Execute(string.Format(_updateSql, 
-                        Source.Provider.ParameterSymbol, 
-                        Source.Provider.ParameterSymbol, 
-                        Source.Provider.ParameterSymbol), p =>
+                    flag = session.Execute(string.Format(_updateSql, Source.Provider.ParameterSymbol), p =>
                     {
                         p["Id"] = id;
-                        p["LastLoginTime", DataType.Date] = Date.Now();
+                        p["LastLoginTime", DataType.Date] = DateTime.Now;
                         p["LastLoginIP"] = _GetIp();
 
                     }) == 1;
@@ -102,9 +96,7 @@
             try
             {
                 if (Source.UseSession(Http.Session.Id, session => session.Execute(
-                    string.Format(_logoutSql,
-                            Source.Provider.ParameterSymbol,
-                            Source.Provider.ParameterSymbol), p =>
+                    string.Format(_logoutSql, Source.Provider.ParameterSymbol), p =>
                             {
                                 p["Id"] = user.Id;
                                 p["LastLogoutTime", DataType.Date] = Date.Now();
@@ -140,10 +132,7 @@
             var user = Http.Cache.Get<UserInfo>(guid);
             if (user == null) return false;
             return Source.UseSession(Http.Session.Id, session => session.Execute(
-                string.Format(_changedPasswordSql,
-                        Source.Provider.ParameterSymbol,
-                        Source.Provider.ParameterSymbol,
-                        Source.Provider.ParameterSymbol), p => 
+                string.Format(_changedPasswordSql, Source.Provider.ParameterSymbol), p => 
             {
                 p["Name"] = user.Name;
                 p["Password"] = password;

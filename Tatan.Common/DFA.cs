@@ -25,7 +25,7 @@
     /// </summary>
     /// <typeparam name="T">token类型</typeparam>
 // ReSharper disable once InconsistentNaming
-    public class DFA<T> : IDisposable
+    public class DFA<T>
     {
         /// <summary>
         /// 构造函数
@@ -36,17 +36,6 @@
             StateFunctions = capacity == 0 ? 
                 new Dictionary<Enum, Func<T, Enum>>() : 
                 new Dictionary<Enum, Func<T, Enum>>(capacity);
-        }
-
-        /// <summary>
-        /// 销毁有穷状态机
-        /// </summary>
-        public void Dispose()
-        {
-            StateFunctions.Clear();
-            StateFunctions = null;
-            State = null;
-            EndHandler = null;
         }
 
         /// <summary>

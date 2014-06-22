@@ -24,7 +24,7 @@
         /// 构造函数
         /// </summary>
         /// <param name="id">唯一标识符</param>
-        public Role(int id)
+        public Role(long id)
             : base(id)
         {
         }

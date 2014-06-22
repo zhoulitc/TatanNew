@@ -25,7 +25,7 @@
         /// 构造函数
         /// </summary>
         /// <param name="id">唯一标识符</param>
-        public Tables(int id)
+        public Tables(long id)
             : base(id)
         {
         }

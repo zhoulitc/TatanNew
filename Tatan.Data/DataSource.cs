@@ -160,7 +160,7 @@ namespace Tatan.Data
             {
                 Sessions.Add(identity, new DataSession(this, identity, _dataProvider.Connection));
             }
-            using (DataSession session = Sessions[identity])
+            using (var session = Sessions[identity])
             {
                 return function(session);
             }

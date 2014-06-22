@@ -14,15 +14,15 @@ namespace Tatan.Data.UnitTest
     using Tatan.Common.Cryptography;
 
     [TestClass]
-    public class EntityGeneratorTest
+    public class SqliteGeneratorTest
     {
         private IDataSource _source;
 
         [TestInitialize]
         public void Init()
         {
-            if (System.IO.File.Exists(Runtime.Root + "Table1.cs"))
-                System.IO.File.Delete(Runtime.Root + "Table1.cs");
+            if (System.IO.File.Exists(Runtime.Root + "Table1.sql"))
+                System.IO.File.Delete(Runtime.Root + "Table1.sql");
             string p = "System.Data.SQLite";
             string c = @"Data Source=Db\test.db3;Version=3;";
             _source = DataSource.Connect(p, c);
@@ -53,7 +53,7 @@ namespace Tatan.Data.UnitTest
                 TableId = 1
             };
             _source.Tables["Fields"].Insert(f);
-            IGenerator g = new EntityGenerator(st, _source, null);
+            IGenerator g = new SqliteGenerator(st, _source);
             g.Execute(Runtime.Root);
             var s = _source.Tables["Fields"].Delete<Fields>(field => field.Name == "col1");
         }
@@ -61,14 +61,14 @@ namespace Tatan.Data.UnitTest
         [TestMethod]
         public void TestExecuteTableNull()
         {
-            IGenerator g = new EntityGenerator(null, _source, null);
+            IGenerator g = new SqliteGenerator(null, _source);
             g.Execute(Runtime.Root);
         }
 
         [TestMethod]
         public void TestExecuteTableNull2()
         {
-            IGenerator g = new EntityGenerator(null, _source, null);
+            IGenerator g = new SqliteGenerator(null, _source);
             g.Execute(Runtime.Root.Substring(0, Runtime.Root.Length - 1));
         }
 
@@ -83,7 +83,7 @@ namespace Tatan.Data.UnitTest
                     Title = "表1"
                 }
             };
-            IGenerator g = new EntityGenerator(st, null, null);
+            IGenerator g = new SqliteGenerator(st, null);
             try
             {
                 g.Execute(Runtime.Root);

@@ -23,7 +23,7 @@
         /// 构造函数
         /// </summary>
         /// <param name="id">唯一标识符</param>
-        public Permission(int id)
+        public Permission(long id)
             : base(id)
         {
         }

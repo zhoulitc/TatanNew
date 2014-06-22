@@ -1,0 +1,4 @@
+﻿CREATE TABLE [{%Table%}](
+	[Id] INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+	{%Columns%}
+);

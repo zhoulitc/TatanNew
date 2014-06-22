@@ -1,4 +1,4 @@
-﻿namespace Tatan.Data.Relation
+﻿namespace Tatan.Data.Generator
 {
     /// <summary>
     /// 生成器接口

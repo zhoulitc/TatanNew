@@ -3,7 +3,7 @@
     /// <summary>
     /// 可识别的对象接口
     /// </summary>
-    public interface IDentifiable : IDentifiable<int>
+    public interface IDentifiable : IDentifiable<long>
     {
     }
 

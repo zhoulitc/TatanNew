@@ -4,7 +4,6 @@
     using Common.Collections;
     using Data;
 
-
     /// <summary>
     /// 用户登录信息
     /// </summary>
@@ -15,8 +14,16 @@
         /// <summary>
         /// 构造函数
         /// </summary>
+        public UserLogin()
+            : base(-1)
+        {
+        }
+
+        /// <summary>
+        /// 构造函数
+        /// </summary>
         /// <param name="id">唯一标识符</param>
-        public UserLogin(int id)
+        public UserLogin(long id)
             : base(id)
         {
         }

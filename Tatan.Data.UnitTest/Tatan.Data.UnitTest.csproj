@@ -62,6 +62,7 @@
     <Compile Include="DataSourceTest.cs" />
     <Compile Include="DataTableTest.cs" />
     <Compile Include="DataDocumentTest.cs" />
+    <Compile Include="SqliteGeneratorTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Tatan.Common\Tatan.Common.csproj">

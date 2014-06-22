@@ -25,5 +25,10 @@ namespace Tatan.Data
         /// 模糊匹配符号
         /// </summary>
         string FuzzyMatchingSymbol { get; }
+
+        /// <summary>
+        /// 调用存储过程命令
+        /// </summary>
+        string CallStoredProcedure { get; }
     }
 }

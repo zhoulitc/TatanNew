@@ -15,6 +15,8 @@ namespace Tatan.Data
 
         public string FuzzyMatchingSymbol { get; set; }
 
+        public string CallStoredProcedure { get; set; }
+
         public DataProvider(string name, string connection)
         {
             Name = name;
@@ -25,46 +27,55 @@ namespace Tatan.Data
                     ParameterSymbol = "?";
                     StringSplicingSymbol = "||";
                     FuzzyMatchingSymbol = "*";
+                    CallStoredProcedure = "CALL";
                     break;
                 case "IBM.Data.DB2":
                     ParameterSymbol = "?";
                     StringSplicingSymbol = "||";
                     FuzzyMatchingSymbol = "%";
+                    CallStoredProcedure = "CALL";
                     break;
                 case "IBM.Data.Informix":
                     ParameterSymbol = "?";
                     StringSplicingSymbol = "||";
                     FuzzyMatchingSymbol = "%";
+                    CallStoredProcedure = "CALL";
                     break;
                 case "MySql.Data.MySqlClient":
                     ParameterSymbol = "?";
                     StringSplicingSymbol = "||";
                     FuzzyMatchingSymbol = "%";
+                    CallStoredProcedure = "CALL";
                     break;
                 case "System.Data.OracleClient":
                     ParameterSymbol = "?";
                     StringSplicingSymbol = "||";
                     FuzzyMatchingSymbol = "%";
+                    CallStoredProcedure = "CALL";
                     break;
                 case "Npgsql":
                     ParameterSymbol = "?";
                     StringSplicingSymbol = "||";
                     FuzzyMatchingSymbol = "%";
+                    CallStoredProcedure = "CALL";
                     break;
                 case "System.Data.SQLite":
                     ParameterSymbol = "$";
                     StringSplicingSymbol = "||";
                     FuzzyMatchingSymbol = "%";
+                    CallStoredProcedure = "";
                     break;
                 case "Sybase.Data.AseClient":
                     ParameterSymbol = "?";
                     StringSplicingSymbol = "||";
                     FuzzyMatchingSymbol = "%";
+                    CallStoredProcedure = "CALL";
                     break;
                 case "System.Data.SqlClient":
                     ParameterSymbol = "@";
                     StringSplicingSymbol = "+";
                     FuzzyMatchingSymbol = "%";
+                    CallStoredProcedure = "EXEC";
                     break;
             }
         }

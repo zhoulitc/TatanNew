@@ -25,7 +25,7 @@
         /// 构造函数
         /// </summary>
         /// <param name="id">唯一标识符</param>
-        public Fields(int id)
+        public Fields(long id)
             : base(id)
         {
         }
@@ -38,7 +38,7 @@
         static Fields()
         {
             _perproties = new PropertyCollection(typeof(Fields),
-                "Name", "Title", "Type", "Size", "Scale", "DefaultValue", "TableId", "OrderId"
+                "Name", "Title", "Type", "Size", "Scale", "DefaultValue", "IsNotNull", "TableId", "OrderId"
             );
         }
         #endregion
@@ -63,6 +63,7 @@
             Size = default(int);
             Scale = default(int);
             DefaultValue = default(string);
+            IsNotNull = default(bool);
             TableId = default(int);
             OrderId = default(int);
         }
@@ -98,6 +99,11 @@
         /// 字段默认值
         /// </summary>
         public string DefaultValue { get; set; }
+
+        /// <summary>
+        /// 字段是否不为空
+        /// </summary>
+        public bool IsNotNull { get; set; }
 
         /// <summary>
         /// 字段表名

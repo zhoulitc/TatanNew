@@ -1,5 +1,6 @@
 ﻿namespace Tatan.Data.Relation
 {
+    using System;
     using Collections;
     using Common.Exception;
 
@@ -10,6 +11,8 @@
     public partial class Tables
     {
         private const string _getFields = "SELECT * FROM Fields WHERE TableId={0}TableId";
+
+        [NonSerialized]
         private FieldsCollection _fields;
 
         /// <summary>

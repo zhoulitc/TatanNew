@@ -18,7 +18,7 @@ namespace Tatan.Data
     {
         #region 私有变量
         private readonly DbCommand _command;
-        private readonly string _symbol;
+        private readonly IDataProvider _provider;
 
         #endregion
 
@@ -38,7 +38,7 @@ namespace Tatan.Data
 // ReSharper disable once PossibleNullReferenceException
             conn.ConnectionString = connectionString;
             _command = conn.CreateCommand();
-            _symbol = source.Provider.ParameterSymbol;
+            _provider = source.Provider;
         }
         #endregion
 
@@ -69,7 +69,7 @@ namespace Tatan.Data
         public IDataEntities<T> GetEntities<T>(string request, Action<IDataParameters> action = null)
             where T : IDataEntity, new()
         {
-            using (DbDataReader reader = _Execute(request, action, () => _command.ExecuteReader()))
+            using (var reader = _Execute(request, action, () => _command.ExecuteReader()))
             {
                 return _GetEntities<T>(reader);
             }
@@ -78,7 +78,7 @@ namespace Tatan.Data
         public async Task<IDataEntities<T>> GetEntitiesAsync<T>(string request, Action<IDataParameters> action = null)
             where T : IDataEntity, new()
         {
-            using (DbDataReader reader = await _Execute(request, action, () => _command.ExecuteReaderAsync()))
+            using (var reader = await _Execute(request, action, () => _command.ExecuteReaderAsync()))
             {
                 return _GetEntities<T>(reader);
             }
@@ -329,19 +329,28 @@ namespace Tatan.Data
         #endregion
 
         #region Protected Method
-        private CommandType _SetCommandType(string text)
-        {
-            return (text.Trim().Contains(" ")) ? CommandType.Text : CommandType.StoredProcedure;
-        }
-
         private void _PrepareCommand(string text)
         {
-            _command.CommandText = text; //TODO 检查SQL
-            _command.CommandType = _SetCommandType(text);
+            text = text.Trim();
+            _command.CommandText = _Check(text, _provider.CallStoredProcedure);
+            _command.CommandType = _SetCommandType(text, _provider);
             _command.CommandTimeout = Timeout <= 0 ? 15 : Timeout;
             if (_command.Connection.State != ConnectionState.Open)
                 _command.Connection.Open();
             _command.Prepare();
+        }
+
+        private static CommandType _SetCommandType(string text, IDataProvider provider)
+        {
+            if (string.IsNullOrEmpty(provider.CallStoredProcedure))
+                return CommandType.Text;
+            return (text.Contains(" ")) ? CommandType.Text : CommandType.StoredProcedure;
+        }
+
+        private static string _Check(string text, string call)
+        {
+            ExceptionHandler.IllegalSql(text, call);
+            return text;
         }
 
         private T _Execute<T>(string text, Action<IDataParameters> action, Func<T> function)
@@ -352,7 +361,7 @@ namespace Tatan.Data
             {
                 _PrepareCommand(text);
                 if (action != null)
-                    action(new DataParameters(_command, _symbol));
+                    action(new DataParameters(_command, _provider.ParameterSymbol));
                 result = function();
             }
             catch (Exception ex)
@@ -364,7 +373,7 @@ namespace Tatan.Data
             return result;
         }
 
-        private DataEntities<T> _GetEntities<T>(IDataReader reader)
+        private static DataEntities<T> _GetEntities<T>(IDataReader reader)
             where T : IDataEntity, new()
         {
             if (reader == null)
@@ -376,7 +385,7 @@ namespace Tatan.Data
                 for (var j = 0; j < reader.FieldCount; j++)
                 {
                     if (reader.GetName(j) == "Id")
-                        SetId(entity, reader.GetInt32(j));
+                        SetId(entity, reader.GetInt64(j));
                     else if (!reader.IsDBNull(j))
                         entity[reader.GetName(j)] = reader.GetValue(j);
                 }
@@ -385,13 +394,15 @@ namespace Tatan.Data
             return entities;
         }
 
-        private void SetId(object obj, int id)
+        private static void SetId(object obj, long id)
         {
-            if (obj is DataEntity)
+            var entity = obj as DataEntity;
+            if (entity != null)
             {
-                obj.GetType().GetProperty("Id").SetValue(obj, id);
+                entity.Id = id;
             }
         }
+
         #endregion
     }
 }

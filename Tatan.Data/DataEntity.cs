@@ -21,7 +21,7 @@
         /// 
         /// </summary>
         /// <param name="id"></param>
-        protected DataEntity(int id)
+        protected DataEntity(long id)
         {
             Id = id;
         }
@@ -62,7 +62,7 @@
         /// <summary>
         /// 一个自动生成的唯一标识符
         /// </summary>
-        public int Id { get; set; }
+        public long Id { get; set; }
         #endregion
 
         #region IEnumerable

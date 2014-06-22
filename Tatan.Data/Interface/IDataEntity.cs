@@ -7,7 +7,7 @@ namespace Tatan.Data
     /// <summary>
     /// 数据实体接口
     /// </summary>
-    public interface IDataEntity : IDentifiable<int>, IEnumerable<string>, IReplicable<IDataEntity>, IObject, IPropertyChanged
+    public interface IDataEntity : IDentifiable<long>, IEnumerable<string>, IReplicable<IDataEntity>, IObject, IPropertyChanged
     {
         /// <summary>
         /// 清空实体记录
