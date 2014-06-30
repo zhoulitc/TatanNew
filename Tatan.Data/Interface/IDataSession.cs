@@ -11,28 +11,7 @@ namespace Tatan.Data
     /// </summary>
     public interface IDataSession : IDentifiable<string>
     {
-        /// <summary>
-        /// 设置命令的超时时间
-        /// </summary>
-        int Timeout { set; }
-
         #region 数据处理
-        /// <summary>
-        /// 获取一个数据集
-        /// </summary>
-        /// <param name="request">请求串，向数据源请求数据，例如SQL、存储过程等</param>
-        /// <param name="action">参数设置行为</param>
-        /// <returns>数据集</returns>
-        IDataDocument GetDocument(string request, Action<IDataParameters> action = null);
-
-        /// <summary>
-        /// 获取一个数据集（异步版本）
-        /// </summary>
-        /// <param name="request">请求串，向数据源请求数据，例如SQL、存储过程等</param>
-        /// <param name="action">参数设置行为</param>
-        /// <returns>数据集</returns>
-        Task<IDataDocument> GetDocumentAsync(string request, Action<IDataParameters> action = null);
-
         /// <summary>
         /// 获取一个数据实体集
         /// <para>泛型必须继承至实体接口</para>
@@ -56,20 +35,54 @@ namespace Tatan.Data
             where T : IDataEntity, new();
 
         /// <summary>
-        /// 获取一个数据标量
+        /// 执行请求获取一个数据标量
         /// </summary>
         /// <param name="request">请求串，向数据源请求数据，例如SQL、存储过程等</param>
         /// <param name="action">参数设置行为</param>
         /// <returns>唯一标量</returns>
-        T GetScalar<T>(string request, Action<IDataParameters> action = null);
+        T ExecuteScalar<T>(string request, Action<IDataParameters> action = null);
 
         /// <summary>
-        /// 获取一个数据标量（异步版本）
+        /// 执行请求获取一个数据标量（异步版本）
         /// </summary>
         /// <param name="request">请求串，向数据源请求数据，例如SQL、存储过程等</param>
         /// <param name="action">参数设置行为</param>
         /// <returns>唯一标量</returns>
-        Task<T> GetScalarAsync<T>(string request, Action<IDataParameters> action = null);
+        Task<T> ExecuteScalarAsync<T>(string request, Action<IDataParameters> action = null);
+
+        /// <summary>
+        /// 执行请求并处理返回的数据集
+        /// </summary>
+        /// <param name="request">请求串，向数据源请求数据，例如SQL、存储过程等</param>
+        /// <param name="function">操作返回的结果集，并返回结果集加工后的数据</param>
+        /// <returns>泛型列表</returns>
+        T ExecuteReader<T>(string request, Func<IDataReader, T> function);
+
+        /// <summary>
+        /// 执行请求并处理返回的数据集
+        /// </summary>
+        /// <param name="request">请求串，向数据源请求数据，例如SQL、存储过程等</param>
+        /// <param name="function">操作返回的结果集，并返回结果集加工后的数据</param>
+        /// <returns>泛型列表</returns>
+        Task<T> ExecuteReaderAsync<T>(string request, Func<IDataReader, Task<T>> function);
+
+        /// <summary>
+        /// 执行请求并处理返回的数据集
+        /// </summary>
+        /// <param name="request">请求串，向数据源请求数据，例如SQL、存储过程等</param>
+        /// <param name="action">参数设置行为</param>
+        /// <param name="function">操作返回的结果集，并返回结果集加工后的数据</param>
+        /// <returns>泛型列表</returns>
+        T ExecuteReader<T>(string request, Action<IDataParameters> action, Func<IDataReader, T> function);
+
+        /// <summary>
+        /// 执行请求并处理返回的数据集
+        /// </summary>
+        /// <param name="request">请求串，向数据源请求数据，例如SQL、存储过程等</param>
+        /// <param name="action">参数设置行为</param>
+        /// <param name="function">操作返回的结果集，并返回结果集加工后的数据</param>
+        /// <returns>泛型列表</returns>
+        Task<T> ExecuteReaderAsync<T>(string request, Action<IDataParameters> action, Func<IDataReader, Task<T>> function);
 
         /// <summary>
         /// 执行命令
@@ -96,5 +109,10 @@ namespace Tatan.Data
         /// <returns>事务处理接口</returns>
         IDbTransaction BeginTransaction(IsolationLevel lockLevel = IsolationLevel.Unspecified);
         #endregion
+
+        /// <summary>
+        /// 设置命令的超时时间
+        /// </summary>
+        int Timeout { set; }
     }
 }

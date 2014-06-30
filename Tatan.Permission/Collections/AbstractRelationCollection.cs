@@ -83,7 +83,7 @@
             ExceptionHandler.ArgumentNull("Source", Source);
             ExceptionHandler.ArgumentNull("relation", relation);
             var sql = string.Format(Sqls["contains"], TableName, Source.Provider.ParameterSymbol, ThisName, ThatName);
-            return Source.UseSession(TableName, session => session.GetScalar<long>(sql, parameters =>
+            return Source.UseSession(TableName, session => session.ExecuteScalar<long>(sql, parameters =>
             {
                 parameters[ThisName] = relation.Id;
                 parameters[ThatName] = Identity.Id;

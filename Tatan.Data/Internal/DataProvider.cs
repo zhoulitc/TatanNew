@@ -7,7 +7,7 @@ namespace Tatan.Data
     {
         public string Name { get; set; }
 
-        public string Connection { get; set; }
+        public string ConnectionString { get; set; }
 
         public string ParameterSymbol { get; set; }
 
@@ -17,10 +17,10 @@ namespace Tatan.Data
 
         public string CallStoredProcedure { get; set; }
 
-        public DataProvider(string name, string connection)
+        public DataProvider(string name, string connectionString)
         {
             Name = name;
-            Connection = connection;
+            ConnectionString = connectionString;
             switch (Name)
             {
                 case "System.Data.OleDb":
@@ -89,12 +89,12 @@ namespace Tatan.Data
 
         public override int GetHashCode()
         {
-            return Name.GetHashCode() ^ Connection.GetHashCode();
+            return Name.GetHashCode() ^ ConnectionString.GetHashCode();
         }
 
         public override string ToString()
         {
-            return String.Format("{0}[{1}]", Name, Connection);
+            return String.Format("{0}[{1}]", Name, ConnectionString);
         }
     }
 }

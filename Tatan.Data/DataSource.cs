@@ -71,7 +71,7 @@ namespace Tatan.Data
             _dataProvider = provider;
             _tables = new DataTableCollection(this);
             Sessions = new Dictionary<string, DataSession>();
-            _session = new DataSession(this, "0", _dataProvider.Connection);
+            _session = new DataSession("0", _dataProvider);
         }
 
         #region IDisposable
@@ -158,7 +158,7 @@ namespace Tatan.Data
                 return function(_session);
             if (!Sessions.ContainsKey(identity))
             {
-                Sessions.Add(identity, new DataSession(this, identity, _dataProvider.Connection));
+                Sessions.Add(identity, new DataSession(identity, _dataProvider));
             }
             using (var session = Sessions[identity])
             {

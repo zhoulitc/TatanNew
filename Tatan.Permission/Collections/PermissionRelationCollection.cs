@@ -69,7 +69,7 @@ namespace Tatan.Permission.Collections
         private bool GroupRoleContains(Permission relation)
         {
             var sql = string.Format(_sqlsExtension["GroupsRolesContains"], Source.Provider.ParameterSymbol);
-            return Source.UseSession(TableName, session => session.GetScalar<long>(sql, parameters =>
+            return Source.UseSession(TableName, session => session.ExecuteScalar<long>(sql, parameters =>
             {
                 parameters[ThisName] = relation.Id;
                 parameters[ThatName] = Identity.Id;
@@ -79,7 +79,7 @@ namespace Tatan.Permission.Collections
         private bool UserGroupRoleContains(Permission relation)
         {
             var sql = string.Format(_sqlsExtension["UsersGroupsRolesContains"], Source.Provider.ParameterSymbol);
-            return (Source.UseSession(TableName, session => session.GetScalar<long>(sql, parameters =>
+            return (Source.UseSession(TableName, session => session.ExecuteScalar<long>(sql, parameters =>
             {
                 parameters[ThisName] = relation.Id;
                 parameters[ThatName] = Identity.Id;

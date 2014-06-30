@@ -3,7 +3,7 @@
     using Collections;
 
     /// <summary>
-    /// 代码根
+    /// 代码模块，一个模块包含多个目录和文件
     /// </summary>
     public class CodeModule : CodeBase
     {

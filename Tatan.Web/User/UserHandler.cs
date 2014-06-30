@@ -45,7 +45,7 @@
             {
                 var flag = false;
                 var trans = session.BeginTransaction(System.Data.IsolationLevel.ReadCommitted);
-                var id = session.GetScalar<long>(string.Format(_checkSql, Source.Provider.ParameterSymbol), p =>
+                var id = session.ExecuteScalar<long>(string.Format(_checkSql, Source.Provider.ParameterSymbol), p =>
                 {
                     p["Name"] = username;
                     p["Password"] = cipher.Encrypt(password);
@@ -77,8 +77,8 @@
             us.Token = cipher.Encrypt(password);
             us.State = cipher.Encrypt(Http.Session.Id);
 
+            Http.Cache.Set(us.Guid, us);
             Http.Cookies[us.Guid] = us.ToString();
-            Http.Cache[us.Guid] = us;
             Http.Session[us.Guid] = us;
             return us;
         }
@@ -102,7 +102,7 @@
                                 p["LastLogoutTime", DataType.Date] = Date.Now();
                             }) == 1))
                 {
-                    Http.Cache[guid] = null;
+                    Http.Cache.Remove(guid);
                     Http.Cookies[guid] = null;
                     Http.Session[guid] = null;
                     Http.Session.Abandon();

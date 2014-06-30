@@ -48,23 +48,8 @@ namespace Tatan.Common.UnitTest
         public void TestMD5Decrypt()
         {
             var ic = CipherFactory.GetCipher("md5");
-            try
-            {
-                var s1 = ic.Decrypt("c86fdd4105b631118cfa7e4a06c21");
-            }
-            catch (System.Exception e)
-            {
-                Assert.AreEqual(e.Message, "此操作没有实现。");
-            }
-
-            try
-            {
-                var s1 = ic.Decrypt("c86fdd4105b631118cfa7e4a06c21", "");
-            }
-            catch (System.Exception e)
-            {
-                Assert.AreEqual(e.Message, "此操作没有实现。");
-            }
+            Assert.AreEqual(ic.Decrypt("c86fdd4105b631118cfa7e4a06c21"), "c86fdd4105b631118cfa7e4a06c21");
+            Assert.AreEqual(ic.Decrypt("c86fdd4105b631118cfa7e4a06c21", ""), "c86fdd4105b631118cfa7e4a06c21");
         }
 
         [TestMethod]
@@ -81,23 +66,8 @@ namespace Tatan.Common.UnitTest
         public void TestSHA1Decrypt()
         {
             var ic = CipherFactory.GetCipher("sha1");
-            try
-            {
-                var s1 = ic.Decrypt("c86fdd4105b631118cfa7e4a06c21");
-            }
-            catch (System.Exception e)
-            {
-                Assert.AreEqual(e.Message, "此操作没有实现。");
-            }
-
-            try
-            {
-                var s1 = ic.Decrypt("c86fdd4105b631118cfa7e4a06c21", "");
-            }
-            catch (System.Exception e)
-            {
-                Assert.AreEqual(e.Message, "此操作没有实现。");
-            }
+            Assert.AreEqual(ic.Decrypt("c86fdd4105b631118cfa7e4a06c21"), "c86fdd4105b631118cfa7e4a06c21");
+            Assert.AreEqual(ic.Decrypt("c86fdd4105b631118cfa7e4a06c21", ""), "c86fdd4105b631118cfa7e4a06c21");
         }
 
         [TestMethod]

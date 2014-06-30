@@ -7,8 +7,8 @@ namespace Tatan.Common.Exception
     using System.Text.RegularExpressions;
     using I18n;
     using IO;
-    using Directory = System.IO.Directory;
-    using File = System.IO.File;
+    using Directory = Directory;
+    using File = File;
     using Collections;
 
     #region 异常处理类
@@ -160,7 +160,7 @@ namespace Tatan.Common.Exception
         public static void DirectoryNotFound(string path)
         {
             if (!Directory.Exists(path))
-                throw new System.IO.DirectoryNotFoundException(_exception.GetText("DirectoryNotFound"));
+                throw new DirectoryNotFoundException(_exception.GetText("DirectoryNotFound"));
         }
 
         /// <summary>
@@ -170,7 +170,7 @@ namespace Tatan.Common.Exception
         public static void FileNotFound(string path)
         {
             if (!File.Exists(path))
-                throw new System.IO.FileNotFoundException(_exception.GetText("FileNotFound"));
+                throw new FileNotFoundException(_exception.GetText("FileNotFound"));
         }
 
         /// <summary>
@@ -181,7 +181,7 @@ namespace Tatan.Common.Exception
         public static void IllegalMatch(Regex regex, string input)
         {
             if (!regex.IsMatch(input))
-                throw new FileNotFoundException(_exception.GetText("IllegalMatch"));
+                throw new Exception(_exception.GetText("IllegalMatch"));
         }
 
         /// <summary>

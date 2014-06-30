@@ -40,7 +40,7 @@ namespace Tatan.Data.UnitTest
                     trans.Rollback();
                     return 0;
                 }
-                var s = session.GetScalar<long>(("SELECT Size FROM Fields WHERE Id=38"));
+                var s = session.ExecuteScalar<long>(("SELECT Size FROM Fields WHERE Id=38"));
                 trans.Commit();
                 return s;
             });
@@ -53,9 +53,7 @@ namespace Tatan.Data.UnitTest
             Assert.AreEqual(_source.UseSession("sdsa1", session => 
                 session.Execute("UPDATE Fields SET Name='Column1' WHERE Id=38")), 0);
             Assert.AreEqual(_source.UseSession("sdsa1", session => 
-                session.GetDocument("SELECT * FROM Fields")).Count>=0, true);
-            Assert.AreEqual(_source.UseSession("sdsa1", session => 
-                session.GetScalar<long>("SELECT Size FROM Fields WHERE Id=1")), 0);
+                session.ExecuteScalar<long>("SELECT Size FROM Fields WHERE Id=1")), 0);
             Assert.AreEqual(_source.UseSession("sdsa1", session => 
                 session.GetEntities<Fields>("SELECT * FROM Fields")).Count>=0, true);
         }
@@ -65,9 +63,6 @@ namespace Tatan.Data.UnitTest
         {
             var ss = GetResult().Result;
             Assert.AreEqual(ss, 0);
-
-            var s1 = GetResult1().Result;
-            Assert.AreEqual(s1.Count>=0, true);
 
             var s2 = GetResult2().Result;
             Assert.AreEqual(s2, 0);
@@ -83,16 +78,9 @@ namespace Tatan.Data.UnitTest
             return ss;
         }
 
-        private async Task<IDataDocument> GetResult1()
-        {
-            var ss = await _source.UseSession("sdsa1", session => session.GetDocumentAsync("SELECT * FROM Fields"));
-            Assert.AreNotEqual(ss, null);
-            return ss;
-        }
-
         private async Task<long> GetResult2()
         {
-            var ss = await _source.UseSession("sdsa1", session => session.GetScalarAsync<long>("SELECT Size FROM Fields WHERE Id=41"));
+            var ss = await _source.UseSession("sdsa1", session => session.ExecuteScalarAsync<long>("SELECT Size FROM Fields WHERE Id=41"));
             return ss;
         }
 

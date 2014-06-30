@@ -20,25 +20,31 @@ namespace Tatan.Data
         private readonly DbCommand _command;
         private readonly IDataProvider _provider;
 
+        private static readonly object _lock = new object();
+        private static readonly ListMap<string, DbProviderFactory> _dbFactories; //工厂集
+
         #endregion
 
         #region 构造函数
-        public DataSession(DataSource source, string id, string connectionString)
+        public DataSession(string id, IDataProvider provider)
         {
-            ExceptionHandler.ArgumentNull("source", source);
-            ExceptionHandler.ArgumentNull("connectionString", connectionString);
-
+            ExceptionHandler.ArgumentNull("provider", provider);
             if (string.IsNullOrEmpty(id) || id.Length > 128)
                 id = "0";
             Id = id;
 
-            var dbFactory = DataSource.Get(source.Provider.Name);
-            var conn = dbFactory.CreateConnection();
-            ExceptionHandler.ArgumentNull("conn", conn);
+            var dbFactory = Get(provider.Name);
+            var connection = dbFactory.CreateConnection();
+            ExceptionHandler.ArgumentNull("connection", connection);
 // ReSharper disable once PossibleNullReferenceException
-            conn.ConnectionString = connectionString;
-            _command = conn.CreateCommand();
-            _provider = source.Provider;
+            connection.ConnectionString = provider.ConnectionString;
+            _command = connection.CreateCommand();
+            _provider = provider;
+        }
+
+        static DataSession()
+        {
+            _dbFactories = new ListMap<string, DbProviderFactory>(20);
         }
         #endregion
 
@@ -47,25 +53,6 @@ namespace Tatan.Data
         public int Timeout { private get; set; }
 
         #region 数据处理
-        public IDataDocument GetDocument(string request, Action<IDataParameters> action = null)
-        {
-            using (var reader = _Execute(request, action, () => _command.ExecuteReader()))
-            {
-                var document = new DataDocument(reader);
-                return document;
-            }
-        }
-
-        public async Task<IDataDocument> GetDocumentAsync(string request, Action<IDataParameters> action = null)
-        {
-
-            using (var reader = await _Execute(request, action, () => _command.ExecuteReaderAsync()))
-            {
-                var document = new DataDocument(reader);
-                return document;
-            }
-        }
-
         public IDataEntities<T> GetEntities<T>(string request, Action<IDataParameters> action = null)
             where T : IDataEntity, new()
         {
@@ -84,7 +71,7 @@ namespace Tatan.Data
             }
         }
 
-        public T GetScalar<T>(string request, Action<IDataParameters> action = null)
+        public T ExecuteScalar<T>(string request, Action<IDataParameters> action = null)
         {
             var value = _Execute(request, action, () => _command.ExecuteScalar());
             if (value == null)
@@ -92,12 +79,44 @@ namespace Tatan.Data
             return (T)value;
         }
 
-        public async Task<T> GetScalarAsync<T>(string request, Action<IDataParameters> action = null)
+        public async Task<T> ExecuteScalarAsync<T>(string request, Action<IDataParameters> action = null)
         {
             var value = await _Execute(request, action, () => _command.ExecuteScalarAsync());
             if (value == null)
                 return default(T);
             return (T)value;
+        }
+
+        public T ExecuteReader<T>(string request, Func<IDataReader, T> function)
+        {
+            using (var reader = _Execute(request, null, () => _command.ExecuteReader()))
+            {
+                return function(reader);
+            }
+        }
+
+        public async Task<T> ExecuteReaderAsync<T>(string request, Func<IDataReader, Task<T>> function)
+        {
+            using (var reader = await _Execute(request, null, () => _command.ExecuteReaderAsync()))
+            {
+                return await function(reader);
+            }
+        }
+
+        public T ExecuteReader<T>(string request, Action<IDataParameters> action, Func<IDataReader, T> function)
+        {
+            using (var reader = _Execute(request, action, () => _command.ExecuteReader()))
+            {
+                return function(reader);
+            }
+        }
+
+        public async Task<T> ExecuteReaderAsync<T>(string request, Action<IDataParameters> action, Func<IDataReader, Task<T>> function)
+        {
+            using (var reader = await _Execute(request, action, () => _command.ExecuteReaderAsync()))
+            {
+                return await function(reader);
+            }
         }
 
         public int Execute(string command, Action<IDataParameters> action = null)
@@ -124,7 +143,8 @@ namespace Tatan.Data
         #region 参数设置
         internal sealed class DataParameters : IDataParameters, IDisposable
         {
-            private IDbCommand _command;
+            private IDataParameterCollection _parameters;
+            private Func<IDbDataParameter> _createParamter;
             private readonly string _symbol;
             private static readonly ListMap<DataType, DbType> _mapping;
 
@@ -142,23 +162,25 @@ namespace Tatan.Data
                 };
             }
 
-            public DataParameters(IDbCommand command, string symbol)
+            public DataParameters(IDataParameterCollection parameters, Func<IDbDataParameter> createParamter, string symbol)
             {
-                _command = command;
-                _command.Parameters.Clear();
+                _parameters = parameters;
+                _parameters.Clear();
+                _createParamter = createParamter;
                 _symbol = symbol;
             }
             public void Dispose()
             {
-                _command.Parameters.Clear();
-                _command = null;
+                _parameters.Clear();
+                _parameters = null;
+                _createParamter = null;
             }
 
             public object this[int index, DataType type = DataType.Object, int size = 0] 
             {
                 set
                 {
-                    if (index < 0 || index > _command.Parameters.Count)
+                    if (index < 0 || index > _parameters.Count)
                         throw new IndexOutOfRangeException(ExceptionHandler.GetText("IndexOutOfRange"));
                     SetOtherValue(TryCreate(index), type, size, value);
                 }
@@ -168,7 +190,7 @@ namespace Tatan.Data
             {
                 set
                 {
-                    if (index < 0 || index > _command.Parameters.Count)
+                    if (index < 0 || index > _parameters.Count)
                         throw new IndexOutOfRangeException(ExceptionHandler.GetText("IndexOutOfRange"));
                     SetNumberValue(TryCreate(index), size, scale, value);
                 }
@@ -195,10 +217,10 @@ namespace Tatan.Data
             private IDbDataParameter TryCreate(int index)
             {
                 IDbDataParameter parameter = null;
-                if (index == _command.Parameters.Count)
+                if (index == _parameters.Count)
                 {
-                    parameter = _command.CreateParameter();
-                    _command.Parameters.Add(parameter);
+                    parameter = _createParamter();
+                    _parameters.Add(parameter);
                 }
                 return parameter;
             }
@@ -207,16 +229,16 @@ namespace Tatan.Data
             {
                 name = _symbol + name;
                 IDbDataParameter parameter = null;
-                if (!_command.Parameters.Contains(name))
+                if (!_parameters.Contains(name))
                 {
-                    parameter = _command.CreateParameter();
+                    parameter = _createParamter();
                     parameter.ParameterName = name;
-                    _command.Parameters.Add(parameter);
+                    _parameters.Add(parameter);
                 }
                 return parameter;
             }
 
-            private void SetNumberValue(IDbDataParameter parameter, byte size, byte scale, object value)
+            private static void SetNumberValue(IDbDataParameter parameter, byte size, byte scale, object value)
             {
                 if (parameter != null)
                 {
@@ -234,7 +256,7 @@ namespace Tatan.Data
                 }
             }
 
-            private void SetOtherValue(IDbDataParameter parameter, DataType type, int size, object value)
+            private static void SetOtherValue(IDbDataParameter parameter, DataType type, int size, object value)
             {
                 if (parameter != null)
                 {
@@ -251,7 +273,7 @@ namespace Tatan.Data
                 }
             }
 
-            private void SetNullValue(IDbDataParameter parameter)
+            private static void SetNullValue(IDataParameter parameter)
             {
                 parameter.DbType = DbType.Object;
                 parameter.Value = DBNull.Value;
@@ -361,7 +383,7 @@ namespace Tatan.Data
             {
                 _PrepareCommand(text);
                 if (action != null)
-                    action(new DataParameters(_command, _provider.ParameterSymbol));
+                    action(new DataParameters(_command.Parameters, _command.CreateParameter, _provider.ParameterSymbol));
                 result = function();
             }
             catch (Exception ex)
@@ -403,6 +425,17 @@ namespace Tatan.Data
             }
         }
 
+        private static DbProviderFactory Get(string name)
+        {
+            if (!_dbFactories.Contains(name))
+            {
+                lock (_lock)
+                {
+                    _dbFactories.Add(name, DbProviderFactories.GetFactory(name));
+                }
+            }
+            return _dbFactories[name];
+        }
         #endregion
     }
 }

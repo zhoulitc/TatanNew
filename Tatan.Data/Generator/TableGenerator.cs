@@ -14,7 +14,14 @@
     /// </summary>
     public abstract class TableGenerator : IGenerator
     {
+        /// <summary>
+        /// 数据表
+        /// </summary>
         protected readonly IEnumerable<Tables> Tables;
+
+        /// <summary>
+        /// 数据源
+        /// </summary>
         protected readonly IDataSource Source;
 
         #region 构造函数

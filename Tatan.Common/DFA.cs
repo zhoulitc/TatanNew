@@ -1,5 +1,6 @@
 ﻿namespace Tatan.Common
 {
+    using System.Linq;
     using System;
     using System.Collections.Generic;
     using Exception;
@@ -81,13 +82,14 @@
         /// <exception cref="System.ArgumentNullException">传入参数为空时</exception>
         public void Run(IEnumerable<T> tokens, Enum beginState)
         {
-            ExceptionHandler.ArgumentNull("tokens", tokens);
+            var enumerable = tokens as T[] ?? tokens.ToArray();
+            ExceptionHandler.ArgumentNull("tokens", enumerable);
             ExceptionHandler.ArgumentNull("beginState", beginState);
 
             State = beginState;
             if (StateFunctions.Count > 0)
             {
-                foreach (var token in tokens)
+                foreach (var token in enumerable)
                 {
                     CallStateFunction(token);
                 }

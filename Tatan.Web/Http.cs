@@ -2,6 +2,7 @@
 {
     using System;
     using System.Web;
+    using Common.Caching;
     using Common.Exception;
 
     /// <summary>
@@ -68,64 +69,7 @@
         /// </summary>
         public static ICache Cache
         {
-            get { return InternalCache.Instance; }
-        }
-
-        private sealed class InternalCache : ICache
-        {
-            #region 单例
-            private static readonly InternalCache _instance = new InternalCache();
-            private InternalCache() { }
-            public static InternalCache Instance { get { return _instance; } }
-            #endregion
-
-            public void Clear()
-            {
-                var enumerator = HttpRuntime.Cache.GetEnumerator();
-                while (enumerator.MoveNext())
-                {
-                    HttpRuntime.Cache.Remove(enumerator.Key.ToString());
-                }
-            }
-
-            public int Count { get { return HttpRuntime.Cache.Count; } }
-
-            public T Get<T>(string key)
-            {
-                ExceptionHandler.ArgumentNull("key", key);
-                return (T)HttpRuntime.Cache.Get(key);
-            }
-
-            public object this[string key]
-            {
-                set
-                {
-                    ExceptionHandler.ArgumentNull("key", key);
-                    if (value == null)
-                        HttpRuntime.Cache.Remove(key);
-                    else
-                        HttpRuntime.Cache.Insert(key, value);
-                }
-            }
-
-            /// <summary>
-            /// 设置一个缓存，包含过期时间和最后一次访问到过期时间的间隔
-            /// </summary>
-            /// <param name="key"></param>
-            /// <param name="value"></param>
-            /// <param name="absoluteExpiration">过期时间</param>
-            /// <param name="slidingExpiration">最后一次访问到过期时间的间隔</param>
-            public object this[string key, DateTime absoluteExpiration, TimeSpan slidingExpiration]
-            {
-                set
-                {
-                    ExceptionHandler.ArgumentNull("key", key);
-                    if (value == null)
-                        HttpRuntime.Cache.Remove(key);
-                    else
-                        HttpRuntime.Cache.Insert(key, value, null, absoluteExpiration, slidingExpiration);
-                }
-            }
+            get { return Caches.WebCache; }
         }
         #endregion
 

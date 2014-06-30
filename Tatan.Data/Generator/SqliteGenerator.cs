@@ -42,6 +42,11 @@
             Execute(Runtime.Root + @"Template\Sqlite.template", outputFolder);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="column"></param>
+        /// <returns></returns>
         protected override string GetType(Fields column)
         {
             if (column.Type == "S")

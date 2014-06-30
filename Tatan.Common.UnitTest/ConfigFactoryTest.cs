@@ -47,20 +47,13 @@ namespace Tatan.Common.UnitTest
         }
 
         [TestMethod]
+        [ExpectedException(typeof(System.InvalidOperationException))]
         public void TestGetXmlConfig()
         {
             var o = ConfigFactory.GetXmlConfig<TestConfig>("test");
             Assert.AreEqual(o.Name, "wahaha");
 
-
-            try
-            {
-                var o2 = ConfigFactory.GetXmlConfig<TestConfig2>("test");
-            }
-            catch
-            {
-                Assert.IsTrue(true);
-            }
+            var o2 = ConfigFactory.GetXmlConfig<TestConfig2>("test");
         }
 
         [TestMethod]

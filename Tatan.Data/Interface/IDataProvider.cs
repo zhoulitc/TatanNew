@@ -12,6 +12,11 @@ namespace Tatan.Data
         string Name { get; set; }
 
         /// <summary>
+        /// 连接字符串
+        /// </summary>
+        string ConnectionString { get; set; }
+
+        /// <summary>
         /// 参数符号
         /// </summary>
         string ParameterSymbol { get; }

@@ -53,14 +53,10 @@
     <Compile Include="Interface\IDataQuery.cs" />
     <Compile Include="Internal\DataProvider.cs" />
     <Compile Include="Internal\DataTable.cs" />
-    <Compile Include="Internal\ReadOnly\DataRecord.cs" />
     <Compile Include="Interface\IDataSession.cs" />
     <Compile Include="Interface\IDataSource.cs" />
-    <Compile Include="Interface\ReadOnly\IDataRecord.cs" />
     <Compile Include="Enum\DataType.cs" />
-    <Compile Include="Internal\ReadOnly\DataDocument.cs" />
     <Compile Include="Internal\DataSession.cs" />
-    <Compile Include="Interface\ReadOnly\IDataDocument.cs" />
     <Compile Include="Interface\IDataTable.cs" />
     <Compile Include="Interface\IDataEntities.cs" />
     <Compile Include="Interface\IDataParameters.cs" />
@@ -80,6 +76,10 @@
     <None Include="Template\Sqlite.template">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Tatan.Common\Tatan.Common.csproj">

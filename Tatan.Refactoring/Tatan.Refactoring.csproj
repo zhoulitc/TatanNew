@@ -37,10 +37,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="Rule.cs" />
     <Compile Include="Codes\CodeBase.cs" />
     <Compile Include="Codes\CodeRoot.cs" />
     <Compile Include="Codes\CodeModule.cs" />
+    <Compile Include="Codes\CodeDirectory.cs" />
+    <Compile Include="Codes\CodeFile.cs" />
+    <Compile Include="Codes\CodeClass.cs" />
+    <Compile Include="Codes\CodeVariable.cs" />
+    <Compile Include="Codes\CodeFunction.cs" />
+    <Compile Include="Codes\CodeIfElse.cs" />
+    <Compile Include="Codes\CodeSwitch.cs" />
     <Compile Include="Collections\CodeModuleCollection.cs" />
     <Compile Include="Collections\CodeBaseCollection.cs" />
     <Compile Include="Collections\CodeDirectoryCollection.cs" />
@@ -52,6 +59,7 @@
     <Compile Include="Collections\CodeSwitchCollection.cs" />
     <Compile Include="Enum\CodeAccessibility.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Parser.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

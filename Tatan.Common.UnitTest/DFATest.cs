@@ -44,6 +44,7 @@ namespace Tatan.Common.UnitTest
         }
 
         [TestMethod]
+        [ExpectedException(typeof(System.ArgumentNullException))]
         public void Test1Run()
         {
             var count = 0;
@@ -71,23 +72,8 @@ namespace Tatan.Common.UnitTest
             dfa.Run("i am a man", TestState.StatOutWord);
             Assert.AreEqual(count, 4);
 
-            try
-            {
-                dfa.Run(null, TestState.StatOutWord);
-            }
-            catch (System.Exception e)
-            {
-                Assert.AreEqual(e.Message, "参数为空。\r\n参数名: tokens");
-            }
-
-            try
-            {
-                dfa.Run("", null);
-            }
-            catch (System.Exception e)
-            {
-                Assert.AreEqual(e.Message, "参数为空。\r\n参数名: beginState");
-            }
+            dfa.Run(null, TestState.StatOutWord);
+            dfa.Run("", null);
         }
 
         [TestMethod]

@@ -177,7 +177,7 @@ namespace Tatan.Data
 
         public long Count()
         {
-            return DataSource.UseSession(Name, session => session.GetScalar<long>(_counts));
+            return DataSource.UseSession(Name, session => session.ExecuteScalar<long>(_counts));
         }
 
         public long Count<T>(Expression<Func<T, bool>> condition)
@@ -187,7 +187,7 @@ namespace Tatan.Data
             return DataSource.UseSession(Name, session =>
             {
                 var where = ExpressionParser.Parse(condition, DataSource.Provider.ParameterSymbol);
-                return session.GetScalar<long>(_count + where.Condition, p =>
+                return session.ExecuteScalar<long>(_count + where.Condition, p =>
                 {
                     foreach (var pair in where.Parameters)
                         p[pair.Key] = pair.Value;
@@ -313,7 +313,7 @@ namespace Tatan.Data
                     {
                         var count = string.Format("{0} {1}",
                             _counts, GetWhere(where.Condition)).Trim();
-                        result.TotalCount = session.GetScalar<long>(count, p =>
+                        result.TotalCount = session.ExecuteScalar<long>(count, p =>
                         {
                             foreach (var pair in where.Parameters)
                                 p[pair.Key] = pair.Value;

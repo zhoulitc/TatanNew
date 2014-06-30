@@ -41,9 +41,11 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Caching\Caches.cs" />
     <Compile Include="Collections\AbstractReadOnlyCollection.cs" />
     <Compile Include="Collections\ReadOnlyCollection.cs" />
     <Compile Include="Collections\PropertyCollection.cs" />
@@ -52,6 +54,7 @@
     <Compile Include="Cryptography\Internal\Base64Cipher.cs" />
     <Compile Include="Cryptography\Internal\AesCipher.cs" />
     <Compile Include="Expression\ExpressionParser.cs" />
+    <Compile Include="Caching\ICache.cs" />
     <Compile Include="IDentifiable.cs" />
     <Compile Include="IO\Runtime.cs" />
     <Compile Include="IReplicable.cs" />

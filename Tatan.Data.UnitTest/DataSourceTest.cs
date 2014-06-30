@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tatan.Data;
 using Tatan.Common.Serialization;
@@ -49,8 +50,8 @@ namespace Tatan.Data.UnitTest
         [TestMethod]
         public void TestUseSession()
         {
-            var doc = _source.UseSession(session => session.GetDocument("select * from fields"));
-            Assert.AreEqual(doc.Count>=0,true);
+            var doc = _source.UseSession(session => session.ExecuteReader("select * from fields", (reader) => reader.FieldCount));
+            Assert.AreEqual(doc>=0,true);
         }
     }
 }
