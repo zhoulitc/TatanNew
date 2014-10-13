@@ -36,10 +36,10 @@ namespace Tatan.Common.Extension.String.Target
         {
             if (string.IsNullOrEmpty(leftMatch))
                 leftMatch = "{%";
-            ExceptionHandler.IllegalMatch(_regexLetterOrDigit, leftMatch);
+            Assert.LegalMatch(_regexLetterOrDigit, leftMatch);
             if (string.IsNullOrEmpty(rightMatch))
                 rightMatch = "%}";
-            ExceptionHandler.IllegalMatch(_regexLetterOrDigit, rightMatch);
+            Assert.LegalMatch(_regexLetterOrDigit, rightMatch);
 
             var pattern = string.Format("{0}([A-Za-z0-9_-])*{1}", leftMatch, rightMatch);
             return Replace(source, new Regex(pattern), leftMatch.Length, rightMatch.Length, targets);

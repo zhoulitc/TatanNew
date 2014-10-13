@@ -17,14 +17,14 @@
         {
             get
             {
-                ExceptionHandler.ArgumentNull("name", name);
-                ExceptionHandler.KeyNotFound(Collection, name);
+                Assert.ArgumentNotNull("name", name);
+                Assert.KeyFound(Collection, name);
                 return Collection[name];
             }
             internal set
             {
-                ExceptionHandler.ArgumentNull("name", name);
-                ExceptionHandler.ArgumentNull("value", value);
+                Assert.ArgumentNotNull("name", name);
+                Assert.ArgumentNotNull("value", value);
                 if (Contains(name))
                     Collection[name] = value;
                 else

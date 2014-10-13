@@ -16,10 +16,11 @@
             _logs = new Dictionary<string, ILog>
             {
                 {typeof (NullLog).FullName, new NullLog()},
-                {typeof (DefaultLog).FullName, new DefaultLog()}
+                {typeof (DefaultLog).FullName, new DefaultLog("logs")}
             };
             _lock = new object();
             Level = LogLevel.Debug; //默认级别
+            Current = _logs[typeof(DefaultLog).FullName];
         }
 
         /// <summary>
@@ -37,17 +38,20 @@
             var type = typeof (T);
             if (!_logs.ContainsKey(type.FullName))
             {
-                var constructor = type.GetConstructor(new Type[] {});
+                var constructor = type.GetConstructor(Type.EmptyTypes);
                 if (constructor == null)
                     return _logs[typeof (NullLog).FullName];
 
                 var log = constructor.Invoke(null) as ILog;
-
-                lock (_lock)
+                if (log != null)
                 {
-                    if (!_logs.ContainsKey(type.FullName))
+                    lock (_lock)
                     {
-                        _logs.Add(type.FullName, log);
+                        if (!_logs.ContainsKey(type.FullName))
+                        {
+                            Current = log;
+                            _logs.Add(type.FullName, Current);
+                        }
                     }
                 }
             }
@@ -55,14 +59,8 @@
         }
 
         /// <summary>
-        /// 获取默认的日志对象
+        /// 获取最近调用的日志对象
         /// </summary>
-        public static ILog Default
-        {
-            get
-            {
-                return Get<DefaultLog>();
-            }
-        }
+        public static ILog Current { get; private set; }
     }
 }

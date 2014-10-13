@@ -9,14 +9,14 @@
     /// 组
     /// </summary>
     [Serializable]
-    public partial class Group : DataEntity, IDentifiable, INameable
+    public partial class Group : DataEntity, INameable
     {
         #region 构造函数
         /// <summary>
         /// 
         /// </summary>
         public Group()
-            : base(-1)
+            : base(string.Empty)
         {
         }
 
@@ -24,7 +24,7 @@
         /// 构造函数
         /// </summary>
         /// <param name="id">唯一标识符</param>
-        public Group(long id)
+        public Group(string id)
             : base(id)
         {
         }
@@ -69,7 +69,7 @@
         /// <summary>
         /// 父群组Id
         /// </summary>
-        public int ParentId { get; set; }
+        public string ParentId { get; set; }
 
         #endregion
     }

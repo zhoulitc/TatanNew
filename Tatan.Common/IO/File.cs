@@ -24,8 +24,8 @@
         /// <exception cref="System.NotSupportedException">文件格式无效时</exception>
         public static void AppendText(string path, Action<StreamWriter> action)
         {
-            ExceptionHandler.ArgumentNull("path", path);
-            ExceptionHandler.ArgumentNull("action", action);
+            Assert.ArgumentNotNull("path", path);
+            Assert.ArgumentNotNull("action", action);
 
             using (var sw = SystemFile.AppendText(path))
             {
@@ -49,7 +49,7 @@
         /// <exception cref="System.NotSupportedException">文件格式无效时</exception>
         public static void Create(string path, Action<FileStream> action = null)
         {
-            ExceptionHandler.ArgumentNull("path", path);
+            Assert.ArgumentNotNull("path", path);
             using (var fs = SystemFile.Create(path))
             {
                 if (action != null)
@@ -72,8 +72,8 @@
         /// <exception cref="System.NotSupportedException">文件格式无效时</exception>
         public static void CreateText(string path, Action<StreamWriter> action)
         {
-            ExceptionHandler.ArgumentNull("path", path);
-            ExceptionHandler.ArgumentNull("action", action);
+            Assert.ArgumentNotNull("path", path);
+            Assert.ArgumentNotNull("action", action);
 
             using (var sw = SystemFile.CreateText(path))
             {
@@ -97,8 +97,8 @@
         /// <exception cref="System.NotSupportedException">文件格式无效时</exception>
         public static void OpenRead(string path, Action<FileStream> action)
         {
-            ExceptionHandler.ArgumentNull("path", path);
-            ExceptionHandler.ArgumentNull("action", action);
+            Assert.ArgumentNotNull("path", path);
+            Assert.ArgumentNotNull("action", action);
 
             using (var fs = SystemFile.OpenRead(path))
             {
@@ -122,8 +122,8 @@
         /// <exception cref="System.NotSupportedException">文件格式无效时</exception>
         public static void OpenText(string path, Action<StreamReader> action)
         {
-            ExceptionHandler.ArgumentNull("path", path);
-            ExceptionHandler.ArgumentNull("action", action);
+            Assert.ArgumentNotNull("path", path);
+            Assert.ArgumentNotNull("action", action);
 
             using (var sr = SystemFile.OpenText(path))
             {
@@ -147,8 +147,8 @@
         /// <exception cref="System.NotSupportedException">文件格式无效时</exception>
         public static void OpenWrite(string path, Action<FileStream> action)
         {
-            ExceptionHandler.ArgumentNull("path", path);
-            ExceptionHandler.ArgumentNull("action", action);
+            Assert.ArgumentNotNull("path", path);
+            Assert.ArgumentNotNull("action", action);
 
             using (var fs = SystemFile.OpenWrite(path))
             {

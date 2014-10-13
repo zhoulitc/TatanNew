@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.Globalization;
-    using System.Xml;
     using IO;
     using Xml;
 
@@ -16,6 +15,7 @@
         private const string _exception = "ANALYSING XML DOCUMENT ERROR.";
         private const string _notFound = "NOT FOUND THE TEXT.";
         private const string _buildError = "CONSTRUCTOR ERROR.";
+        private const string _defaultCulture = "zh-cn";
 
         #region 公开行为
         /// <summary>
@@ -31,7 +31,7 @@
                 directory += Runtime.Separator;
             _format = directory + "{0}.xml";
             _informations = new Dictionary<string, IDictionary<string, string>>();
-            LoadInformation(CultureInfo.CurrentUICulture.Name.ToLower());
+            LoadInformation(_defaultCulture);
         }
 
         /// <summary>
@@ -41,11 +41,10 @@
         /// <returns></returns>
         public bool Reload(string culture)
         {
-            if (string.IsNullOrEmpty(culture))
-                culture = CultureInfo.CurrentUICulture.Name;
+            culture = GetCulture(culture);
             lock (_syncRoot)
             {
-                return LoadInformation(culture.ToLower());
+                return LoadInformation(culture);
             }
         }
 
@@ -59,9 +58,7 @@
         {
             if (string.IsNullOrEmpty(key))
                 return _notFound;
-            if (string.IsNullOrEmpty(culture))
-                culture = CultureInfo.CurrentUICulture.Name;
-            culture = culture.ToLower();
+            culture = GetCulture(culture);
             if (!_informations.ContainsKey(culture))
             {
                 lock (_syncRoot)
@@ -83,23 +80,32 @@
 
         private bool LoadInformation(string culture)
         {
-            var root = XmlParser.GetRoot(string.Format(_format, culture));
-            if (root != null)
+            var dictionary = XmlParser.ToDictionary(string.Format(_format, culture));
+            if (dictionary != null)
             {
                 if (_informations.ContainsKey(culture))
                 {
                     _informations[culture].Clear();
                     _informations.Remove(culture);
                 }
-                _informations.Add(culture, new Dictionary<string, string>(root.ChildNodes.Count));
-                foreach (XmlNode node in root.ChildNodes)
-                {
-                    if (node is XmlComment) continue;
-                    _informations[culture].Add(node.Name, node.InnerText);
-                }
+                _informations.Add(culture, dictionary);
             }
-            return root != null;
-        } 
+            return dictionary != null;
+        }
+
+        private string GetCulture(string culture)
+        {
+            if (string.IsNullOrEmpty(culture))
+            {
+                if (CultureInfo.CurrentUICulture != null)
+                    culture = CultureInfo.CurrentUICulture.Name;
+                else if (CultureInfo.CurrentCulture != null)
+                    culture = CultureInfo.CurrentCulture.Name;
+                else
+                    culture = _defaultCulture;
+            }
+            return culture.ToLower();
+        }
         #endregion
     }
     #endregion

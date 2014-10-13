@@ -70,7 +70,7 @@ namespace Tatan.Data.UnitTest
             t.Clear();
             Assert.AreEqual(_source.Tables["Tables"].Count(), 1);
 
-            t = new Tables(1);
+            t = new Tables("1");
             var fields = t.GetFields(_source);
             Assert.AreEqual(fields.Count, 1);
             foreach (var field in fields)
@@ -78,9 +78,9 @@ namespace Tatan.Data.UnitTest
                 Assert.IsNotNull(field.Name);
             }
 
-            Assert.AreEqual(_source.Tables["Tables"].Update(new Tables(1) {Name = "table2"}), false);
+            Assert.AreEqual(_source.Tables["Tables"].Update(new Tables("1") {Name = "table2"}), false);
 
-            Assert.AreEqual(_source.Tables["Tables"].Count<Tables>(table => table.Id == 0), 0);
+            Assert.AreEqual(_source.Tables["Tables"].Count<Tables>(table => table.Id == "0"), 0);
 
             Assert.AreEqual(_source.Tables["Tables"].Update<Tables>(new{Title="wahaha1"}, table=>table.Name=="table1"), 1);
 
@@ -88,16 +88,16 @@ namespace Tatan.Data.UnitTest
                 new Dictionary<string, object>{{"Title","walala"}}, 
                 table => table.Name == "table1"), 1);
 
-            Assert.AreEqual(_source.Tables["Tables"].Delete(new Tables(1)), false);
+            Assert.AreEqual(_source.Tables["Tables"].Delete(new Tables("1")), false);
 
-            Assert.AreEqual(_source.Tables["Fields"].Delete<Fields>(field=>field.Id==1), 0);
+            Assert.AreEqual(_source.Tables["Fields"].Delete<Fields>(field=>field.Id=="1"), 0);
         }
 
         [TestMethod]
         public void TestTableNew()
         {
             var table = _source.Tables.Add(typeof(TestDataEntity));
-            var entity = table.NewEntity<TestDataEntity>(1);
+            var entity = table.NewEntity<TestDataEntity>("1");
             Assert.IsNotNull(entity);
         }
 
@@ -111,11 +111,11 @@ namespace Tatan.Data.UnitTest
                     "Name", "Age");
             }
 
-            public TestDataEntity() : base(-1)
+            public TestDataEntity() : base(string.Empty)
             {
             }
 
-            public TestDataEntity(int id)
+            public TestDataEntity(string id)
                 : base(id)
             {
             }

@@ -9,14 +9,14 @@
     /// 用户
     /// </summary>
     [Serializable]
-    public partial class User : DataEntity, IDentifiable, INameable
+    public partial class User : DataEntity, INameable
     {
         #region 构造函数
         /// <summary>
         /// 构造函数
         /// </summary>
         public User()
-            : base(-1)
+            : base(string.Empty)
         {
         }
 
@@ -24,7 +24,7 @@
         /// 构造函数
         /// </summary>
         /// <param name="id">唯一标识符</param>
-        public User(long id)
+        public User(string id)
             : base(id)
         {
         }

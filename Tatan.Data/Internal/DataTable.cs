@@ -49,7 +49,7 @@ namespace Tatan.Data
         {
             Name = tableName;
             DataSource = dataSource;
-            var constructorInfo = type.GetConstructor(new[] { typeof(int) });
+            var constructorInfo = type.GetConstructor(new[] { typeof(string) });
             if (constructorInfo != null)
                 _entityPrototype = (IDataEntity)constructorInfo.Invoke(new object[] { DataEntity.DefaultId });
 
@@ -65,6 +65,8 @@ namespace Tatan.Data
 
         private static string GetFields(IEnumerable<string> entityPrototype)
         {
+            if (entityPrototype == null) return string.Empty;
+
             var builder = new StringBuilder(100);
             foreach (var name in entityPrototype)
                 builder.Append(',').Append(name);
@@ -83,7 +85,7 @@ namespace Tatan.Data
         public bool Insert<T>(T entity)
             where T : class, IDataEntity
         {
-            ExceptionHandler.ArgumentNull("entity", entity);
+            Assert.ArgumentNotNull("entity", entity);
             return DataSource.UseSession(Name, session => session.Execute(_insert, p =>
             {
                 foreach (var name in entity)
@@ -94,7 +96,7 @@ namespace Tatan.Data
         public bool Delete<T>(T entity)
             where T : class, IDataEntity
         {
-            ExceptionHandler.ArgumentNull("entity", entity);
+            Assert.ArgumentNotNull("entity", entity);
             return DataSource.UseSession(Name, session => session.Execute(_deleteIdentity, p =>
             {
                 p[_identityName] = entity.Id;
@@ -104,7 +106,7 @@ namespace Tatan.Data
         public int Delete<T>(Expression<Func<T, bool>> condition)
             where T : class, IDataEntity
         {
-            ExceptionHandler.ArgumentNull("condition", condition);
+            Assert.ArgumentNotNull("condition", condition);
             return DataSource.UseSession(Name, session =>
             {
                 var where = ExpressionParser.Parse(condition, DataSource.Provider.ParameterSymbol);
@@ -119,7 +121,7 @@ namespace Tatan.Data
         public bool Update<T>(T entity)
             where T : class, IDataEntity
         {
-            ExceptionHandler.ArgumentNull("entity", entity);
+            Assert.ArgumentNotNull("entity", entity);
             var set = new StringBuilder();
             foreach (var name in entity)
             {
@@ -140,8 +142,8 @@ namespace Tatan.Data
         public int Update<T>(object entity, Expression<Func<T, bool>> condition)
             where T : class, IDataEntity
         {
-            ExceptionHandler.ArgumentNull("entity", entity);
-            ExceptionHandler.ArgumentNull("condition", condition);
+            Assert.ArgumentNotNull("entity", entity);
+            Assert.ArgumentNotNull("condition", condition);
             return DataSource.UseSession(Name, session =>
             {
                 var set = ExpressionParser.Parse(entity, DataSource.Provider.ParameterSymbol);
@@ -159,8 +161,8 @@ namespace Tatan.Data
         public int Update<T>(IDictionary<string, object> sets, Expression<Func<T, bool>> condition)
             where T : class, IDataEntity
         {
-            ExceptionHandler.ArgumentNull("sets", sets);
-            ExceptionHandler.ArgumentNull("condition", condition);
+            Assert.ArgumentNotNull("sets", sets);
+            Assert.ArgumentNotNull("condition", condition);
             return DataSource.UseSession(Name, session =>
             {
                 var set = ExpressionParser.Parse(sets, DataSource.Provider.ParameterSymbol);
@@ -183,7 +185,7 @@ namespace Tatan.Data
         public long Count<T>(Expression<Func<T, bool>> condition)
             where T : class, IDataEntity
         {
-            ExceptionHandler.ArgumentNull("condition", condition);
+            Assert.ArgumentNotNull("condition", condition);
             return DataSource.UseSession(Name, session =>
             {
                 var where = ExpressionParser.Parse(condition, DataSource.Provider.ParameterSymbol);
@@ -195,7 +197,7 @@ namespace Tatan.Data
             });
         }
 
-        public T NewEntity<T>(int id)
+        public T NewEntity<T>(string id)
             where T : class, IDataEntity
         {
             var entity = (DataEntity)_entityPrototype.Clone();

@@ -25,8 +25,8 @@ namespace Tatan.Data.UnitTest
         public void TestCloneCopy()
         {
             var table = _source.Tables.Add(typeof(TestDataEntity));
-            var entity = table.NewEntity<TestDataEntity>(1);
-            Assert.AreEqual(entity.Id, 1);
+            var entity = table.NewEntity<TestDataEntity>("1");
+            Assert.AreEqual(entity.Id, "1");
             entity.PropertyChanged += (o, s) =>
             {
                 string s1 = o.ToString();
@@ -53,7 +53,7 @@ namespace Tatan.Data.UnitTest
         public void TestForeach()
         {
             var table = _source.Tables.Add(typeof(TestDataEntity));
-            var entity = table.NewEntity<TestDataEntity>(1);
+            var entity = table.NewEntity<TestDataEntity>("1");
             entity["Name"] = "2";
             entity["Age"] = 2;
             foreach (var name in entity)
@@ -76,7 +76,8 @@ namespace Tatan.Data.UnitTest
                     "Name", "Age");
             }
 
-            public TestDataEntity(int id = -1) : base(id)
+            public TestDataEntity(string id = "")
+                : base(id)
             {
             }
 

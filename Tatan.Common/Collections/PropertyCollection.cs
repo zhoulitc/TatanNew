@@ -20,7 +20,7 @@
         /// <exception cref="System.Reflection.AmbiguousMatchException">找到多个有指定名称且与指定绑定约束匹配的属性时抛出</exception>
         public PropertyCollection(Type type, params string[] names)
         {
-            ExceptionHandler.ArgumentNull("type", type);
+            Assert.ArgumentNotNull("type", type);
             if (names.Length == 0)
             {
                 var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
@@ -46,8 +46,8 @@
         /// <returns></returns>
         public bool IsString(string name)
         {
-            ExceptionHandler.ObjectDisposed(_isDisposed);
-            ExceptionHandler.ArgumentNull("name", name);
+            Assert.ObjectNotDisposed(_isDisposed);
+            Assert.ArgumentNotNull("name", name);
             return Contains(name) && Collection[name].PropertyType.IsAssignableFrom(_stringType);
         }
 
@@ -97,19 +97,19 @@
         {
             get
             {
-                ExceptionHandler.ObjectDisposed(_isDisposed);
-                ExceptionHandler.ArgumentNull("instance", instance);
-                ExceptionHandler.ArgumentNull("name", name);
-                ExceptionHandler.KeyNotFound(Collection, name);
+                Assert.ObjectNotDisposed(_isDisposed);
+                Assert.ArgumentNotNull("instance", instance);
+                Assert.ArgumentNotNull("name", name);
+                Assert.KeyFound(Collection, name);
                 return Collection[name].GetValue(instance);
             }
             set
             {
-                ExceptionHandler.ObjectDisposed(_isDisposed);
-                ExceptionHandler.ArgumentNull("instance", instance);
-                ExceptionHandler.ArgumentNull("name", name);
-                ExceptionHandler.ArgumentNull("value", value);
-                ExceptionHandler.KeyNotFound(Collection, name);
+                Assert.ObjectNotDisposed(_isDisposed);
+                Assert.ArgumentNotNull("instance", instance);
+                Assert.ArgumentNotNull("name", name);
+                Assert.ArgumentNotNull("value", value);
+                Assert.KeyFound(Collection, name);
                 Collection[name].SetValue(instance, value);
             }
         }

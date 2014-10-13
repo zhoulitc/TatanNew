@@ -1,11 +1,19 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
+using Tatan.Net.Wcf;
 
 namespace Tatan.Services.Rest
 {
+    public class Person
+    {
+        public string Name { get; set; }
+
+        public int Age { get; set; }
+    }
+
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)] 
-    public class Service1 : IService1
+    public class Service1 : IAction
     {
         private readonly List<Person> _data = new List<Person>
         {
@@ -13,42 +21,46 @@ namespace Tatan.Services.Rest
             new Person{Name="hedan",Age=22}
         };
 
-        public Person GetData(string name)
+        [Action(Method = HttpMethod.Get)]
+        public object GetData(string name)
         {
             return _data.Find(p => p.Name == name);
         }
 
-        public RestResult AddData(string name, string age)
+        [Action(Method = HttpMethod.Post)]
+        public bool AddData(string name, int age)
         {
             foreach (var p in _data)
             {
                 if (p.Name == name)
-                    return RestResult.Fail("exists");
+                    return false;
             }
-            _data.Add(new Person{Name=name,Age=int.Parse(age)});
-            return RestResult.Success();
+            _data.Add(new Person { Name = name, Age = age });
+            return true;
         }
 
-        public RestResult DeleteData(string name)
+        [Action(Method = HttpMethod.Delete)]
+        public bool DeleteData(string name)
         {
             Person person = null;
             foreach (var p in _data.Where(p => p.Name == name))
             {
                 person = p;
             }
-            if (person == null) return RestResult.Fail("not exists");
+            if (person == null) return false;
             _data.Remove(person);
-            return RestResult.Success();
+            return true;
         }
 
-        public RestResult EditData(string name, string age)
+        [Action(Method = HttpMethod.Put)]
+        public bool EditData(string name, int age)
         {
             foreach (var p in _data.Where(p => p.Name == name))
             {
-                p.Age = int.Parse(age);
-                return RestResult.Success();
+                p.Age = age;
+                return true;
             }
-            return RestResult.Fail("not exists");
+            return false;
         }
     }
 }

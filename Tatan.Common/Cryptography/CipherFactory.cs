@@ -5,7 +5,7 @@
     /// <summary>
     /// 密码学工厂
     /// </summary>
-    public static class CipherFactory
+    internal static class CipherFactory
     {
         /// <summary>
         /// 获取加密解密算法类

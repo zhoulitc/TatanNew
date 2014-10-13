@@ -8,14 +8,14 @@
     /// <summary>
     /// 权限
     /// </summary>
-    public partial class Permission : DataEntity, IDentifiable, INameable
+    public partial class Permission : DataEntity, INameable
     {
         #region 构造函数
         /// <summary>
         /// 构造函数
         /// </summary>
         public Permission()
-            : base(-1)
+            : base(string.Empty)
         {
         }
 
@@ -23,7 +23,7 @@
         /// 构造函数
         /// </summary>
         /// <param name="id">唯一标识符</param>
-        public Permission(long id)
+        public Permission(string id)
             : base(id)
         {
         }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Tatan.Common.Compiler;
 
 namespace Tatan.Common.UnitTest
 {

@@ -80,8 +80,8 @@
         /// <returns></returns>
         public virtual bool Contains(T relation)
         {
-            ExceptionHandler.ArgumentNull("Source", Source);
-            ExceptionHandler.ArgumentNull("relation", relation);
+            Assert.ArgumentNotNull("Source", Source);
+            Assert.ArgumentNotNull("relation", relation);
             var sql = string.Format(Sqls["contains"], TableName, Source.Provider.ParameterSymbol, ThisName, ThatName);
             return Source.UseSession(TableName, session => session.ExecuteScalar<long>(sql, parameters =>
             {
@@ -97,9 +97,9 @@
         /// <returns></returns>
         public bool Add(T relation)
         {
-            ExceptionHandler.ArgumentNull("Source", Source);
+            Assert.ArgumentNotNull("Source", Source);
             if (Contains(relation))
-                ExceptionHandler.DuplicateRecords();
+                Assert.DuplicateRecords();
             var sql = string.Format(Sqls["add"], TableName, Source.Provider.ParameterSymbol, ThisName, ThatName);
             return Source.UseSession(sql, session => session.Execute(sql, parameters =>
             {
@@ -115,9 +115,9 @@
         /// <returns></returns>
         public bool Remove(T relation)
         {
-            ExceptionHandler.ArgumentNull("Source", Source);
+            Assert.ArgumentNotNull("Source", Source);
             if (!Contains(relation))
-                ExceptionHandler.NotExistRecords();
+                Assert.NotExistRecords();
             var sql = string.Format(Sqls["remove"], TableName, Source.Provider.ParameterSymbol, ThisName, ThatName);
             return Source.UseSession(TableName, session => session.Execute(sql, parameters =>
             {
@@ -130,9 +130,9 @@
         /// 根据Id获取关联对象
         /// </summary>
         /// <param name="id"></param>
-        public virtual T GetById(long id)
+        public virtual T GetById(string id)
         {
-            ExceptionHandler.ArgumentNull("Source", Source);
+            Assert.ArgumentNotNull("Source", Source);
             var sql = string.Format(Sqls["getById"], TypeName, TableName, Source.Provider.ParameterSymbol, ThisName, ThatName);
             return Source.UseSession(TableName, session =>
             {

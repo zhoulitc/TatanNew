@@ -21,6 +21,7 @@ namespace Tatan.Data
         private readonly IDataProvider _provider;
 
         private static readonly object _lock = new object();
+        private static readonly Type _readerType = typeof (IDataReader);
         private static readonly ListMap<string, DbProviderFactory> _dbFactories; //工厂集
 
         #endregion
@@ -28,15 +29,14 @@ namespace Tatan.Data
         #region 构造函数
         public DataSession(string id, IDataProvider provider)
         {
-            ExceptionHandler.ArgumentNull("provider", provider);
+            Assert.ArgumentNotNull("provider", provider);
             if (string.IsNullOrEmpty(id) || id.Length > 128)
                 id = "0";
             Id = id;
 
             var dbFactory = Get(provider.Name);
             var connection = dbFactory.CreateConnection();
-            ExceptionHandler.ArgumentNull("connection", connection);
-// ReSharper disable once PossibleNullReferenceException
+            Assert.ArgumentNotNull("connection", connection);
             connection.ConnectionString = provider.ConnectionString;
             _command = connection.CreateCommand();
             _provider = provider;
@@ -91,6 +91,8 @@ namespace Tatan.Data
         {
             using (var reader = _Execute(request, null, () => _command.ExecuteReader()))
             {
+                if (_readerType.IsAssignableFrom(typeof(T)))
+                    Assert.TypeError();
                 return function(reader);
             }
         }
@@ -99,6 +101,8 @@ namespace Tatan.Data
         {
             using (var reader = await _Execute(request, null, () => _command.ExecuteReaderAsync()))
             {
+                if (_readerType.IsAssignableFrom(typeof(T)))
+                    Assert.TypeError();
                 return await function(reader);
             }
         }
@@ -107,6 +111,8 @@ namespace Tatan.Data
         {
             using (var reader = _Execute(request, action, () => _command.ExecuteReader()))
             {
+                if (_readerType.IsAssignableFrom(typeof(T)))
+                    Assert.TypeError();
                 return function(reader);
             }
         }
@@ -115,6 +121,8 @@ namespace Tatan.Data
         {
             using (var reader = await _Execute(request, action, () => _command.ExecuteReaderAsync()))
             {
+                if (_readerType.IsAssignableFrom(typeof(T)))
+                    Assert.TypeError();
                 return await function(reader);
             }
         }
@@ -181,7 +189,7 @@ namespace Tatan.Data
                 set
                 {
                     if (index < 0 || index > _parameters.Count)
-                        throw new IndexOutOfRangeException(ExceptionHandler.GetText("IndexOutOfRange"));
+                        throw new IndexOutOfRangeException(Assert.GetText("IndexOutOfRange"));
                     SetOtherValue(TryCreate(index), type, size, value);
                 }
             }
@@ -191,7 +199,7 @@ namespace Tatan.Data
                 set
                 {
                     if (index < 0 || index > _parameters.Count)
-                        throw new IndexOutOfRangeException(ExceptionHandler.GetText("IndexOutOfRange"));
+                        throw new IndexOutOfRangeException(Assert.GetText("IndexOutOfRange"));
                     SetNumberValue(TryCreate(index), size, scale, value);
                 }
             }
@@ -200,7 +208,7 @@ namespace Tatan.Data
             {
                 set
                 {
-                    ExceptionHandler.ArgumentNull("name", name);
+                    Assert.ArgumentNotNull("name", name);
                     SetOtherValue(TryCreate(name), type, size, value);
                 }
             }
@@ -209,7 +217,7 @@ namespace Tatan.Data
             {
                 set 
                 {
-                    ExceptionHandler.ArgumentNull("name", name);
+                    Assert.ArgumentNotNull("name", name);
                     SetNumberValue(TryCreate(name), size, scale, value);
                 }
             }
@@ -332,7 +340,7 @@ namespace Tatan.Data
             {
                 get
                 {
-                    ExceptionHandler.IndexOutOfRange(index, Count);
+                    Assert.IndexInOfRange(index, Count);
                     return Entities[index];
                 }
             }
@@ -371,14 +379,14 @@ namespace Tatan.Data
 
         private static string _Check(string text, string call)
         {
-            ExceptionHandler.IllegalSql(text, call);
+            Assert.LegalSql(text, call);
             return text;
         }
 
         private T _Execute<T>(string text, Action<IDataParameters> action, Func<T> function)
         {
             var result = default(T);
-            ExceptionHandler.ArgumentNull("text", text);
+            Assert.ArgumentNotNull("text", text);
             try
             {
                 _PrepareCommand(text);
@@ -388,9 +396,9 @@ namespace Tatan.Data
             }
             catch (Exception ex)
             {
-                Log.Default.Error(typeof(DataSession), ex.Message, ex);
+                Log.Current.Error(typeof(DataSession), ex.Message, ex);
                 _command.Cancel();
-                ExceptionHandler.DatabaseError(ex);
+                Assert.DatabaseError(ex);
             }
             return result;
         }
@@ -407,7 +415,7 @@ namespace Tatan.Data
                 for (var j = 0; j < reader.FieldCount; j++)
                 {
                     if (reader.GetName(j) == "Id")
-                        SetId(entity, reader.GetInt64(j));
+                        SetId(entity, reader[j].ToString());
                     else if (!reader.IsDBNull(j))
                         entity[reader.GetName(j)] = reader.GetValue(j);
                 }
@@ -416,7 +424,7 @@ namespace Tatan.Data
             return entities;
         }
 
-        private static void SetId(object obj, long id)
+        private static void SetId(object obj, string id)
         {
             var entity = obj as DataEntity;
             if (entity != null)

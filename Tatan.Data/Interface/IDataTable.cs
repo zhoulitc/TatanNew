@@ -96,7 +96,7 @@ namespace Tatan.Data
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        T NewEntity<T>(int id)
+        T NewEntity<T>(string id)
             where T : class, IDataEntity;
 
 

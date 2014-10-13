@@ -9,7 +9,7 @@ namespace Tatan.Common.Caching
     using Exception;
 
     /// <summary>
-    ///Http操作类
+    ///缓存操作类
     /// </summary>
     public static class Caches
     {
@@ -67,10 +67,10 @@ namespace Tatan.Common.Caching
 
             public T Get<T>(string key)
             {
-                ExceptionHandler.ArgumentNull("key", key);
+                Assert.ArgumentNotNull("key", key);
                 var value = HttpRuntime.Cache.Get(key);
                 if (!(value is T)) 
-                    ExceptionHandler.NotExistRecords();
+                    Assert.NotExistRecords();
 
 
                 return (T) value;
@@ -78,7 +78,7 @@ namespace Tatan.Common.Caching
 
             public void Set<T>(string key, T value, Action<string, object> removeCallback = null)
             {
-                ExceptionHandler.ArgumentNull("key", key);
+                Assert.ArgumentNotNull("key", key);
                 if (removeCallback == null)
                     HttpRuntime.Cache.Insert(key, value, null, Cache.NoAbsoluteExpiration, SlidingExpiration);
                 else
@@ -88,7 +88,7 @@ namespace Tatan.Common.Caching
 
             public void Set<T>(string key, T value, TimeSpan slidingExpiration, Action<string, object> removeCallback = null)
             {
-                ExceptionHandler.ArgumentNull("key", key);
+                Assert.ArgumentNotNull("key", key);
                 if (removeCallback == null)
                     HttpRuntime.Cache.Insert(key, value, null, Cache.NoAbsoluteExpiration, slidingExpiration);
                 else
@@ -98,7 +98,7 @@ namespace Tatan.Common.Caching
 
             public void Remove(string key)
             {
-                ExceptionHandler.ArgumentNull("key", key);
+                Assert.ArgumentNotNull("key", key);
                 HttpRuntime.Cache.Remove(key);
             }
         }
@@ -159,7 +159,7 @@ namespace Tatan.Common.Caching
                             callback(key, value);
                     }
                 }
-            }, null, 1000*1, 1000*1);
+            }, null, 1000 * SlidingExpiration.Minutes, 1000 * SlidingExpiration.Minutes);
 
             public void Dispose()
             {
@@ -170,7 +170,7 @@ namespace Tatan.Common.Caching
 
             public void Clear()
             {
-                ExceptionHandler.ObjectDisposed(_isDisposed);
+                Assert.ObjectNotDisposed(_isDisposed);
                 lock (_lock)
                 {
                     _caches.Clear();
@@ -181,26 +181,26 @@ namespace Tatan.Common.Caching
             {
                 get
                 {
-                    ExceptionHandler.ObjectDisposed(_isDisposed);
+                    Assert.ObjectNotDisposed(_isDisposed);
                     return _caches.Count;
                 }
             }
 
             public bool Contains(string key)
             {
-                ExceptionHandler.ObjectDisposed(_isDisposed);
+                Assert.ObjectNotDisposed(_isDisposed);
                 return _caches.ContainsKey(key);
             }
 
             public T Get<T>(string key)
             {
-                ExceptionHandler.ObjectDisposed(_isDisposed);
-                ExceptionHandler.ArgumentNull("key", key);
+                Assert.ObjectNotDisposed(_isDisposed);
+                Assert.ArgumentNotNull("key", key);
                 if (!Contains(key))
-                    ExceptionHandler.KeyNotFound(key);
+                    Assert.KeyFound(key);
                 var item = _caches[key];
                 if (item == null || !(item.Value is T)) 
-                    ExceptionHandler.NotExistRecords();
+                    Assert.NotExistRecords();
 
                 lock (_lock)
                 {
@@ -212,8 +212,8 @@ namespace Tatan.Common.Caching
 
             public void Set<T>(string key, T value, Action<string, object> removeCallback = null)
             {
-                ExceptionHandler.ObjectDisposed(_isDisposed);
-                ExceptionHandler.ArgumentNull("key", key);
+                Assert.ObjectNotDisposed(_isDisposed);
+                Assert.ArgumentNotNull("key", key);
                 lock (_lock)
                 {
                     SetCacheItem(key, value, SlidingExpiration, removeCallback);
@@ -222,8 +222,8 @@ namespace Tatan.Common.Caching
 
             public void Set<T>(string key, T value, TimeSpan slidingExpiration, Action<string, object> removeCallback = null)
             {
-                ExceptionHandler.ObjectDisposed(_isDisposed);
-                ExceptionHandler.ArgumentNull("key", key);
+                Assert.ObjectNotDisposed(_isDisposed);
+                Assert.ArgumentNotNull("key", key);
                 lock (_lock)
                 {
                     SetCacheItem(key, value, slidingExpiration, removeCallback);
@@ -232,8 +232,8 @@ namespace Tatan.Common.Caching
 
             public void Remove(string key)
             {
-                ExceptionHandler.ObjectDisposed(_isDisposed);
-                ExceptionHandler.ArgumentNull("key", key);
+                Assert.ObjectNotDisposed(_isDisposed);
+                Assert.ArgumentNotNull("key", key);
                 if (!Contains(key))
                     return;
 

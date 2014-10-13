@@ -20,7 +20,7 @@
         /// </summary>
         public FieldsCollection GetFields(IDataSource source)
         {
-            ExceptionHandler.ArgumentNull("source", source);
+            Assert.ArgumentNotNull("source", source);
             if (_fields != null)
                 return _fields;
             var entities = source.UseSession("Fields", session => session.GetEntities<Fields>(

@@ -14,6 +14,8 @@ namespace Tatan.Common.Collections
     {
         private readonly List<TKey> _keys;
         private readonly TValue[] _values;
+        private static readonly int _defaultCapacity = 10;
+        private static readonly int _maxCapacity = 100;
 
         /// <summary>
         /// 构造函数
@@ -21,15 +23,15 @@ namespace Tatan.Common.Collections
         /// <param name="capacity"></param>
         public ListMap(int capacity = 0)
         {
-            if (capacity <= 10)
+            if (capacity <= _defaultCapacity)
             {
-                _keys = new List<TKey>(10);
-                _values = new TValue[10];
+                _keys = new List<TKey>(_defaultCapacity);
+                _values = new TValue[_defaultCapacity];
             }
             else
             {
-                _keys = new List<TKey>(capacity > 100 ? 100 : capacity);
-                _values = new TValue[capacity > 100 ? 100 : capacity];
+                _keys = new List<TKey>(capacity > _maxCapacity ? _maxCapacity : capacity);
+                _values = new TValue[capacity > _maxCapacity ? _maxCapacity : capacity];
             }
         }
 
@@ -37,24 +39,23 @@ namespace Tatan.Common.Collections
         /// 构造函数
         /// </summary>
         /// <param name="collection"></param>
-        public ListMap(IEnumerable<KeyValuePair<TKey, TValue>> collection)
+        public ListMap(IDictionary<TKey, TValue> collection)
         {
             if (collection == null)
             {
-                _keys = new List<TKey>(10);
-                _values = new TValue[10];
+                _keys = new List<TKey>(_defaultCapacity);
+                _values = new TValue[_defaultCapacity];
+                return;
             }
-            else
+            Assert.IndexInOfRange(collection.Count, _maxCapacity);
+            _keys = new List<TKey>(collection.Count + 1);
+            var values = new List<TValue>(collection.Count + 1);
+            foreach (var element in collection)
             {
-                _keys = new List<TKey>();
-                var values = new List<TValue>();
-                foreach (var element in collection)
-                {
-                    _keys.Add(element.Key);
-                    values.Add(element.Value);
-                }
-                _values = values.ToArray();
+                _keys.Add(element.Key);
+                values.Add(element.Value);
             }
+            _values = values.ToArray();
         }
 
         /// <summary>
@@ -77,7 +78,7 @@ namespace Tatan.Common.Collections
         /// <returns></returns>
         public bool Add(TKey key, TValue value)
         {
-            ExceptionHandler.IsNotAllow(_keys.Count, _keys.Capacity);
+            Assert.IsAllow(_keys.Count, _keys.Capacity);
 
 // ReSharper disable once CompareNonConstrainedGenericWithNull
             if (value == null) return false;
@@ -112,17 +113,17 @@ namespace Tatan.Common.Collections
             {
                 var index = Find(key);
                 if (index < 0)
-                    ExceptionHandler.KeyNotFound<object>(null);
+                    Assert.KeyFound<object>(null);
                 return _values[index];
             }
             set
             {
 // ReSharper disable once CompareNonConstrainedGenericWithNull
                 if (value == null)
-                    ExceptionHandler.KeyNotFound<object>(null);
+                    Assert.KeyFound<object>(null);
                 var index = Find(key);
                 if (index < 0)
-                    ExceptionHandler.KeyNotFound<object>(null);
+                    Assert.KeyFound<object>(null);
                 _values[_keys.Count - 1] = value;
             }
         }
@@ -131,7 +132,7 @@ namespace Tatan.Common.Collections
         {
 // ReSharper disable once CompareNonConstrainedGenericWithNull
             if (key == null)
-                ExceptionHandler.KeyNotFound<object>(null);
+                Assert.KeyFound<object>(null);
             return _keys.IndexOf(key);
         }
 

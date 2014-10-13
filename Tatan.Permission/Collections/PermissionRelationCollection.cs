@@ -38,7 +38,7 @@ namespace Tatan.Permission.Collections
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public override Permission GetById(long id)
+        public override Permission GetById(string id)
         {
             var permission = base.GetById(id);
             if (permission != null) 
@@ -86,7 +86,7 @@ namespace Tatan.Permission.Collections
             }) > 0));
         }
 
-        private Permission GetByUserGroupRoleId(long id)
+        private Permission GetByUserGroupRoleId(string id)
         {
             var sql = string.Format(_sqlsExtension["UsersGroupsRolesGetById"], Source.Provider.ParameterSymbol);
             return Source.UseSession(TableName, session =>
@@ -102,7 +102,7 @@ namespace Tatan.Permission.Collections
             });
         }
 
-        private Permission GetByGroupRoleId(long id)
+        private Permission GetByGroupRoleId(string id)
         {
             var sql = string.Format(_sqlsExtension["GroupsRolesGetById"], Source.Provider.ParameterSymbol);
             return Source.UseSession(TableName, session =>

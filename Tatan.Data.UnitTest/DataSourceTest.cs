@@ -48,10 +48,15 @@ namespace Tatan.Data.UnitTest
         }
 
         [TestMethod]
+        [ExpectedException(typeof(Exception))]
         public void TestUseSession()
         {
             var doc = _source.UseSession(session => session.ExecuteReader("select * from fields", (reader) => reader.FieldCount));
             Assert.AreEqual(doc>=0,true);
+
+            _source.UseSession(session => session.ExecuteReader(
+                "select * from fields",
+                (reader) => reader));
         }
     }
 }

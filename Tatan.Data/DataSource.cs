@@ -1,4 +1,5 @@
-﻿// ReSharper disable once CheckNamespace
+﻿using System.IO;
+
 namespace Tatan.Data
 {
     using System;
@@ -38,8 +39,8 @@ namespace Tatan.Data
         /// <returns></returns>
         public static IDataSource Connect(string providerName, string connectionString)
         {
-            ExceptionHandler.ArgumentNull("providerName", providerName);
-            ExceptionHandler.ArgumentNull("connectionString", connectionString);
+            Assert.ArgumentNotNull("providerName", providerName);
+            Assert.ArgumentNotNull("connectionString", connectionString);
             var provider = new DataProvider(providerName, connectionString);
             if (!_sources.ContainsKey(provider))
             {
@@ -61,8 +62,8 @@ namespace Tatan.Data
         /// <returns></returns>
         public static IDataSource Connect(string configName)
         {
-            ExceptionHandler.ArgumentNull("configName", configName);
-            var config = ConfigFactory.ConnectionConfig[configName];
+            Assert.ArgumentNotNull("configName", configName);
+            var config = ConfigManager.ConnectionConfig[configName];
             return Connect(config.ProviderName, config.ConnectionString);
         }
 
@@ -153,7 +154,7 @@ namespace Tatan.Data
         /// <returns></returns>
         public T UseSession<T>(string identity, Func<IDataSession, T> function)
         {
-            ExceptionHandler.ArgumentNull("function", function);
+            Assert.ArgumentNotNull("function", function);
             if (string.IsNullOrEmpty(identity) || identity.Length > 128)
                 return function(_session);
             if (!Sessions.ContainsKey(identity))

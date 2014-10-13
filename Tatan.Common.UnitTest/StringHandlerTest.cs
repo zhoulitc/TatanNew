@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Tatan.Common.Extension.Enum;
+using Tatan.Common.Extension.String.Regular;
+
 
 namespace Tatan.Common.UnitTest
 {
-    using Tatan.Common.Extension.String.Convert;
-    using Tatan.Common.Extension.String.Regex;
-    using Tatan.Common.Extension.String.Target;
+    using Extension.String.Convert;
+    using Extension.String.Target;
+    using Extension;
 
     [TestClass]
     public class StringHandlerTest
@@ -59,8 +62,8 @@ namespace Tatan.Common.UnitTest
             Assert.IsFalse(a1);
             Assert.IsTrue(a2);
 
-            var q1 = byte.MaxValue.ToString().AsByte();
-            var q2 = "s12".AsByte(2);
+            var q1 = byte.MaxValue.ToString().AsInt8();
+            var q2 = "s12".AsInt8(2);
             Assert.AreEqual(q1, byte.MaxValue);
             Assert.AreEqual(q2, 2);
 
@@ -98,50 +101,52 @@ namespace Tatan.Common.UnitTest
             Assert.AreEqual(s3.ToString(), "00000000-0000-0000-0000-000000000000");
             Assert.AreEqual(s4.ToString(), "00000000-0000-0000-0000-000000000000");
 
-            var q11111 = int.MaxValue.ToString().AsInt();
-            var q22222 = "s12".AsInt(2);
+            var q11111 = int.MaxValue.ToString().AsInt32();
+            var q22222 = "s12".AsInt32(2);
             Assert.AreEqual(q11111, int.MaxValue);
             Assert.AreEqual(q22222, 2);
 
-            var q111111 = long.MaxValue.ToString().AsLong();
-            var q222222 = "s12".AsLong(2);
+            var q111111 = long.MaxValue.ToString().AsInt64();
+            var q222222 = "s12".AsInt64(2);
             Assert.AreEqual(q111111, long.MaxValue);
             Assert.AreEqual(q222222, 2);
 
-            var q1111111 = sbyte.MaxValue.ToString().AsSByte();
-            var q2222222 = "s12".AsSByte(2);
+            var q1111111 = sbyte.MaxValue.ToString().AsInt8();
+            var q2222222 = "s12".AsInt8(2);
             Assert.AreEqual(q1111111, sbyte.MaxValue);
             Assert.AreEqual(q2222222, 2);
 
-            var q11111111 = short.MaxValue.ToString().AsShort();
-            var q22222222 = "s12".AsShort(2);
+            var q11111111 = short.MaxValue.ToString().AsInt16();
+            var q22222222 = "s12".AsInt16(2);
             Assert.AreEqual(q11111111, short.MaxValue);
             Assert.AreEqual(q22222222, 2);
 
-            var q111111111 = uint.MaxValue.ToString().AsUInt();
-            var q222222222 = "s12".AsUInt(2);
+            var q111111111 = uint.MaxValue.ToString().AsUInt32();
+            var q222222222 = "s12".AsUInt32(2);
             Assert.AreEqual(q111111111, uint.MaxValue);
             Assert.AreEqual(q222222222, (uint)2);
 
-            var q1111111111 = ulong.MaxValue.ToString().AsULong();
-            var q2222222222 = "s12".AsULong(2);
+            var q1111111111 = ulong.MaxValue.ToString().AsUInt64();
+            var q2222222222 = "s12".AsUInt64(2);
             Assert.AreEqual(q1111111111, ulong.MaxValue);
             Assert.AreEqual(q2222222222, (ulong)2);
 
-            var q11111111111 = ushort.MaxValue.ToString().AsUShort();
-            var q22222222222 = "s12".AsUShort(2);
+            var q11111111111 = ushort.MaxValue.ToString().AsUInt16();
+            var q22222222222 = "s12".AsUInt16(2);
             Assert.AreEqual(q11111111111, ushort.MaxValue);
             Assert.AreEqual(q22222222222, (ushort)2);
 
             var x1 = "32".As<int>();
-            var x2 = "s12".As<Test>(new Test());
-            var x3 = "s12".As<Test2>(new Test2());
+            //var x2 = "s12".As<Test>(new Test());
+            //var x3 = "s12".As<Test2>(new Test2());
             string s = null;
             var x4 = s.As<int>();
             Assert.AreEqual(x1, 32);
-            Assert.IsNotNull(x2);
-            Assert.IsNotNull(x3);
+            //Assert.IsNotNull(x2);
+            //Assert.IsNotNull(x3);
             Assert.IsNotNull(x4);
+            var sss = 1;
+            var ssss = sss.As<double>();
         }
 
         [TestMethod]
@@ -199,6 +204,24 @@ namespace Tatan.Common.UnitTest
             Assert.AreEqual(ss.Length, 0);
         }
 
+        [TestMethod]
+        public void TestEnum()
+        {
+            Assert.AreEqual(T1.A.AsInt(), 0);
+            Assert.AreEqual(T1.B.AsInt(), 1);
+            Assert.AreEqual(T1.A.AsEnum<T2>(), T2.AA);
+            try
+            {
+                var T = T1.B.AsEnum<T2>();
+                Assert.AreEqual(T1.B.AsEnum<T2>(), T2.BB);
+            }
+            catch (System.Exception ex)
+            {
+                var s = ex.Message;
+            }
+
+        }
+
         public struct Test
         {
             
@@ -210,6 +233,18 @@ namespace Tatan.Common.UnitTest
             {
                 return new Test2();
             }
+        }
+
+        public enum T1
+        {
+            A,
+            B
+        }
+
+        public enum T2
+        {
+            AA=0,
+            BB=2
         }
     }
 }

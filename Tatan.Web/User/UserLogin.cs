@@ -15,7 +15,7 @@
         /// 构造函数
         /// </summary>
         public UserLogin()
-            : base(-1)
+            : base(string.Empty)
         {
         }
 
@@ -23,7 +23,7 @@
         /// 构造函数
         /// </summary>
         /// <param name="id">唯一标识符</param>
-        public UserLogin(long id)
+        public UserLogin(string id)
             : base(id)
         {
         }

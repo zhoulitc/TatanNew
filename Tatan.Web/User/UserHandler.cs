@@ -2,10 +2,11 @@
 {
     using System;
     using Common;
-    using Common.Cryptography;
+    using Common.Extension.String.Codec;
     using Common.Exception;
     using Common.Logging;
     using Data;
+    using Net;
 
     /// <summary>
     /// 
@@ -36,11 +37,10 @@
         public static UserInfo Login(string username, string password)
         {
             if (string.IsNullOrEmpty(username))
-                ExceptionHandler.ArgumentNull("username", username);
-            ExceptionHandler.ArgumentNull("password", password);
+                Assert.ArgumentNotNull("username", username);
+            Assert.ArgumentNotNull("password", password);
 
             var us = new UserInfo {IsLogin = false, Name = username};
-            var cipher = CipherFactory.GetCipher("md5");
             var result = Source.UseSession(Http.Session.Id, session =>
             {
                 var flag = false;
@@ -48,12 +48,12 @@
                 var id = session.ExecuteScalar<long>(string.Format(_checkSql, Source.Provider.ParameterSymbol), p =>
                 {
                     p["Name"] = username;
-                    p["Password"] = cipher.Encrypt(password);
+                    p["Password"] = password.AsEncode("md5");
                 });
                 if (id > 0)
                 {
                     us.Id = id;
-                    us.Guid = cipher.Encrypt(id + username);
+                    us.Guid = (id + username).AsEncode("md5");
                     flag = session.Execute(string.Format(_updateSql, Source.Provider.ParameterSymbol), p =>
                     {
                         p["Id"] = id;
@@ -74,8 +74,8 @@
             });
             if (!result) return us;
             us.IsLogin = true;
-            us.Token = cipher.Encrypt(password);
-            us.State = cipher.Encrypt(Http.Session.Id);
+            us.Token = password.AsEncode("md5");
+            us.State = Http.Session.Id.AsEncode("md5");
 
             Http.Cache.Set(us.Guid, us);
             Http.Cookies[us.Guid] = us.ToString();
@@ -111,7 +111,7 @@
             }
             catch (Exception ex)
             {
-                Log.Default.Error(typeof(UserHandler), ex.Message, ex);
+                Log.Current.Error(typeof(UserHandler), ex.Message, ex);
             }
             return false;
         }
@@ -125,9 +125,9 @@
         /// <returns></returns>
         public static bool ChangedPassword(string guid, string password, string newPassword)
         {
-            ExceptionHandler.ArgumentNull("guid", guid);
-            ExceptionHandler.ArgumentNull("password", password);
-            ExceptionHandler.ArgumentNull("newPassword", newPassword);
+            Assert.ArgumentNotNull("guid", guid);
+            Assert.ArgumentNotNull("password", password);
+            Assert.ArgumentNotNull("newPassword", newPassword);
 
             var user = Http.Cache.Get<UserInfo>(guid);
             if (user == null) return false;
@@ -163,11 +163,11 @@
         /// <returns></returns>
         public static bool Register(string username, string password)
         {
-            ExceptionHandler.ArgumentNull("Source", Source);
-            ExceptionHandler.ArgumentNull("username", username);
-            ExceptionHandler.ArgumentNull("password", password);
+            Assert.ArgumentNotNull("Source", Source);
+            Assert.ArgumentNotNull("username", username);
+            Assert.ArgumentNotNull("password", password);
 
-            var user = new UserLogin(1) { Name = username, Password = password, RegisterTime = DateTime.Now };
+            var user = new UserLogin { Name = username, Password = password, RegisterTime = DateTime.Now };
             return Source.Tables[_userLogin].Insert(user);
         }
 
@@ -201,7 +201,7 @@
             }
             catch (Exception ex)
             {
-                Log.Default.Warn(typeof(UserHandler), ex.Message, ex);
+                Log.Current.Warn(typeof(UserHandler), ex.Message, ex);
                 return string.Empty;
             }
         }

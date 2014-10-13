@@ -1,5 +1,6 @@
 ﻿namespace Tatan.Common.Xml
 {
+    using System.Collections.Generic;
     using System.Xml;
     using Logging;
 
@@ -33,9 +34,24 @@
             }
             catch (System.Exception ex)
             {
-                Log.Default.Warn(typeof(XmlParser), ex.Message, ex);
+                Log.Current.Warn(typeof(XmlParser), ex.Message, ex);
                 return null;
             }
+        }
+
+        public static IDictionary<string, string> ToDictionary(string filename)
+        {
+            var root = GetRoot(filename);
+            if (root == null)
+                return null;
+
+            var result = new Dictionary<string, string>(root.ChildNodes.Count);
+            foreach (XmlNode node in root.ChildNodes)
+            {
+                if (node is XmlComment) continue;
+                result.Add(node.Name, node.InnerText);
+            }
+            return result;
         }
     }
 }

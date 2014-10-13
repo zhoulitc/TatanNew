@@ -5,7 +5,7 @@ using Tatan.Common.IO;
 using Tatan.Data;
 using Tatan.Common.Serialization;
 using Tatan.Common.Configuration;
-using Tatan.Data.Generator;
+using Tatan.Data.Builder;
 using Tatan.Data.Relation;
 
 
@@ -35,7 +35,7 @@ namespace Tatan.Data.UnitTest
         {
             var st = new List<Tables>
             {
-                new Tables(1)
+                new Tables("1")
                 {
                     Name = "Table1",
                     Title = "表1"
@@ -53,7 +53,7 @@ namespace Tatan.Data.UnitTest
                 TableId = 1
             };
             _source.Tables["Fields"].Insert(f);
-            IGenerator g = new SqliteGenerator(st, _source);
+            IBuilder g = new SqliteBuilder(st, _source);
             g.Execute(Runtime.Root);
             var s = _source.Tables["Fields"].Delete<Fields>(field => field.Name == "col1");
         }
@@ -61,14 +61,14 @@ namespace Tatan.Data.UnitTest
         [TestMethod]
         public void TestExecuteTableNull()
         {
-            IGenerator g = new SqliteGenerator(null, _source);
+            IBuilder g = new SqliteBuilder(null, _source);
             g.Execute(Runtime.Root);
         }
 
         [TestMethod]
         public void TestExecuteTableNull2()
         {
-            IGenerator g = new SqliteGenerator(null, _source);
+            IBuilder g = new SqliteBuilder(null, _source);
             g.Execute(Runtime.Root.Substring(0, Runtime.Root.Length - 1));
         }
 
@@ -77,13 +77,13 @@ namespace Tatan.Data.UnitTest
         {
             var st = new List<Tables>
             {
-                new Tables(1)
+                new Tables("1")
                 {
                     Name = "Table1",
                     Title = "表1"
                 }
             };
-            IGenerator g = new SqliteGenerator(st, null);
+            IBuilder g = new SqliteBuilder(st, null);
             try
             {
                 g.Execute(Runtime.Root);

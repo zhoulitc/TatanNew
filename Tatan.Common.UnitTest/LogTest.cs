@@ -11,7 +11,7 @@ namespace Tatan.Common.UnitTest
     [TestClass]
     public class LogTest
     {
-        private readonly string _path = Runtime.Root + "log";
+        private readonly string _path = Runtime.Root + "logs";
 
         [TestInitialize]
         public void Init()
@@ -170,23 +170,25 @@ namespace Tatan.Common.UnitTest
         [TestMethod]
         public void TestDebug()
         {
-            
-            Log.Default.Debug("yeye");
-            Log.Default.Info("yeye");
-            Log.Default.Warn(null, "yeye");
-            Log.Default.Error(typeof(LogTest), "yeye");
-            Log.Default.Fatal(null);
-            Log.Default.Debug("haha", new System.Exception("wahaha", new System.Exception("walala")));
-            var files = System.IO.Directory.GetFiles(_path, "*.debug.log");
-            Assert.IsTrue(files.Length > 0);
-            files = System.IO.Directory.GetFiles(_path, "*.info.log");
-            Assert.IsTrue(files.Length > 0);
-            files = System.IO.Directory.GetFiles(_path, "*.warn.log");
-            Assert.IsTrue(files.Length > 0);
-            files = System.IO.Directory.GetFiles(_path, "*.error.log");
-            Assert.IsTrue(files.Length > 0);
-            files = System.IO.Directory.GetFiles(_path, "*.fatal.log");
-            Assert.IsTrue(files.Length > 0);
+            Log.Current.Debug("yeye");
+            Log.Current.Info("yeye");
+            Log.Current.Warn(null, "yeye");
+            Log.Current.Error(typeof(LogTest), "yeye");
+            Log.Current.Fatal(null);
+            Log.Current.Debug("haha", new System.Exception("wahaha", new System.Exception("walala")));
+            if (System.IO.Directory.Exists(_path))
+            {
+                var files = System.IO.Directory.GetFiles(_path, "*.debug.log");
+                Assert.IsTrue(files.Length > 0);
+                files = System.IO.Directory.GetFiles(_path, "*.info.log");
+                Assert.IsTrue(files.Length > 0);
+                files = System.IO.Directory.GetFiles(_path, "*.warn.log");
+                Assert.IsTrue(files.Length > 0);
+                files = System.IO.Directory.GetFiles(_path, "*.error.log");
+                Assert.IsTrue(files.Length > 0);
+                files = System.IO.Directory.GetFiles(_path, "*.fatal.log");
+                Assert.IsTrue(files.Length > 0);
+            }
         }
 
         [TestMethod]
@@ -194,88 +196,100 @@ namespace Tatan.Common.UnitTest
         {
             Thread.CurrentThread.Name = "ss";
             Log.Level = LogLevel.Info;
-            Log.Default.Debug("yeye");
-            Log.Default.Info("yeye");
-            Log.Default.Warn("yeye");
-            Log.Default.Error("yeye");
-            Log.Default.Fatal("yeye");
-            Log.Default.Info("haha", new System.Exception("wahaha", new System.Exception("walala")));
-            var files = System.IO.Directory.GetFiles(_path, "*.debug.log");
-            Assert.IsTrue(files.Length == 0);
-            files = System.IO.Directory.GetFiles(_path, "*.info.log");
-            Assert.IsTrue(files.Length > 0);
-            files = System.IO.Directory.GetFiles(_path, "*.warn.log");
-            Assert.IsTrue(files.Length > 0);
-            files = System.IO.Directory.GetFiles(_path, "*.error.log");
-            Assert.IsTrue(files.Length > 0);
-            files = System.IO.Directory.GetFiles(_path, "*.fatal.log");
-            Assert.IsTrue(files.Length > 0);
+            Log.Current.Debug("yeye");
+            Log.Current.Info("yeye");
+            Log.Current.Warn("yeye");
+            Log.Current.Error("yeye");
+            Log.Current.Fatal("yeye");
+            Log.Current.Info("haha", new System.Exception("wahaha", new System.Exception("walala")));
+            if (System.IO.Directory.Exists(_path))
+            {
+                var files = System.IO.Directory.GetFiles(_path, "*.debug.log");
+                Assert.IsTrue(files.Length == 0);
+                files = System.IO.Directory.GetFiles(_path, "*.info.log");
+                Assert.IsTrue(files.Length > 0);
+                files = System.IO.Directory.GetFiles(_path, "*.warn.log");
+                Assert.IsTrue(files.Length > 0);
+                files = System.IO.Directory.GetFiles(_path, "*.error.log");
+                Assert.IsTrue(files.Length > 0);
+                files = System.IO.Directory.GetFiles(_path, "*.fatal.log");
+                Assert.IsTrue(files.Length > 0);
+            }
         }
 
         [TestMethod]
         public void TestWarn()
         {
             Log.Level = LogLevel.Warn;
-            Log.Default.Debug("yeye");
-            Log.Default.Info("yeye");
-            Log.Default.Warn("yeye");
-            Log.Default.Error("yeye");
-            Log.Default.Fatal("yeye");
-            Log.Default.Warn("haha", new System.Exception("wahaha", new System.Exception("walala")));
-            var files = System.IO.Directory.GetFiles(_path, "*.debug.log");
-            Assert.IsTrue(files.Length == 0);
-            files = System.IO.Directory.GetFiles(_path, "*.info.log");
-            Assert.IsTrue(files.Length == 0);
-            files = System.IO.Directory.GetFiles(_path, "*.warn.log");
-            Assert.IsTrue(files.Length > 0);
-            files = System.IO.Directory.GetFiles(_path, "*.error.log");
-            Assert.IsTrue(files.Length > 0);
-            files = System.IO.Directory.GetFiles(_path, "*.fatal.log");
-            Assert.IsTrue(files.Length > 0);
+            Log.Current.Debug("yeye");
+            Log.Current.Info("yeye");
+            Log.Current.Warn("yeye");
+            Log.Current.Error("yeye");
+            Log.Current.Fatal("yeye");
+            Log.Current.Warn("haha", new System.Exception("wahaha", new System.Exception("walala")));
+            if (System.IO.Directory.Exists(_path))
+            {
+                var files = System.IO.Directory.GetFiles(_path, "*.debug.log");
+                Assert.IsTrue(files.Length == 0);
+                files = System.IO.Directory.GetFiles(_path, "*.info.log");
+                Assert.IsTrue(files.Length == 0);
+                files = System.IO.Directory.GetFiles(_path, "*.warn.log");
+                Assert.IsTrue(files.Length > 0);
+                files = System.IO.Directory.GetFiles(_path, "*.error.log");
+                Assert.IsTrue(files.Length > 0);
+                files = System.IO.Directory.GetFiles(_path, "*.fatal.log");
+                Assert.IsTrue(files.Length > 0);
+            }
         }
 
         [TestMethod]
         public void TestError()
         {
             Log.Level = LogLevel.Error;
-            Log.Default.Debug("yeye");
-            Log.Default.Info("yeye");
-            Log.Default.Warn("yeye");
-            Log.Default.Error("yeye");
-            Log.Default.Fatal("yeye");
-            Log.Default.Error("haha", new System.Exception("wahaha", new System.Exception("walala")));
-            var files = System.IO.Directory.GetFiles(_path, "*.debug.log");
-            Assert.IsTrue(files.Length == 0);
-            files = System.IO.Directory.GetFiles(_path, "*.info.log");
-            Assert.IsTrue(files.Length == 0);
-            files = System.IO.Directory.GetFiles(_path, "*.warn.log");
-            Assert.IsTrue(files.Length == 0);
-            files = System.IO.Directory.GetFiles(_path, "*.error.log");
-            Assert.IsTrue(files.Length > 0);
-            files = System.IO.Directory.GetFiles(_path, "*.fatal.log");
-            Assert.IsTrue(files.Length > 0);
+            Log.Current.Debug("yeye");
+            Log.Current.Info("yeye");
+            Log.Current.Warn("yeye");
+            Log.Current.Error("yeye");
+            Log.Current.Fatal("yeye");
+            Log.Current.Error("haha", new System.Exception("wahaha", new System.Exception("walala")));
+            if (System.IO.Directory.Exists(_path))
+            {
+                var files = System.IO.Directory.GetFiles(_path, "*.debug.log");
+                Assert.IsTrue(files.Length == 0);
+                files = System.IO.Directory.GetFiles(_path, "*.info.log");
+                Assert.IsTrue(files.Length == 0);
+                files = System.IO.Directory.GetFiles(_path, "*.warn.log");
+                Assert.IsTrue(files.Length == 0);
+                files = System.IO.Directory.GetFiles(_path, "*.error.log");
+                Assert.IsTrue(files.Length > 0);
+                files = System.IO.Directory.GetFiles(_path, "*.fatal.log");
+                Assert.IsTrue(files.Length > 0);
+            }
         }
 
         [TestMethod]
         public void TestFatal()
         {
             Log.Level = LogLevel.Fatal;
-            Log.Default.Debug("yeye");
-            Log.Default.Info("yeye");
-            Log.Default.Warn("yeye");
-            Log.Default.Error("yeye");
-            Log.Default.Fatal("yeye");
-            Log.Default.Fatal("haha", new System.Exception("wahaha", new System.Exception("walala")));
-            var files = System.IO.Directory.GetFiles(_path, "*.debug.log");
-            Assert.IsTrue(files.Length == 0);
-            files = System.IO.Directory.GetFiles(_path, "*.info.log");
-            Assert.IsTrue(files.Length == 0);
-            files = System.IO.Directory.GetFiles(_path, "*.warn.log");
-            Assert.IsTrue(files.Length == 0);
-            files = System.IO.Directory.GetFiles(_path, "*.error.log");
-            Assert.IsTrue(files.Length == 0);
-            files = System.IO.Directory.GetFiles(_path, "*.fatal.log");
-            Assert.IsTrue(files.Length > 0);
+            Log.Current.Debug("yeye");
+            Log.Current.Info("yeye");
+            Log.Current.Warn("yeye");
+            Log.Current.Error("yeye");
+            Log.Current.Fatal("yeye");
+            Log.Current.Fatal("haha", new System.Exception("wahaha", new System.Exception("walala")));
+            if (System.IO.Directory.Exists(_path))
+            {
+                var files = System.IO.Directory.GetFiles(_path, "*.debug.log");
+                Assert.IsTrue(files.Length == 0);
+                files = System.IO.Directory.GetFiles(_path, "*.info.log");
+                Assert.IsTrue(files.Length == 0);
+                files = System.IO.Directory.GetFiles(_path, "*.warn.log");
+                Assert.IsTrue(files.Length == 0);
+                files = System.IO.Directory.GetFiles(_path, "*.error.log");
+                Assert.IsTrue(files.Length == 0);
+                files = System.IO.Directory.GetFiles(_path, "*.fatal.log");
+                Assert.IsTrue(files.Length > 0);
+            }
         }
     }
 }

@@ -46,8 +46,8 @@
     </Compile>
     <Compile Include="DataSource.cs" />
     <Compile Include="Enum\DataSort.cs" />
-    <Compile Include="Generator\SqliteGenerator.cs" />
-    <Compile Include="Generator\TableGenerator.cs" />
+    <Compile Include="Builder\SqliteBuilder.cs" />
+    <Compile Include="Builder\TableBuilder.cs" />
     <Compile Include="Interface\IDataProvider.cs" />
     <Compile Include="Interface\IDataResult.cs" />
     <Compile Include="Interface\IDataQuery.cs" />
@@ -63,8 +63,8 @@
     <Compile Include="Interface\IDataEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Relation\Fields.cs" />
-    <Compile Include="Generator\IGenerator.cs" />
-    <Compile Include="Generator\EntityGenerator.cs" />
+    <Compile Include="Builder\IBuilder.cs" />
+    <Compile Include="Builder\EntityBuilder.cs" />
     <Compile Include="Relation\Tables.cs" />
     <Compile Include="Relation\TablesPartial.cs" />
     <Compile Include="Relation\Collections\FieldsCollection.cs" />

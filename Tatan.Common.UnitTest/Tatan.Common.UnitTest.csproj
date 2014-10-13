@@ -73,6 +73,7 @@
     <Compile Include="LogTest.cs" />
     <Compile Include="ListMapTest.cs" />
     <Compile Include="CachesTest.cs" />
+    <Compile Include="TreeNodeTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Tatan.Common\Tatan.Common.csproj">

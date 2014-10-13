@@ -9,14 +9,14 @@
     /// 角色
     /// </summary>
     [Serializable]
-    public partial class Role : DataEntity, IDentifiable, INameable
+    public partial class Role : DataEntity, INameable
     {
         #region 构造函数
         /// <summary>
         /// 构造函数
         /// </summary>
         public Role()
-            : base(-1)
+            : base(string.Empty)
         {
         }
 
@@ -24,7 +24,7 @@
         /// 构造函数
         /// </summary>
         /// <param name="id">唯一标识符</param>
-        public Role(long id)
+        public Role(string id)
             : base(id)
         {
         }

@@ -16,7 +16,7 @@
         /// 构造函数
         /// </summary>
         public Fields()
-            : base(-1)
+            : base(string.Empty)
         {
             
         }
@@ -25,7 +25,7 @@
         /// 构造函数
         /// </summary>
         /// <param name="id">唯一标识符</param>
-        public Fields(long id)
+        public Fields(string id)
             : base(id)
         {
         }

@@ -9,20 +9,22 @@
     using Collections;
 
     /// <summary>
-    /// 默认日志类，所有文件都是一个不切分
+    /// 默认日志类，所有日志类型文件都是一个不切分
     /// </summary>
     internal class DefaultLog : ILog
     {
         private readonly Type _type;
-        private readonly ListMap<LogLevel, string> _filenames;
+        private readonly ListMap<LogLevel, string> _fileNames;
         private readonly string _fileFormat;
         private readonly string _cententFormat;
-        public DefaultLog()
+        private readonly string _dirName;
+        public DefaultLog(string dirName)
         {
             _type = typeof(DefaultLog);
+            _dirName = dirName;
             _fileFormat = "yyyyMMdd";
             _cententFormat = "yyyy-MM-dd hh:mm:ss.fff";
-            _filenames = new ListMap<LogLevel, string>(5)
+            _fileNames = new ListMap<LogLevel, string>(5)
             {
                 {LogLevel.Debug, "{0}.debug.log"},
                 {LogLevel.Info, "{0}.info.log"},
@@ -84,9 +86,9 @@
 
         private string GetPath(LogLevel level)
         {
-            var dir = string.Format("{0}log{1}", Runtime.Root, Runtime.Separator);
+            var dir = string.Format("{0}{1}{2}", Runtime.Root, _dirName, Runtime.Separator);
             if (!SystemDirectory.Exists(dir)) SystemDirectory.CreateDirectory(dir);
-            return dir + string.Format(_filenames[level], Date.Now(_fileFormat));
+            return dir + string.Format(_fileNames[level], Date.Now(_fileFormat));
         }
 
         private void Write(LogLevel level, Type logger, string message, Exception inner)
@@ -99,7 +101,7 @@
         }
 
         /// <summary>
-        /// 格式：[时间] [线程] [Logger] message \r inner
+        /// format：[datetime] [thread] [Logger] message \r inner
         /// </summary>
         /// <param name="logger"></param>
         /// <param name="message"></param>

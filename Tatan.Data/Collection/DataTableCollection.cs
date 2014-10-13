@@ -30,8 +30,8 @@ namespace Tatan.Data
         {
             get
             {
-                ExceptionHandler.ArgumentNull("name", name);
-                ExceptionHandler.KeyNotFound(Collection, name);
+                Assert.ArgumentNotNull("name", name);
+                Assert.KeyFound(Collection, name);
                 return Collection[name];
             }
         }

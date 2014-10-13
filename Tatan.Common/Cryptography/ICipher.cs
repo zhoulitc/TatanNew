@@ -3,7 +3,7 @@
     /// <summary>
     /// 密码加解密接口
     /// </summary>
-    public interface ICipher
+    internal interface ICipher
     {
         /// <summary>
         /// 加密

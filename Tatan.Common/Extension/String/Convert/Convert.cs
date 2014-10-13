@@ -18,7 +18,7 @@
         /// <param name="value"></param>
         /// <param name="def">默认值</param>
         /// <returns>Boolean</returns>
-        public static bool AsBoolean(this string value, bool def = false)
+        public static bool AsBoolean(this string value, bool def = default(bool))
         {
             bool ret;
             if (!bool.TryParse(value, out ret))
@@ -37,54 +37,64 @@
         public static DateTime AsDateTime(this string value, DateTime def = default(DateTime))
         {
             DateTime ret;
-            if (!DateTime.TryParse(value, out ret))
+            if (!DateTime.TryParse(value, outs ret))
+                ret = def;
+            return ret;
+        }
+        #endregion
+
+        #region 转换为枚举
+        /// <summary>
+        /// 转换为枚举，不会抛出异常。转换失败则返回def
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="def">默认值</param>
+        /// <returns></returns>
+        public static T AsEnum<T>(this string value, T def = default(T)) where T : struct
+        {
+            T ret;
+            if (!Enum.TryParse(value, out ret))
                 ret = def;
             return ret;
         }
         #endregion
 
         #region 转换为浮点数
-
-        #region 转换为Decimal
         /// <summary>
         /// 转换为Decimal，不会抛出异常。转换失败则返回def
         /// </summary>
         /// <param name="value"></param>
         /// <param name="def">默认值</param>
         /// <returns>Decimal</returns>
-        public static decimal AsDecimal(this string value, decimal def = 0)
+        public static decimal AsDecimal(this string value, decimal def = default(decimal))
         {
             decimal ret;
             if (!decimal.TryParse(value, out ret))
                 ret = def;
             return ret;
         }
-        #endregion
 
-        #region 转换为Double
         /// <summary>
         /// 转换为Double，不会抛出异常。转换失败则返回def
         /// </summary>
         /// <param name="value"></param>
         /// <param name="def">默认值</param>
         /// <returns>Double</returns>
-        public static double AsDouble(this string value, double def = 0)
+        public static double AsDouble(this string value, double def = default(double))
         {
             double ret;
             if (!double.TryParse(value, out ret))
                 ret = def;
             return ret;
         }
-        #endregion
 
-        #region 转换为Float
         /// <summary>
         /// 转换为Float，不会抛出异常。转换失败则返回def
         /// </summary>
         /// <param name="value"></param>
         /// <param name="def">默认值</param>
         /// <returns>Float</returns>
-        public static float AsFloat(this string value, float def = 0)
+        public static float AsFloat(this string value, float def = default(float))
         {
             float ret;
             if (!float.TryParse(value, out ret))
@@ -93,66 +103,56 @@
         }
         #endregion
 
-        #endregion
-
         #region 转换为有符号整数
-
-        #region 转换为Byte
         /// <summary>
         /// 转换为Byte，不会抛出异常。转换失败则返回def
         /// </summary>
         /// <param name="value"></param>
         /// <param name="def">默认值</param>
         /// <returns>Byte</returns>
-        public static byte AsByte(this string value, byte def = 0)
+        public static sbyte AsInt8(this string value, sbyte def = default(sbyte))
         {
-            byte ret;
-            if (!byte.TryParse(value, out ret))
+            sbyte ret;
+            if (!sbyte.TryParse(value, out ret))
                 ret = def;
             return ret;
         }
-        #endregion
 
-        #region 转换为Short
         /// <summary>
         /// 转换为Short，不会抛出异常。转换失败则返回def
         /// </summary>
         /// <param name="value"></param>
         /// <param name="def">默认值</param>
         /// <returns>Short</returns>
-        public static short AsShort(this string value, short def = 0)
+        public static short AsInt16(this string value, short def = default(short))
         {
             short ret;
             if (!short.TryParse(value, out ret))
                 ret = def;
             return ret;
         }
-        #endregion
 
-        #region 转换为Int
         /// <summary>
         /// 转换为Int，不会抛出异常。转换失败则返回def
         /// </summary>
         /// <param name="value"></param>
         /// <param name="def">默认值</param>
         /// <returns>Int</returns>
-        public static int AsInt(this string value, int def = 0)
+        public static int AsInt32(this string value, int def = default(int))
         {
             int ret;
             if (!int.TryParse(value, out ret))
                 ret = def;
             return ret;
         }
-        #endregion
 
-        #region 转换为Long
         /// <summary>
         /// 转换为Long，不会抛出异常。转换失败则返回def
         /// </summary>
         /// <param name="value"></param>
         /// <param name="def">默认值</param>
         /// <returns>Long</returns>
-        public static long AsLong(this string value, long def = 0)
+        public static long AsInt64(this string value, long def = default(long))
         {
             long ret;
             if (!long.TryParse(value, out ret))
@@ -161,74 +161,62 @@
         }
         #endregion
 
-        #endregion
-
         #region 转换为无符号整数 
-
-        #region 转换为SByte
         /// <summary>
-        /// 转换为SByte，不会抛出异常。转换失败则返回def
+        /// 转换为Byte，不会抛出异常。转换失败则返回def
         /// </summary>
         /// <param name="value"></param>
         /// <param name="def">默认值</param>
-        /// <returns>SByte</returns>
-        public static sbyte AsSByte(this string value, sbyte def = 0)
+        /// <returns>Byte</returns>
+        public static byte AsUInt8(this string value, byte def = default(byte))
         {
-            sbyte ret;
-            if (!sbyte.TryParse(value, out ret))
+            byte ret;
+            if (!byte.TryParse(value, out ret))
                 ret = def;
             return ret;
         }
-        #endregion
 
-        #region 转换为UShort
         /// <summary>
         /// 转换为UShort，不会抛出异常。转换失败则返回def
         /// </summary>
         /// <param name="value"></param>
         /// <param name="def">默认值</param>
         /// <returns>UShort</returns>
-        public static ushort AsUShort(this string value, ushort def = 0)
+        public static ushort AsUInt16(this string value, ushort def = default(ushort))
         {
             ushort ret;
             if (!ushort.TryParse(value, out ret))
                 ret = def;
             return ret;
         }
-        #endregion
 
-        #region 转换为UInt
         /// <summary>
         /// 转换为UInt，不会抛出异常。转换失败则返回def
         /// </summary>
         /// <param name="value"></param>
         /// <param name="def">默认值</param>
         /// <returns>UInt</returns>
-        public static uint AsUInt(this string value, uint def = 0)
+        public static uint AsUInt32(this string value, uint def = default(uint))
         {
             uint ret;
             if (!uint.TryParse(value, out ret))
                 ret = def;
             return ret;
         }
-        #endregion
 
-        #region 转换为ULong
         /// <summary>
         /// 转换为ULong，不会抛出异常。转换失败则返回def
         /// </summary>
         /// <param name="value"></param>
         /// <param name="def">默认值</param>
         /// <returns>ULong</returns>
-        public static ulong AsULong(this string value, ulong def = 0)
+        public static ulong AsUInt64(this string value, ulong def = default(ulong))
         {
             ulong ret;
             if (!ulong.TryParse(value, out ret))
                 ret = def;
             return ret;
         }
-        #endregion
-
         #endregion
 
         #region 转换为GUID
@@ -273,38 +261,8 @@
             }
             catch (EncoderFallbackException ex)
             {
-                Log.Default.Warn(typeof(Convert), ex.Message, ex);
+                Log.Current.Warn(typeof(Convert), ex.Message, ex);
                 ret = new byte[0];
-            }
-            return ret;
-        }
-        #endregion
-
-        #region 转换为泛型值类型，必须指定def
-        /// <summary>
-        /// 转换为泛型值类型，必须指定def，不会抛出异常。转换失败则返回def
-        /// <para>运用了反射，效率上比特定的转换要慢</para>
-        /// </summary>
-        /// <param name="value"></param>
-        /// <param name="def">默认值</param>
-        /// <returns>泛型值类型</returns>
-        public static T As<T>(this string value, T def = default(T)) where T : struct
-        {
-            var ret = def;
-            var type = typeof(T);
-            try
-            {
-                //可能存在参数不匹配导致调用失败的情况，或者没有获取到方法
-                var mi = type.GetMethod("Parse", new[] {typeof (string)});
-                if (null == mi)
-                    return ret;
-
-                //可能转换失败
-                ret = (T) mi.Invoke(null, new object[] {value});
-            }
-            catch (Exception ex)
-            {
-                Log.Default.Warn(typeof(Convert), ex.Message, ex);
             }
             return ret;
         }

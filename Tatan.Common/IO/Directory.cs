@@ -26,8 +26,8 @@
         /// <exception cref="System.NotSupportedException">文件格式无效时</exception>
         public static void Copy(string source, string destination)
         {
-            ExceptionHandler.ArgumentNull("source", source);
-            ExceptionHandler.ArgumentNull("destination", destination);
+            Assert.ArgumentNotNull("source", source);
+            Assert.ArgumentNotNull("destination", destination);
 
             if (destination[destination.Length - 1].ToString() != Runtime.Separator)
             {

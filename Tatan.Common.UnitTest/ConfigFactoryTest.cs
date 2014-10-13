@@ -50,16 +50,16 @@ namespace Tatan.Common.UnitTest
         [ExpectedException(typeof(System.InvalidOperationException))]
         public void TestGetXmlConfig()
         {
-            var o = ConfigFactory.GetXmlConfig<TestConfig>("test");
+            var o = ConfigManager.Get<TestConfig>("test");
             Assert.AreEqual(o.Name, "wahaha");
 
-            var o2 = ConfigFactory.GetXmlConfig<TestConfig2>("test");
+            var o2 = ConfigManager.Get<TestConfig2>("test");
         }
 
         [TestMethod]
         public void TestAppConfig()
         {
-            var o = ConfigFactory.AppConfig;
+            var o = ConfigManager.AppConfig;
             Assert.AreEqual(o["key"], string.Empty);
             Assert.AreEqual(o["s"], "1");
         }
@@ -67,7 +67,7 @@ namespace Tatan.Common.UnitTest
         [TestMethod]
         public void TestConnectionConfig()
         {
-            var o = ConfigFactory.ConnectionConfig;
+            var o = ConfigManager.ConnectionConfig;
             Assert.AreEqual(o["key"].ConnectionString, string.Empty);
             Assert.AreEqual(o["LocalSqlServer"].ProviderName, "System.Data.SqlClient");
         }
@@ -79,7 +79,7 @@ namespace Tatan.Common.UnitTest
                 JsonConvert.SerializeObject,
                 JsonConvert.DeserializeObject
                 );
-            var o = ConfigFactory.GetXmlConfig<TestConfig>("test");
+            var o = ConfigManager.Get<TestConfig>("test");
             var s = xml.Serialize(o);
             Assert.AreEqual(s, "{\"Name\":\"wahaha\"}");
 
@@ -97,7 +97,7 @@ namespace Tatan.Common.UnitTest
             s = xml.Serialize(new TestConfig2 { Name = "wahaha" });
             Assert.AreEqual(s.Length > 0, true);
 
-            var o = ConfigFactory.GetXmlConfig<TestConfig>("test");
+            var o = ConfigManager.Get<TestConfig>("test");
             s = xml.Serialize(o);
             Assert.AreEqual(s, "<?xml version=\"1.0\"?>\r\n<TestConfig xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <Name>wahaha</Name>\r\n</TestConfig>");
 

@@ -14,14 +14,14 @@
     public abstract class DataEntity : IDataEntity
     {
         //默认标识符值
-        internal const int DefaultId = -1;
+        internal readonly static string DefaultId = string.Empty;
 
         #region 构造函数
         /// <summary>
         /// 
         /// </summary>
         /// <param name="id"></param>
-        protected DataEntity(long id)
+        protected DataEntity(string id)
         {
             Id = id;
         }
@@ -62,7 +62,7 @@
         /// <summary>
         /// 一个自动生成的唯一标识符
         /// </summary>
-        public long Id { get; set; }
+        public string Id { get; set; }
         #endregion
 
         #region IEnumerable

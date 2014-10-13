@@ -22,7 +22,7 @@
         /// <returns></returns>
         public static ParserResult Parse<T>(Expression<Func<T, bool>> expression, string symbol)
         {
-            ExceptionHandler.ArgumentNull("symbol", symbol);
+            Assert.ArgumentNotNull("symbol", symbol);
             var visitor = new ExpressionParserVisitor(symbol);
             visitor.Visit(expression);
             return visitor.Result.Trim();
@@ -36,8 +36,8 @@
         /// <returns></returns>
         public static ParserResult Parse(IDictionary<string, object> sets, string symbol)
         {
-            ExceptionHandler.ArgumentNull("sets", sets);
-            ExceptionHandler.ArgumentNull("symbol", symbol);
+            Assert.ArgumentNotNull("sets", sets);
+            Assert.ArgumentNotNull("symbol", symbol);
             var set = new ParserResult(sets);
             foreach (var key in sets.Keys)
             {
@@ -54,8 +54,8 @@
         /// <returns></returns>
         public static ParserResult Parse(object entity, string symbol)
         {
-            ExceptionHandler.ArgumentNull("entity", entity);
-            ExceptionHandler.ArgumentNull("symbol", symbol);
+            Assert.ArgumentNotNull("entity", entity);
+            Assert.ArgumentNotNull("symbol", symbol);
             var properties = entity.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public);
             var set = new ParserResult();
             foreach (var property in properties)
@@ -195,7 +195,7 @@
                 _result.Append("(");
                 Visit(node.Left);
                 if (!_types.Contains(node.NodeType))
-                    ExceptionHandler.NotSupported();
+                    Assert.NotSupported();
                 _result.Append(_types[node.NodeType]);
                 Visit(node.Right);
                 _result.Append(")");
@@ -241,7 +241,7 @@
                     _result.SetNull();
                     return node;
                 }
-                ExceptionHandler.NotSupported();
+                Assert.NotSupported();
                 return node;
             }
         }

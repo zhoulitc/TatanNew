@@ -83,8 +83,8 @@
         public void Run(IEnumerable<T> tokens, Enum beginState)
         {
             var enumerable = tokens as T[] ?? tokens.ToArray();
-            ExceptionHandler.ArgumentNull("tokens", enumerable);
-            ExceptionHandler.ArgumentNull("beginState", beginState);
+            Assert.ArgumentNotNull("tokens", enumerable);
+            Assert.ArgumentNotNull("beginState", beginState);
 
             State = beginState;
             if (StateFunctions.Count > 0)
