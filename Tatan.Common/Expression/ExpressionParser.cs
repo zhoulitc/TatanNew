@@ -5,7 +5,6 @@
     using System.Linq.Expressions;
     using System.Reflection;
     using System.Text;
-    using Collections;
     using Exception;
 
     /// <summary>
@@ -67,15 +66,14 @@
         }
 
         #region ParserResult
+
         /// <summary>
         /// 解析结果
         /// </summary>
         public class ParserResult
         {
-// ReSharper disable once InconsistentNaming
-            internal StringBuilder _condition;
-// ReSharper disable once InconsistentNaming
-            internal IDictionary<string, object> _parameters;
+            private StringBuilder _condition;
+            private readonly IDictionary<string, object> _parameters;
 
             internal ParserResult Trim()
             {
@@ -130,9 +128,9 @@
             public ParserResult(IDictionary<string, object> parameters = null)
             {
                 _condition = new StringBuilder();
-                _parameters = parameters == null ? 
-                    new Dictionary<string, object>() : 
-                    new Dictionary<string, object>(parameters);
+                _parameters = parameters == null
+                    ? new Dictionary<string, object>()
+                    : new Dictionary<string, object>(parameters);
             }
 
             /// <summary>
@@ -151,6 +149,7 @@
                 get { return _parameters; }
             }
         }
+
         #endregion
 
         private class ExpressionParserVisitor : ExpressionVisitor
@@ -159,13 +158,13 @@
             private readonly Queue<string> _queue;
             private readonly string _symbol;
 
-            private static readonly ListMap<ExpressionType, string> _types;
+            private static readonly IDictionary<ExpressionType, string> _types;
             private static readonly string _paramName;
 
             static ExpressionParserVisitor()
             {
                 _paramName = "param";
-                _types = new ListMap<ExpressionType, string>(8)
+                _types = new Dictionary<ExpressionType, string>(8)
                 {
                     {ExpressionType.AndAlso, " AND "},
                     {ExpressionType.OrElse, " OR "},
@@ -178,7 +177,7 @@
                 };
             }
 
-            public ParserResult Result 
+            public ParserResult Result
             {
                 get { return _result; }
             }
@@ -194,7 +193,7 @@
             {
                 _result.Append("(");
                 Visit(node.Left);
-                if (!_types.Contains(node.NodeType))
+                if (!_types.ContainsKey(node.NodeType))
                     Assert.NotSupported();
                 _result.Append(_types[node.NodeType]);
                 Visit(node.Right);
@@ -224,7 +223,7 @@
             private object GetValue(object value)
             {
                 if (value is bool)
-                    return ((bool)value) ? 1 : 0;
+                    return ((bool) value) ? 1 : 0;
                 return value;
             }
 

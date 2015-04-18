@@ -1,0 +1,14 @@
+﻿{
+	"Url": "https://kyfw.12306.cn/otn/leftTicket/log?leftTicketDTO.train_date=@date@&leftTicketDTO.from_station=@from@&leftTicketDTO.to_station=@to@&purpose_codes=ADULT",
+	"Headers": {
+		"Accept": "*/*",
+		"Accept-Language": "zh-CN",
+		"Cache-Control": "no-cache",
+		"Connection": "Keep-Alive",
+		"Cookie": "@cookie@",
+		"Host": "kyfw.12306.cn",
+		"Referer": "https://kyfw.12306.cn/otn/leftTicket/init",
+		"User-Agent": "Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko",
+		"X-Requested-With": "XMLHttpRequest"
+	}
+}

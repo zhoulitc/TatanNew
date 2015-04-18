@@ -1,0 +1,24 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+    <body>
+
+    </body>
+    <script type="text/javascript">
+        var a = {}, b = {}, c = {};
+        b.__proto__ = a;
+        c.__proto__ = b;
+        a.t = 3;
+        console.log(b.t); //prototype: b.t=3
+        console.log(b.t); //prototype chain: c.t=3
+        b.t = 4;
+        console.log(a.t); //a.t=3
+        console.log(b.t); //b.t=4
+        console.log(c.t); //c.t=4
+        console.log(c.r); //undefined
+    </script>
+</html>

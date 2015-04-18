@@ -20,6 +20,11 @@ namespace Tatan.Common.UnitTest
             }
             return false;
         }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
     public class UserInfo
     {
@@ -55,7 +60,7 @@ namespace Tatan.Common.UnitTest
         public void JsonSerializeUsingExtension()
         {
             //使用第三方json序列化
-            var json = Serializer.CreateJsonSerializer(
+            var json = Serializers.CreateJsonSerializer(
                 JsonConvert.SerializeObject,
                 JsonConvert.DeserializeObject<User>
                 );
@@ -70,7 +75,7 @@ namespace Tatan.Common.UnitTest
         public void JsonDeserializeUsingExtension()
         {
             //使用第三方json序列化
-            var json = Serializer.CreateJsonSerializer(
+            var json = Serializers.CreateJsonSerializer(
                 JsonConvert.SerializeObject,
                 JsonConvert.DeserializeObject<User>
                 );
@@ -84,7 +89,7 @@ namespace Tatan.Common.UnitTest
         [TestMethod]
         public void JsonSerializeUsingDefault()
         {
-            var json = Serializer.Json;
+            var json = Serializers.Json;
             //json.UsingDefault();
             var s1 = json.Serialize(_user);
             Assert.AreEqual(s1, _textd);
@@ -93,7 +98,7 @@ namespace Tatan.Common.UnitTest
         [TestMethod]
         public void JsonDeserializeUsingDefault()
         {
-            var json = Serializer.Json;
+            var json = Serializers.Json;
             //json.UsingDefault();
             var user1 = json.Deserialize<UserInfo>("{\"Address\":\"\\\"我也不知道\\\"\",\"Objs\":[33,\"wuyu\",false],\"Sex\":true}");
             Assert.AreEqual(user1.Address, _user.Info.Address);
@@ -103,7 +108,7 @@ namespace Tatan.Common.UnitTest
         public void JsonSerializeEmpty()
         {
             //使用第三方json序列化
-            var json = Serializer.Json;
+            var json = Serializers.Json;
             var s1 = json.Serialize(null);
             Assert.AreEqual(s1, string.Empty);
         }
@@ -112,7 +117,7 @@ namespace Tatan.Common.UnitTest
         public void JsonDeserializeEmpty()
         {
             //使用第三方json序列化
-            var json = Serializer.Json;
+            var json = Serializers.Json;
             var user1 = json.Deserialize<User>(null);
             Assert.AreEqual(user1, null);
         }

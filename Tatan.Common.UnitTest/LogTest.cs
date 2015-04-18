@@ -1,181 +1,99 @@
 ﻿using System;
 using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Tatan.Common.Component;
 using Tatan.Common.IO;
 using Tatan.Common.Logging;
 
 namespace Tatan.Common.UnitTest
 {
-    using Common;
-
     [TestClass]
     public class LogTest
     {
-        private readonly string _path = Runtime.Root + "logs";
+        private readonly string _path = Runtime.Root + "Log";
 
         [TestInitialize]
         public void Init()
         {
+            ComponentManager.Dispose();
             if (System.IO.Directory.Exists(_path)) System.IO.Directory.Delete(_path, true);
         }
 
         [TestCleanup]
         public void Cleanup()
         {
+            ComponentManager.Dispose();
             if (System.IO.Directory.Exists(_path)) System.IO.Directory.Delete(_path, true);
         }
 
         #region 
-        public class TestLog : ILog
+        public class TestLog
         {
             public TestLog(int a)
             {
             }
 
-            public void Debug(string message, System.Exception inner = null)
-            {
-                throw new NotImplementedException();
-            }
-
-            public void Debug(Type logger, string message, System.Exception inner = null)
-            {
-                throw new NotImplementedException();
-            }
-
-            public void Info(string message, System.Exception inner = null)
-            {
-                throw new NotImplementedException();
-            }
-
-            public void Info(Type logger, string message, System.Exception inner = null)
-            {
-                throw new NotImplementedException();
-            }
-
-            public void Warn(string message, System.Exception inner = null)
-            {
-                throw new NotImplementedException();
-            }
-
-            public void Warn(Type logger, string message, System.Exception inner = null)
-            {
-                throw new NotImplementedException();
-            }
-
-            public void Error(string message, System.Exception inner = null)
-            {
-                throw new NotImplementedException();
-            }
-
-            public void Error(Type logger, string message, System.Exception inner = null)
-            {
-                throw new NotImplementedException();
-            }
-
-            public void Fatal(string message, System.Exception inner = null)
-            {
-                throw new NotImplementedException();
-            }
-
-            public void Fatal(Type logger, string message, System.Exception inner = null)
+            public void WriteLog(Log.Level level, string logger, string message, System.Exception ex)
             {
                 throw new NotImplementedException();
             }
         }
 
-        public class TestLog2 : ILog
+        public class TestLog2
         {
-            public TestLog2()
-            {
-            }
-
-            public void Debug(string message, System.Exception inner = null)
-            {
-            }
-
-            public void Debug(Type logger, string message, System.Exception inner = null)
-            {
-            }
-
-            public void Info(string message, System.Exception inner = null)
-            {
-            }
-
-            public void Info(Type logger, string message, System.Exception inner = null)
-            {
-            }
-
-            public void Warn(string message, System.Exception inner = null)
-            {
-            }
-
-            public void Warn(Type logger, string message, System.Exception inner = null)
-            {
-            }
-
-            public void Error(string message, System.Exception inner = null)
-            {
-            }
-
-            public void Error(Type logger, string message, System.Exception inner = null)
-            {
-            }
-
-            public void Fatal(string message, System.Exception inner = null)
-            {
-            }
-
-            public void Fatal(Type logger, string message, System.Exception inner = null)
+            public void WriteLog(Log.Level level, string logger, string message, System.Exception ex)
             {
             }
         }
         #endregion
 
         [TestMethod]
+        [ExpectedException(typeof(NotImplementedException))]
         public void TestNullLog()
         {
-            var log = Log.Get<TestLog>();
-            log.Debug("yeye");
-            log.Info("yeye");
-            log.Warn("yeye");
-            log.Error("yeye");
-            log.Fatal(null);
-            log.Debug(null, "yeye");
-            log.Info(typeof(string), "yeye");
-            log.Warn(null, "yeye");
-            log.Error(typeof(LogTest), "yeye");
-            log.Fatal(null, "");
-            log.Debug("haha", new System.Exception("wahaha", new System.Exception("walala")));
+            ComponentManager.Register(new LogAdapter(new TestLog(0).WriteLog));
+            Log.Debug("yeye");
+            Log.Info("yeye");
+            Log.Warn("yeye");
+            Log.Error("yeye");
+            Log.Fatal(null);
+            Log.Debug("yeye");
+            Log.Info<string>("yeye");
+            Log.Warn("yeye");
+            Log.Error<LogTest>("yeye");
+            Log.Fatal("");
+            Log.Debug("haha", new System.Exception("wahaha", new System.Exception("walala")));
             Assert.IsFalse(System.IO.Directory.Exists(_path));
         }
 
         [TestMethod]
         public void TestCustomLog()
         {
-            var log = Log.Get<TestLog2>();
-            log.Debug("yeye");
-            log.Info("yeye");
-            log.Warn("yeye");
-            log.Error("yeye");
-            log.Fatal(null);
-            log.Debug(null, "yeye");
-            log.Info(typeof(string), "yeye");
-            log.Warn(null, "yeye");
-            log.Error(typeof(LogTest), "yeye");
-            log.Fatal(null, "");
-            log.Debug("haha", new System.Exception("wahaha", new System.Exception("walala")));
+            ComponentManager.Register(new LogAdapter(new TestLog2().WriteLog));
+            Log.Debug("yeye");
+            Log.Info("yeye");
+            Log.Warn("yeye");
+            Log.Error("yeye");
+            Log.Fatal(null);
+            Log.Debug("yeye");
+            Log.Info<string>("yeye");
+            Log.Warn("yeye");
+            Log.Error<LogTest>("yeye");
+            Log.Fatal("");
+            Log.Debug("haha", new System.Exception("wahaha", new System.Exception("walala")));
             Assert.IsFalse(System.IO.Directory.Exists(_path));
         }
 
         [TestMethod]
         public void TestDebug()
         {
-            Log.Current.Debug("yeye");
-            Log.Current.Info("yeye");
-            Log.Current.Warn(null, "yeye");
-            Log.Current.Error(typeof(LogTest), "yeye");
-            Log.Current.Fatal(null);
-            Log.Current.Debug("haha", new System.Exception("wahaha", new System.Exception("walala")));
+            ComponentManager.Register(new DefaultLogAdapter());
+            Log.Debug("yeye");
+            Log.Info("yeye");
+            Log.Warn("yeye");
+            Log.Error<LogTest>("yeye");
+            Log.Fatal(null);
+            Log.Debug("haha", new System.Exception("wahaha", new System.Exception("walala")));
             if (System.IO.Directory.Exists(_path))
             {
                 var files = System.IO.Directory.GetFiles(_path, "*.debug.log");
@@ -195,13 +113,13 @@ namespace Tatan.Common.UnitTest
         public void TestInfo()
         {
             Thread.CurrentThread.Name = "ss";
-            Log.Level = LogLevel.Info;
-            Log.Current.Debug("yeye");
-            Log.Current.Info("yeye");
-            Log.Current.Warn("yeye");
-            Log.Current.Error("yeye");
-            Log.Current.Fatal("yeye");
-            Log.Current.Info("haha", new System.Exception("wahaha", new System.Exception("walala")));
+            ComponentManager.Register(new DefaultLogAdapter(Log.Level.Info));
+            Log.Debug("yeye");
+            Log.Info("yeye");
+            Log.Warn("yeye");
+            Log.Error("yeye");
+            Log.Fatal("yeye");
+            Log.Info("haha", new System.Exception("wahaha", new System.Exception("walala")));
             if (System.IO.Directory.Exists(_path))
             {
                 var files = System.IO.Directory.GetFiles(_path, "*.debug.log");
@@ -220,13 +138,13 @@ namespace Tatan.Common.UnitTest
         [TestMethod]
         public void TestWarn()
         {
-            Log.Level = LogLevel.Warn;
-            Log.Current.Debug("yeye");
-            Log.Current.Info("yeye");
-            Log.Current.Warn("yeye");
-            Log.Current.Error("yeye");
-            Log.Current.Fatal("yeye");
-            Log.Current.Warn("haha", new System.Exception("wahaha", new System.Exception("walala")));
+            ComponentManager.Register(new DefaultLogAdapter(Log.Level.Warn));
+            Log.Debug("yeye");
+            Log.Info("yeye");
+            Log.Warn("yeye");
+            Log.Error("yeye");
+            Log.Fatal("yeye");
+            Log.Warn("haha", new System.Exception("wahaha", new System.Exception("walala")));
             if (System.IO.Directory.Exists(_path))
             {
                 var files = System.IO.Directory.GetFiles(_path, "*.debug.log");
@@ -245,13 +163,13 @@ namespace Tatan.Common.UnitTest
         [TestMethod]
         public void TestError()
         {
-            Log.Level = LogLevel.Error;
-            Log.Current.Debug("yeye");
-            Log.Current.Info("yeye");
-            Log.Current.Warn("yeye");
-            Log.Current.Error("yeye");
-            Log.Current.Fatal("yeye");
-            Log.Current.Error("haha", new System.Exception("wahaha", new System.Exception("walala")));
+            ComponentManager.Register(new DefaultLogAdapter(Log.Level.Error));
+            Log.Debug("yeye");
+            Log.Info("yeye");
+            Log.Warn("yeye");
+            Log.Error("yeye");
+            Log.Fatal("yeye");
+            Log.Error("haha", new System.Exception("wahaha", new System.Exception("walala")));
             if (System.IO.Directory.Exists(_path))
             {
                 var files = System.IO.Directory.GetFiles(_path, "*.debug.log");
@@ -270,13 +188,13 @@ namespace Tatan.Common.UnitTest
         [TestMethod]
         public void TestFatal()
         {
-            Log.Level = LogLevel.Fatal;
-            Log.Current.Debug("yeye");
-            Log.Current.Info("yeye");
-            Log.Current.Warn("yeye");
-            Log.Current.Error("yeye");
-            Log.Current.Fatal("yeye");
-            Log.Current.Fatal("haha", new System.Exception("wahaha", new System.Exception("walala")));
+            ComponentManager.Register(new DefaultLogAdapter(Log.Level.Fatal));
+            Log.Debug("yeye");
+            Log.Info("yeye");
+            Log.Warn("yeye");
+            Log.Error("yeye");
+            Log.Fatal("yeye");
+            Log.Fatal("haha", new System.Exception("wahaha", new System.Exception("walala")));
             if (System.IO.Directory.Exists(_path))
             {
                 var files = System.IO.Directory.GetFiles(_path, "*.debug.log");

@@ -1,11 +1,8 @@
-﻿using System.IO;
-
-namespace Tatan.Data
+﻿namespace Tatan.Data
 {
     using System;
     using System.Collections.Generic;
     using System.Data.Common;
-    using Common.Collections;
     using Common.Exception;
     using Common.Configuration;
 
@@ -23,12 +20,12 @@ namespace Tatan.Data
         private static readonly IDictionary<DataProvider, IDataSource> _sources; //数据源集合
         private static readonly object _lock = new object();
 
-        internal static readonly ListMap<string, DbProviderFactory> DbFactories; //工厂集
+        internal static readonly Dictionary<string, DbProviderFactory> DbFactories; //工厂集
 
         static DataSource()
         {
             _sources = new Dictionary<DataProvider, IDataSource>();
-            DbFactories = new ListMap<string, DbProviderFactory>(50);
+            DbFactories = new Dictionary<string, DbProviderFactory>(50);
         }
 
         /// <summary>
@@ -63,8 +60,9 @@ namespace Tatan.Data
         public static IDataSource Connect(string configName)
         {
             Assert.ArgumentNotNull("configName", configName);
-            var config = ConfigManager.ConnectionConfig[configName];
-            return Connect(config.ProviderName, config.ConnectionString);
+            var config = Configurations.Connection[configName, "ConnectionString"];
+            var provider = Configurations.Connection[configName, "ProviderName"];
+            return Connect(provider, config);
         }
 
         private DataSource(DataProvider provider)
@@ -113,7 +111,7 @@ namespace Tatan.Data
 
         internal static DbProviderFactory Get(string name)
         {
-            if (!DbFactories.Contains(name))
+            if (!DbFactories.ContainsKey(name))
             {
                 lock (_lock)
                 {

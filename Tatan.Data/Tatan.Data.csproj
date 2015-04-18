@@ -40,6 +40,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attribute\FieldAttribute.cs" />
+    <Compile Include="Attribute\TableAttribute.cs" />
+    <Compile Include="Attribute\DataAttributes.cs" />
     <Compile Include="Collection\DataTableCollection.cs" />
     <Compile Include="DataEntity.cs">
       <SubType>Code</SubType>
@@ -49,8 +52,11 @@
     <Compile Include="Builder\SqliteBuilder.cs" />
     <Compile Include="Builder\TableBuilder.cs" />
     <Compile Include="Interface\IDataProvider.cs" />
+    <Compile Include="Interface\IDataCreated.cs" />
     <Compile Include="Interface\IDataResult.cs" />
     <Compile Include="Interface\IDataQuery.cs" />
+    <Compile Include="Interface\IDataModified.cs" />
+    <Compile Include="Interface\IDataDeleted.cs" />
     <Compile Include="Internal\DataProvider.cs" />
     <Compile Include="Internal\DataTable.cs" />
     <Compile Include="Interface\IDataSession.cs" />
@@ -87,6 +93,7 @@
       <Name>Tatan.Common</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

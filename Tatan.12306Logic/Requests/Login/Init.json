@@ -1,0 +1,10 @@
+﻿{
+	"Url": "https://kyfw.12306.cn/otn/login/init",
+	"Headers": {
+		"Accept": "text/html, application/xhtml+xml, */*",
+		"Accept-Language": "zh-CN",
+		"Connection": "Keep-Alive",
+		"Host": "kyfw.12306.cn",
+		"User-Agent": "Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko"
+	}
+}

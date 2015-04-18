@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Configurations>
+  <!-- 一级配置项 -->
+  <Configure name="" value="" />
+
+  <!-- 二级配置项 -->
+  <ConfigureSection name="">
+    <Configure name="" value="" />
+  </ConfigureSection>
+</Configurations> 

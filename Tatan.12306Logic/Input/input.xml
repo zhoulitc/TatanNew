@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Input>
+  <User username="" >
+    <Train no="" date="" from="" to="">
+      <Condition  />
+    </Train>
+    <Train no="" date="" from="" to="">
+      <Condition  />
+    </Train>
+  </User>
+</Input>

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using Tatan.Common.Collections;
 using Tatan.Common.Exception;
 using Tatan.Common.Extension.String.Target;
 using Tatan.Common.IO;
@@ -18,7 +17,7 @@ namespace Tatan.Data.Builder
         private readonly IEnumerable<Tables> _tables;
         private readonly IDataSource _source;
         private readonly string _projectName;
-        private readonly static ListMap<string, string> _types = new ListMap<string, string>(6)
+        private readonly static Dictionary<string, string> _types = new Dictionary<string, string>(6)
             {
                 {"I", "int"},
                 {"L", "long"},

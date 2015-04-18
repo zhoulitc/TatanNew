@@ -1,4 +1,4 @@
-﻿using Tatan.Common.Collections;
+﻿using System.Collections.Generic;
 
 namespace Tatan.Permission.Collections
 {
@@ -52,11 +52,11 @@ namespace Tatan.Permission.Collections
             return null;
         }
 
-        private static readonly ListMap<string, string> _sqlsExtension;
+        private static readonly Dictionary<string, string> _sqlsExtension;
 
         static PermissionRelationCollection()
         {
-            _sqlsExtension = new ListMap<string, string>(4)
+            _sqlsExtension = new Dictionary<string, string>(4)
             {
                 {"UsersGroupsRolesContains", "SELECT COUNT(1) FROM UserGroup AS t1 INNER JOIN GroupPermission AS t2 ON t1.GroupId=t2.GroupId INNER JOIN UserRole AS t3 ON t1.UserId=t3.UserId INNER JOIN RolePermission AS t4 ON t3.RoleId=t4.RoleId WHERE t1.UserId={0}UserId AND (t2.PermissionId={0}PermissionId OR t4.PermissionId={0}PermissionId)"},
                 {"GroupsRolesContains", "SELECT COUNT(1) FROM GroupRole AS t1 LEFT JOIN RolePermission AS t2 ON t1.RoleId=t2.RoleId WHERE t1.GroupId={0}GroupId AND t2.PermissionId={0}PermissionId"},

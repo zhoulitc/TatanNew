@@ -9,7 +9,6 @@ namespace Tatan.Data
     using System.Threading.Tasks;
     using Common.Exception;
     using Common.Logging;
-    using Common.Collections;
 
     /// <summary>
     /// 数据库抽象会话类，处理一些通用的会话操作
@@ -22,7 +21,7 @@ namespace Tatan.Data
 
         private static readonly object _lock = new object();
         private static readonly Type _readerType = typeof (IDataReader);
-        private static readonly ListMap<string, DbProviderFactory> _dbFactories; //工厂集
+        private static readonly Dictionary<string, DbProviderFactory> _dbFactories; //工厂集
 
         #endregion
 
@@ -44,7 +43,7 @@ namespace Tatan.Data
 
         static DataSession()
         {
-            _dbFactories = new ListMap<string, DbProviderFactory>(20);
+            _dbFactories = new Dictionary<string, DbProviderFactory>(20);
         }
         #endregion
 
@@ -92,7 +91,7 @@ namespace Tatan.Data
             using (var reader = _Execute(request, null, () => _command.ExecuteReader()))
             {
                 if (_readerType.IsAssignableFrom(typeof(T)))
-                    Assert.TypeError();
+                    Assert.TypeError(_readerType, typeof(T));
                 return function(reader);
             }
         }
@@ -102,7 +101,7 @@ namespace Tatan.Data
             using (var reader = await _Execute(request, null, () => _command.ExecuteReaderAsync()))
             {
                 if (_readerType.IsAssignableFrom(typeof(T)))
-                    Assert.TypeError();
+                    Assert.TypeError(_readerType, typeof(T));
                 return await function(reader);
             }
         }
@@ -112,7 +111,7 @@ namespace Tatan.Data
             using (var reader = _Execute(request, action, () => _command.ExecuteReader()))
             {
                 if (_readerType.IsAssignableFrom(typeof(T)))
-                    Assert.TypeError();
+                    Assert.TypeError(_readerType, typeof(T));
                 return function(reader);
             }
         }
@@ -122,7 +121,7 @@ namespace Tatan.Data
             using (var reader = await _Execute(request, action, () => _command.ExecuteReaderAsync()))
             {
                 if (_readerType.IsAssignableFrom(typeof(T)))
-                    Assert.TypeError();
+                    Assert.TypeError(_readerType, typeof(T));
                 return await function(reader);
             }
         }
@@ -154,19 +153,31 @@ namespace Tatan.Data
             private IDataParameterCollection _parameters;
             private Func<IDbDataParameter> _createParamter;
             private readonly string _symbol;
-            private static readonly ListMap<DataType, DbType> _mapping;
+            private static readonly Dictionary<Type, DbType> _mapping;
+            private static readonly Type _defaultType;
 
             static DataParameters()
             {
-                _mapping = new ListMap<DataType, DbType>
+                _defaultType = typeof (string);
+                _mapping = new Dictionary<Type, DbType>
                 {
-                    { DataType.Binary, DbType.Binary },
-                    { DataType.Boolean, DbType.Boolean },
-                    { DataType.Date, DbType.DateTime },
-                    { DataType.Integer, DbType.Int32 },
-                    { DataType.Number, DbType.Double },
-                    { DataType.String, DbType.String },
-                    { DataType.Object, DbType.Object }
+                    {typeof (bool), DbType.Boolean},
+                    {typeof (sbyte), DbType.SByte},
+                    {typeof (byte), DbType.Byte},
+                    {typeof (short), DbType.Int16},
+                    {typeof (ushort), DbType.UInt16},
+                    {typeof (int), DbType.Int32},
+                    {typeof (uint), DbType.UInt32},
+                    {typeof (long), DbType.Int64},
+                    {typeof (ulong), DbType.UInt64},
+                    {typeof (float), DbType.Single},
+                    {typeof (double), DbType.Double},
+                    {typeof (decimal), DbType.Decimal},
+                    {typeof (string), DbType.String},
+                    {typeof (DateTime), DbType.DateTime},
+                    {typeof (Guid), DbType.Guid},
+                    {typeof (byte[]), DbType.Binary},
+                    {typeof (object), DbType.Object}
                 };
             }
 
@@ -184,13 +195,13 @@ namespace Tatan.Data
                 _createParamter = null;
             }
 
-            public object this[int index, DataType type = DataType.Object, int size = 0] 
+            public object this[int index, Type type = null, int size = 0] 
             {
                 set
                 {
                     if (index < 0 || index > _parameters.Count)
                         throw new IndexOutOfRangeException(Assert.GetText("IndexOutOfRange"));
-                    SetOtherValue(TryCreate(index), type, size, value);
+                    SetOtherValue(TryCreate(index), type ?? _defaultType, size, value);
                 }
             }
 
@@ -204,12 +215,12 @@ namespace Tatan.Data
                 }
             }
 
-            public object this[string name, DataType type = DataType.Object, int size = 0] 
+            public object this[string name, Type type = null, int size = 0] 
             {
                 set
                 {
                     Assert.ArgumentNotNull("name", name);
-                    SetOtherValue(TryCreate(name), type, size, value);
+                    SetOtherValue(TryCreate(name), type ?? _defaultType, size, value);
                 }
             }
 
@@ -264,7 +275,7 @@ namespace Tatan.Data
                 }
             }
 
-            private static void SetOtherValue(IDbDataParameter parameter, DataType type, int size, object value)
+            private static void SetOtherValue(IDbDataParameter parameter, Type type, int size, object value)
             {
                 if (parameter != null)
                 {
@@ -340,7 +351,7 @@ namespace Tatan.Data
             {
                 get
                 {
-                    Assert.IndexInOfRange(index, Count);
+                    Assert.IndexInRange(index, Count);
                     return Entities[index];
                 }
             }
@@ -396,9 +407,9 @@ namespace Tatan.Data
             }
             catch (Exception ex)
             {
-                Log.Current.Error(typeof(DataSession), ex.Message, ex);
+                Log.Error<DataSession>(ex.Message, ex);
                 _command.Cancel();
-                Assert.DatabaseError(ex);
+                Assert.DatabaseError(ex, text);
             }
             return result;
         }
@@ -435,7 +446,7 @@ namespace Tatan.Data
 
         private static DbProviderFactory Get(string name)
         {
-            if (!_dbFactories.Contains(name))
+            if (!_dbFactories.ContainsKey(name))
             {
                 lock (_lock)
                 {

@@ -1,0 +1,19 @@
+﻿{
+	"Url": "https://kyfw.12306.cn/otn/login/checkUser",
+	"Headers": {
+		"Accept": "*/*",
+		"Accept-Language": "zh-CN",
+		"Cache-Control": "no-cache",
+		"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+		"Connection": "Keep-Alive",
+		"Cookie": "@cookie@",
+		"If-Modified-Since": "0",
+		"Host": "kyfw.12306.cn",
+		"Referer": "https://kyfw.12306.cn/otn/leftTicket/init",
+		"User-Agent": "Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko",
+		"X-Requested-With": "XMLHttpRequest"
+	},
+	"Content": {
+		"_json_att": ""
+	}
+}

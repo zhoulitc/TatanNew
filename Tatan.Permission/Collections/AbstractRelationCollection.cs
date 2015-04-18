@@ -1,20 +1,21 @@
-﻿namespace Tatan.Permission.Collections
+﻿using System.Collections.Generic;
+
+namespace Tatan.Permission.Collections
 {
     using Common;
-    using Common.Collections;
     using Common.Exception;
     using Data;
 
     /// <summary>
     /// 关联集合
     /// </summary>
-    public abstract class AbstractRelationCollection<T> where T : IDentifiable, INameable, IDataEntity, new()
+    public abstract class AbstractRelationCollection<T> where T : class, IDentifiable, INameable, IDataEntity, new()
     {
 // ReSharper disable once StaticFieldInGenericType
         /// <summary>
         /// 
         /// </summary>
-        protected static readonly ListMap<string, string> Sqls;
+        protected static readonly Dictionary<string, string> Sqls;
 
         /// <summary>
         /// 
@@ -43,7 +44,7 @@
 
         static AbstractRelationCollection()
         {
-            Sqls = new ListMap<string, string>(4)
+            Sqls = new Dictionary<string, string>(4)
             {
                 {"contains", "SELECT COUNT(1) FROM [{0}] WHERE {2}={1}{2} AND {3}={1}{3}"},
                 {"add", "INSERT INTO [{0}]({2},{3}) VALUES({1}{2},{1}{3})"},
@@ -99,7 +100,7 @@
         {
             Assert.ArgumentNotNull("Source", Source);
             if (Contains(relation))
-                Assert.DuplicateRecords();
+                Assert.DuplicateRecords(relation.Id, relation.Name);
             var sql = string.Format(Sqls["add"], TableName, Source.Provider.ParameterSymbol, ThisName, ThatName);
             return Source.UseSession(sql, session => session.Execute(sql, parameters =>
             {
@@ -117,7 +118,7 @@
         {
             Assert.ArgumentNotNull("Source", Source);
             if (!Contains(relation))
-                Assert.NotExistRecords();
+                Assert.NotExistRecords(relation.Id, relation.Name);
             var sql = string.Format(Sqls["remove"], TableName, Source.Provider.ParameterSymbol, ThisName, ThatName);
             return Source.UseSession(TableName, session => session.Execute(sql, parameters =>
             {

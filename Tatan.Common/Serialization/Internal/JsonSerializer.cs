@@ -1,6 +1,7 @@
 ﻿namespace Tatan.Common.Serialization.Internal
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.IO;
     using System.Runtime.Serialization.Json;
@@ -9,6 +10,7 @@
     {
         #region 单例
         private static readonly JsonSerializer _instance = new JsonSerializer();
+        private static readonly Type _dictionaryType = typeof(IDictionary);
         private readonly IDictionary<Type, DataContractJsonSerializer> _typeMap;
         private JsonSerializer()
             : base(null, null)
@@ -49,7 +51,8 @@
             {
                 lock (_typeMap)
                 {
-                    _typeMap.Add(type, new DataContractJsonSerializer(type));
+                    _typeMap.Add(type, new DataContractJsonSerializer(type, 
+                        new DataContractJsonSerializerSettings() { UseSimpleDictionaryFormat = true }));
                 }
             }
             return (T)_typeMap[type].ReadObject(ms);

@@ -1,6 +1,7 @@
-﻿namespace Tatan.Common.Logging
+﻿using System.Diagnostics;
+
+namespace Tatan.Common.Logging
 {
-    using System.Collections.Generic;
     using System;
 
     /// <summary>
@@ -8,59 +9,231 @@
     /// </summary>
     public static class Log
     {
-        private static readonly IDictionary<string, ILog> _logs;
-        private static readonly object _lock;
-
-        static Log()
-        {
-            _logs = new Dictionary<string, ILog>
-            {
-                {typeof (NullLog).FullName, new NullLog()},
-                {typeof (DefaultLog).FullName, new DefaultLog("logs")}
-            };
-            _lock = new object();
-            Level = LogLevel.Debug; //默认级别
-            Current = _logs[typeof(DefaultLog).FullName];
-        }
+        private static event Action<Level, string, string, Exception> Writing;
+        private static readonly string _fullName = typeof (Log).FullName;
 
         /// <summary>
-        /// 获取或设置当前的日志级别
+        /// 注册日志行为
         /// </summary>
-        public static LogLevel Level { get; set; }
-
-        /// <summary>
-        /// 获取指定日志类型的对象
-        /// </summary>
-        /// <typeparam name="T">日志类型</typeparam>
+        /// <param name="writing"></param>
         /// <returns></returns>
-        public static ILog Get<T>() where T : ILog
+        internal static void Register(Action<Level, string, string, Exception> writing)
         {
-            var type = typeof (T);
-            if (!_logs.ContainsKey(type.FullName))
-            {
-                var constructor = type.GetConstructor(Type.EmptyTypes);
-                if (constructor == null)
-                    return _logs[typeof (NullLog).FullName];
-
-                var log = constructor.Invoke(null) as ILog;
-                if (log != null)
-                {
-                    lock (_lock)
-                    {
-                        if (!_logs.ContainsKey(type.FullName))
-                        {
-                            Current = log;
-                            _logs.Add(type.FullName, Current);
-                        }
-                    }
-                }
-            }
-            return _logs[type.FullName];
+            if (writing == null) return;
+            Writing += writing;
         }
 
         /// <summary>
-        /// 获取最近调用的日志对象
+        /// 销毁日志行为
         /// </summary>
-        public static ILog Current { get; private set; }
+        /// <param name="writing"></param>
+        /// <returns></returns>
+        internal static void Undo(Action<Level, string, string, Exception> writing)
+        {
+            if (writing == null) return;
+            Writing -= writing;
+        }
+
+        /// <summary>
+        /// 日志级别
+        /// </summary>
+        public enum Level
+        {
+            /// <summary>
+            /// 调试
+            /// </summary>
+            Debug = 4,
+
+            /// <summary>
+            /// 信息
+            /// </summary>
+            Info = 3,
+
+            /// <summary>
+            /// 警告
+            /// </summary>
+            Warn = 2,
+
+            /// <summary>
+            /// 错误
+            /// </summary>
+            Error = 1,
+
+            /// <summary>
+            /// 致命错误
+            /// </summary>
+            Fatal = 0
+        }
+
+        #region Debug
+
+        /// <summary>
+        /// 提供Debug级别的日志
+        /// <para>此级别日志只能写入文件</para>
+        /// <para>文件名格式为????.debug.log</para>
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="ex"></param>
+        public static void Debug(string message, Exception ex = null)
+        {
+            Write(Level.Debug, CurrentLogger, message, ex);
+        }
+
+        /// <summary>
+        /// 提供Debug级别的日志
+        /// <para>此级别日志只能写入文件</para>
+        /// <para>文件名格式为????.debug.log</para>
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="ex"></param>
+        public static void Debug<T>(string message, Exception ex = null) where T : class
+        {
+            Write(Level.Debug, typeof (T).FullName, message, ex);
+        }
+
+        #endregion
+
+        #region Info
+
+        /// <summary>
+        /// 提供Info级别的日志
+        /// <para>此级别日志只能写入文件</para>
+        /// <para>文件名格式为????.info.log</para>
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="ex"></param>
+        public static void Info(string message, Exception ex = null)
+        {
+            Write(Level.Info, CurrentLogger, message, ex);
+        }
+
+        /// <summary>
+        /// 提供Info级别的日志
+        /// <para>此级别日志只能写入文件</para>
+        /// <para>文件名格式为????.info.log</para>
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="ex"></param>
+        public static void Info<T>(string message, Exception ex = null) where T : class
+        {
+            Write(Level.Info, typeof (T).FullName, message, ex);
+        }
+
+        #endregion
+
+        #region Warn
+
+        /// <summary>
+        /// 提供Warn级别的日志
+        /// <para>此级别日志既可以写入文件也可以写入数据库</para>
+        /// <para>写入表必须带有表名、字段Logger、Message、Exception</para>
+        /// <para>文件名格式为????.warn.log</para>
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="ex"></param>
+        public static void Warn(string message, Exception ex = null)
+        {
+            Write(Level.Warn, CurrentLogger, message, ex);
+        }
+
+        /// <summary>
+        /// 提供Warn级别的日志
+        /// <para>此级别日志既可以写入文件也可以写入数据库</para>
+        /// <para>写入表必须带有表名、字段Logger、Message、Exception</para>
+        /// <para>文件名格式为????.warn.log</para>
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="ex"></param>
+        public static void Warn<T>(string message, Exception ex = null) where T : class
+        {
+            Write(Level.Warn, typeof (T).FullName, message, ex);
+        }
+
+        #endregion
+
+        #region Error
+
+        /// <summary>
+        /// 提供Error级别的日志
+        /// <para>此级别日志既可以写入文件也可以写入数据库</para>
+        /// <para>写入表必须带有表名、字段Logger、Message、Exception</para>
+        /// <para>文件名格式为????.error.log</para>
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="ex"></param>
+        public static void Error(string message, Exception ex = null)
+        {
+            Write(Level.Error, CurrentLogger, message, ex);
+        }
+
+        /// <summary>
+        /// 提供Error级别的日志
+        /// <para>此级别日志既可以写入文件也可以写入数据库</para>
+        /// <para>写入表必须带有表名、字段Logger、Message、Exception</para>
+        /// <para>文件名格式为????.error.log</para>
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="ex"></param>
+        public static void Error<T>(string message, Exception ex = null) where T : class
+        {
+            Write(Level.Error, typeof (T).FullName, message, ex);
+        }
+
+        #endregion
+
+        #region Fatal
+
+        /// <summary>
+        /// 提供Fatal级别的日志
+        /// <para>此级别日志既可以写入文件也可以写入数据库</para>
+        /// <para>写入表必须带有表名、字段Logger、Message、Exception</para>
+        /// <para>文件名格式为????.fatal.log</para>
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="ex"></param>
+        public static void Fatal(string message, Exception ex = null)
+        {
+            Write(Level.Fatal, CurrentLogger, message, ex);
+        }
+
+        /// <summary>
+        /// 提供Fatal级别的日志
+        /// <para>此级别日志既可以写入文件也可以写入数据库</para>
+        /// <para>写入表必须带有表名、字段Logger、Message、Exception</para>
+        /// <para>文件名格式为????.fatal.log</para>
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="ex"></param>
+        public static void Fatal<T>(string message, Exception ex = null) where T : class
+        {
+            Write(Level.Fatal, typeof (T).FullName, message, ex);
+        }
+
+        #endregion
+
+        private static string CurrentLogger
+        {
+            get
+            {
+                var trace = new StackTrace(false);
+                var index = 1;
+                string className;
+                do
+                {
+                    var method = trace.GetFrame(index).GetMethod();
+                    className = method.ReflectedType != null
+                        ? method.ReflectedType.FullName
+                        : _fullName;
+                    index++;
+                } while (className == _fullName);
+                return className;
+            }
+        }
+
+        private static void Write(Level level, string logger, string message, Exception ex)
+        {
+            if (Writing == null) return;
+            Writing(level, logger, message, ex);
+        }
     }
 }

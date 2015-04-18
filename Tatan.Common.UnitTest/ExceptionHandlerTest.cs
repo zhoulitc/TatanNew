@@ -28,7 +28,7 @@ namespace Tatan.Common.UnitTest
         [ExpectedException(typeof(System.Exception))]
         public void TestDatabaseError()
         {
-            Tatan.Common.Exception.Assert.DatabaseError(new System.Exception("wahaha"));
+            Tatan.Common.Exception.Assert.DatabaseError(new System.Exception("wahaha"), "select *");
         }
 
         [TestMethod]
@@ -42,7 +42,8 @@ namespace Tatan.Common.UnitTest
         [ExpectedException(typeof(System.Exception))]
         public void TestDuplicateRecords()
         {
-            Tatan.Common.Exception.Assert.DuplicateRecords();
+            object s = "";
+            Tatan.Common.Exception.Assert.DuplicateRecords(s, "");
         }
 
         [TestMethod]
@@ -63,13 +64,13 @@ namespace Tatan.Common.UnitTest
         [ExpectedException(typeof(System.IndexOutOfRangeException))]
         public void TestIndexOutOfRange()
         {
-            Tatan.Common.Exception.Assert.IndexInOfRange(-1);
-            Tatan.Common.Exception.Assert.IndexInOfRange(1);
+            Tatan.Common.Exception.Assert.IndexInRange(-1);
+            Tatan.Common.Exception.Assert.IndexInRange(1);
 
-            Tatan.Common.Exception.Assert.IndexInOfRange(3, 2);
-            Tatan.Common.Exception.Assert.IndexInOfRange(1, 2);
+            Tatan.Common.Exception.Assert.IndexInRange(3, 2);
+            Tatan.Common.Exception.Assert.IndexInRange(1, 2);
 
-            Tatan.Common.Exception.Assert.IndexInOfRange(-1, 2);
+            Tatan.Common.Exception.Assert.IndexInRange(-1, 2);
         }
 
         [TestMethod]
@@ -91,7 +92,7 @@ namespace Tatan.Common.UnitTest
         [ExpectedException(typeof(System.Exception))]
         public void TestNotExistRecords()
         {
-            Tatan.Common.Exception.Assert.NotExistRecords();
+            Tatan.Common.Exception.Assert.NotExistRecords("","");
         }
 
         [TestMethod]

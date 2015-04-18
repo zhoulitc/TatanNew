@@ -54,118 +54,95 @@ namespace Tatan.Common.UnitTest
             }
         }
 
+        private static void CommonConvertTest<T>(T value, T min, T max, string lagel, T def) where T : struct
+        {
+            //测试正常值
+            var s = value.ToString().As(def);
+            Assert.AreEqual(s, value);
+
+            //测试空值
+            string n = null;
+            Assert.AreEqual(n.As(def), def);
+
+            //测试越界值
+            if (min.ToString() == "0")
+            {
+                var lr = "-1".As(def);
+                Assert.AreEqual(lr, def);
+            }
+            else
+            {
+                var lr = (min.ToString() + "0").As(def);
+                Assert.AreEqual(lr, def);
+            }
+            var ur = (max.ToString() + "0").As(def);
+            Assert.AreEqual(ur, def);
+
+            //测试非法值
+            var lg = lagel.As(def);
+            Assert.AreEqual(lg, def);
+
+            //测试前后空格值
+            var tm = ("            " + value.ToString() + "            ").As(def);
+            Assert.AreEqual(tm, value);
+        }
+
         [TestMethod]
         public void TestConvert()
         {
-            var a1 = "false".AsBoolean();
-            var a2 = "2321".AsBoolean(true);
-            Assert.IsFalse(a1);
-            Assert.IsTrue(a2);
+            CommonConvertTest<byte>(123, byte.MinValue, byte.MaxValue, "12d", 1);
+            CommonConvertTest<sbyte>(-123, sbyte.MinValue, sbyte.MaxValue, "12d", -1);
+            CommonConvertTest<short>(-1233, short.MinValue, short.MaxValue, "12d", -1);
+            CommonConvertTest<ushort>(1233, ushort.MinValue, ushort.MaxValue, "12d", 1);
+            CommonConvertTest(-12323123, int.MinValue, int.MaxValue, "12d", -1);
+            CommonConvertTest<uint>(1233231, uint.MinValue, uint.MaxValue, "12d", 1);
+            CommonConvertTest(-1212312421221321333, long.MinValue, long.MaxValue, "12d", -1);
+            CommonConvertTest<ulong>(12123124212321321333, ulong.MinValue, ulong.MaxValue, "12d", 1);
+            CommonConvertTest(7922816251464337593543950335m, decimal.MinValue, decimal.MaxValue, "12d", -1);
+            CommonConvertTest(1.79769e+208, double.MinValue, double.MaxValue, "12d", -1);
+            CommonConvertTest(-3.40282e+028f, float.MinValue, float.MaxValue, "12d", -1);
 
-            var q1 = byte.MaxValue.ToString().AsInt8();
-            var q2 = "s12".AsInt8(2);
-            Assert.AreEqual(q1, byte.MaxValue);
-            Assert.AreEqual(q2, 2);
+            var a1 = "false".As<bool>();
+            var aa1 = "1".As<bool>();
+            var a2 = "2321".As(true);
+            Assert.IsFalse(a1);
+            Assert.IsTrue(aa1);
+            Assert.IsTrue(a2);
 
             var z1 = "32".AsBytes();
             var z2 = "s12".AsBytes(Encoding.ASCII);
             Assert.AreEqual(z1.Length, 2);
             Assert.AreEqual(z2.Length, 3);
 
-            var w1 = "2014-05-10".AsDateTime();
-            var w2 = "s12".AsDateTime(new DateTime(2014, 5, 10));
+            var w1 = "2014-05-10".As<DateTime>();
+            var w2 = "s12".As(new DateTime(2014, 5, 10));
             Assert.AreEqual(w1, new DateTime(2014,5,10));
             Assert.AreEqual(w2, new DateTime(2014, 5, 10));
 
-            var q11 = decimal.MaxValue.ToString().AsDecimal();
-            var q22 = "s12".AsDecimal(2);
-            Assert.AreEqual(q11, decimal.MaxValue);
-            Assert.AreEqual(q22, 2);
-
-            var q111 = "32.2".ToString().AsDouble();
-            var q222 = "s12".AsDouble(2);
-            Assert.AreEqual(q111, 32.2);
-            Assert.AreEqual(q222, 2);
-
-            var q1111 = "32.2".ToString().AsFloat();
-            var q2222 = "s12".AsFloat(2);
-            Assert.AreEqual(q1111, 32.2f);
-            Assert.AreEqual(q2222, 2);
-
-            var s1 = Guid.New().AsGuid();
-            var s2 = Guid.New().AsGuid("x");
-            var s3 = "".AsGuid();
-            var s4 = "sdsadsa".AsGuid();
+            var s1 = Guid.New().As<System.Guid>();
+            var s2 = Guid.New().As<System.Guid>();
+            var s3 = "".As<System.Guid>();
+            var s4 = "sdsadsa".As<System.Guid>();
             Assert.AreEqual(s1.ToString().Length>0, true);
-            Assert.AreEqual(s2.ToString(), "00000000-0000-0000-0000-000000000000");
+            Assert.AreEqual(s2.ToString().Length > 0, true);
             Assert.AreEqual(s3.ToString(), "00000000-0000-0000-0000-000000000000");
             Assert.AreEqual(s4.ToString(), "00000000-0000-0000-0000-000000000000");
-
-            var q11111 = int.MaxValue.ToString().AsInt32();
-            var q22222 = "s12".AsInt32(2);
-            Assert.AreEqual(q11111, int.MaxValue);
-            Assert.AreEqual(q22222, 2);
-
-            var q111111 = long.MaxValue.ToString().AsInt64();
-            var q222222 = "s12".AsInt64(2);
-            Assert.AreEqual(q111111, long.MaxValue);
-            Assert.AreEqual(q222222, 2);
-
-            var q1111111 = sbyte.MaxValue.ToString().AsInt8();
-            var q2222222 = "s12".AsInt8(2);
-            Assert.AreEqual(q1111111, sbyte.MaxValue);
-            Assert.AreEqual(q2222222, 2);
-
-            var q11111111 = short.MaxValue.ToString().AsInt16();
-            var q22222222 = "s12".AsInt16(2);
-            Assert.AreEqual(q11111111, short.MaxValue);
-            Assert.AreEqual(q22222222, 2);
-
-            var q111111111 = uint.MaxValue.ToString().AsUInt32();
-            var q222222222 = "s12".AsUInt32(2);
-            Assert.AreEqual(q111111111, uint.MaxValue);
-            Assert.AreEqual(q222222222, (uint)2);
-
-            var q1111111111 = ulong.MaxValue.ToString().AsUInt64();
-            var q2222222222 = "s12".AsUInt64(2);
-            Assert.AreEqual(q1111111111, ulong.MaxValue);
-            Assert.AreEqual(q2222222222, (ulong)2);
-
-            var q11111111111 = ushort.MaxValue.ToString().AsUInt16();
-            var q22222222222 = "s12".AsUInt16(2);
-            Assert.AreEqual(q11111111111, ushort.MaxValue);
-            Assert.AreEqual(q22222222222, (ushort)2);
-
-            var x1 = "32".As<int>();
-            //var x2 = "s12".As<Test>(new Test());
-            //var x3 = "s12".As<Test2>(new Test2());
-            string s = null;
-            var x4 = s.As<int>();
-            Assert.AreEqual(x1, 32);
-            //Assert.IsNotNull(x2);
-            //Assert.IsNotNull(x3);
-            Assert.IsNotNull(x4);
-            var sss = 1;
-            var ssss = sss.As<double>();
         }
 
         [TestMethod]
         public void TestRegex()
         {
-            Assert.IsFalse("fals1e".IsBool());
-            Assert.IsTrue("false".IsBool());
+            Assert.IsFalse("fals1e".IsBoolean());
+            Assert.IsTrue("false".IsBoolean());
 
             Assert.IsTrue("2014-5-10".IsDateTime());
             Assert.IsFalse("2014-51-10".IsDateTime());
 
-            Assert.IsTrue("2014-5-10".IsDateTimeOffset());
-            Assert.IsFalse("2014-51-10".IsDateTimeOffset());
-
             Assert.IsTrue("2014@qq.com".IsEmail());
             Assert.IsFalse("2014@@qq.com".IsEmail());
 
-            Assert.IsTrue("2014".IsInt());
-            Assert.IsFalse("2014@".IsInt());
+            Assert.IsTrue("2014".IsInteger());
+            Assert.IsFalse("2014@".IsInteger());
 
 
             Assert.IsTrue("2014.3".IsNumber());
@@ -174,8 +151,6 @@ namespace Tatan.Common.UnitTest
             Assert.IsTrue("13899999999".IsPhone());
             Assert.IsFalse("138999999992".IsPhone());
 
-            Assert.IsTrue("13899999999".IsUInt());
-            Assert.IsFalse("-138999999992".IsUInt());
 
             Assert.IsTrue("13899999999".IsMatch(@"^\d"));
             Assert.IsFalse("-138999999992".IsMatch(@"^\d"));
@@ -209,11 +184,11 @@ namespace Tatan.Common.UnitTest
         {
             Assert.AreEqual(T1.A.AsInt(), 0);
             Assert.AreEqual(T1.B.AsInt(), 1);
-            Assert.AreEqual(T1.A.AsEnum<T2>(), T2.AA);
+            Assert.AreEqual(T1.A.As<T2>(), T2.AA);
             try
             {
-                var T = T1.B.AsEnum<T2>();
-                Assert.AreEqual(T1.B.AsEnum<T2>(), T2.BB);
+                var T = T1.B.As<T2>();
+                Assert.AreEqual(T1.B.As<T2>(), T2.BB);
             }
             catch (System.Exception ex)
             {

@@ -1,0 +1,35 @@
+﻿{
+	"Url": "https://kyfw.12306.cn/otn/confirmPassenger/checkOrderInfo",
+	"Headers": {
+		"Accept": "application/json, text/javascript, */*; q=0.01",
+		"Accept-Encoding": "gzip, deflate",
+		"Accept-Language": "zh-CN",
+		"Cache-Control": "no-cache",
+		"Connection": "Keep-Alive",
+		"Cookie": "@cookie@",
+		"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+		"Host": "kyfw.12306.cn",
+		"Referer": "https://kyfw.12306.cn/otn/confirmPassenger/initDc",
+		"User-Agent": "Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko",
+		"X-Requested-With": "XMLHttpRequest"
+	},
+	"Content": {
+		"cancel_flag": "2",
+		"bed_level_order_num": "000000000000000000000000000000",
+		"passengerTicketStr": "@passenger@",
+
+		3%2C0%2C1%2C%E5%91%A8%E8%A0%A1%2C1%2C431021198805280038%2C13686893341%2CN,
+		"3,0,1,周蠡,1,431021198805280038,13686893341,N"
+
+		"oldPassengerStr": "@oldPassenger@",
+
+		%E5%91%A8%E8%A0%A1%2C1%2C431021198805280038%2C1_
+		"周蠡,1,431021198805280038,1_"
+
+		"tour_flag": "dc",
+		"randCode": "@code@",
+		"@key@": "@value@",
+		"_json_att": "",
+		"REPEAT_SUBMIT_TOKEN": "@token"
+	}
+}

@@ -1,6 +1,8 @@
 ﻿using System;
+using System.IO;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Tatan.Common.Extension.String.IO;
 
 namespace Tatan.Common.UnitTest
 {
@@ -45,12 +47,12 @@ namespace Tatan.Common.UnitTest
         [TestMethod]
         public void DirectoryTestCopy()
         {
-            Directory.Copy(olddir, newdir);
+            olddir.CopyDirectory(newdir);
             Assert.AreEqual(SystemDirectory.Exists(newdir + "testdir\\"), true);
 
             try
             {
-                Directory.Copy(null, newdir);
+                Io.CopyDirectory(null, newdir);
             }
             catch (System.Exception e)
             {
@@ -63,7 +65,7 @@ namespace Tatan.Common.UnitTest
         {
             try
             {
-                Directory.Copy(null, newdir);
+                Io.CopyDirectory(null, newdir);
             }
             catch (System.Exception e)
             {
@@ -74,14 +76,14 @@ namespace Tatan.Common.UnitTest
         [TestMethod]
         public void FileTestAppendText()
         {
-            File.AppendText(file, a => a.Write("a"));
+            file.AppendText(a => a.Write("a"));
             byte[] ss = new byte[512];
-            File.OpenRead(file, a => a.Read(ss, 0, ss.Length));
+            file.OpenRead(a => a.Read(ss, 0, ss.Length));
             Assert.AreEqual(ss[0], 97);
 
             try
             {
-                File.AppendText(null, null);
+                file.AppendText(null);
             }
             catch (System.Exception e)
             {
@@ -90,7 +92,7 @@ namespace Tatan.Common.UnitTest
 
             try
             {
-                File.AppendText(file, null);
+                file.AppendText(null);
             }
             catch (System.Exception e)
             {
@@ -101,32 +103,14 @@ namespace Tatan.Common.UnitTest
         [TestMethod]
         public void FileTestCreate()
         {
-            File.Create(file, a => a.Write(Encoding.UTF8.GetBytes("a"), 0, 1));
+            file.CreateFile(a => a.Write(Encoding.UTF8.GetBytes("a"), 0, 1));
             byte[] ss = new byte[512];
-            File.OpenRead(file, a => a.Read(ss, 0, ss.Length));
+            file.OpenRead(a => a.Read(ss, 0, ss.Length));
             Assert.AreEqual(ss[0], 97);
 
             try
             {
-                File.AppendText(null, null);
-            }
-            catch (System.Exception e)
-            {
-                Assert.AreEqual(e.Message, "参数为空。\r\n参数名: path");
-            }
-        }
-
-        [TestMethod]
-        public void FileTestCreateText()
-        {
-            File.CreateText(file, a => a.Write("a"));
-            byte[] ss = new byte[512];
-            File.OpenRead(file, a => a.Read(ss, 0, ss.Length));
-            Assert.AreEqual(ss[0], 97);
-
-            try
-            {
-                File.CreateText(null, null);
+                file.AppendText(null);
             }
             catch (System.Exception e)
             {
@@ -137,12 +121,12 @@ namespace Tatan.Common.UnitTest
         [TestMethod]
         public void FileTestOpenWrite()
         {
-            File.OpenWrite(file, a => a.Write(Encoding.UTF8.GetBytes("a"), 0, 1));
-            File.OpenText(file, a => Assert.AreEqual(a.ReadToEnd(), "a"));
+            file.OpenWrite(a => a.Write(Encoding.UTF8.GetBytes("a"), 0, 1));
+            file.OpenRead(a => Assert.AreEqual(a.ReadToEnd(), "a"));
 
             try
             {
-                File.OpenWrite(null, null);
+                file.OpenWrite(null);
             }
             catch (System.Exception e)
             {
@@ -150,7 +134,7 @@ namespace Tatan.Common.UnitTest
             }
             try
             {
-                File.AppendText(file, null);
+                file.AppendText(null);
             }
             catch (System.Exception e)
             {
@@ -158,7 +142,7 @@ namespace Tatan.Common.UnitTest
             }
             try
             {
-                File.OpenText(null, null);
+                file.OpenRead((Action<FileStream>)null);
             }
             catch (System.Exception e)
             {
@@ -166,23 +150,7 @@ namespace Tatan.Common.UnitTest
             }
             try
             {
-                File.OpenText(file, null);
-            }
-            catch (System.Exception e)
-            {
-                Assert.AreEqual(e.Message, "参数为空。\r\n参数名: action");
-            }
-            try
-            {
-                File.OpenRead(null, null);
-            }
-            catch (System.Exception e)
-            {
-                Assert.AreEqual(e.Message, "参数为空。\r\n参数名: path");
-            }
-            try
-            {
-                File.OpenRead(file, null);
+                file.OpenRead((Action<StreamReader>)null);
             }
             catch (System.Exception e)
             {

@@ -1,0 +1,8 @@
+﻿{
+    "Configurations": [
+        "Configure" : { "name": "value" },
+        "ConfigureSection" : { 
+            "Configure" : { "name": "value" } 
+        },
+    ]
+}

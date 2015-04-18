@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Tatan.Common.Extension.String.IO;
 using Tatan.Common.I18n;
 using Tatan.Common.IO;
 
@@ -13,9 +14,11 @@ namespace Tatan.Common.UnitTest
         [TestInitialize]
         public void Init()
         {
-            File.CreateText(_pathC, w =>
+            _pathC.CreateFile();
+            _pathC.AppendText(w =>
                 w.WriteLine("<?xml version='1.0' encoding='utf-8'?><China><Name>名称</Name></China>"));
-            File.CreateText(_pathE, w =>
+            _pathE.CreateFile();
+            _pathE.AppendText(w =>
                 w.WriteLine("<?xml version='1.0' encoding='utf-8'?><English><Name>Name</Name></English>"));
         }
 

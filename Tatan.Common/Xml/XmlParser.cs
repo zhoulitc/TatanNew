@@ -34,11 +34,16 @@
             }
             catch (System.Exception ex)
             {
-                Log.Current.Warn(typeof(XmlParser), ex.Message, ex);
+                Log.Error(ex.Message, ex);
                 return null;
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <returns></returns>
         public static IDictionary<string, string> ToDictionary(string filename)
         {
             var root = GetRoot(filename);

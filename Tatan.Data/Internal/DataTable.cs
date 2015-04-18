@@ -1,4 +1,8 @@
-﻿// ReSharper disable once CheckNamespace
+﻿using System.Linq;
+using Tatan.Common;
+// ReSharper disable once CheckNamespace
+
+
 namespace Tatan.Data
 {
     using System;
@@ -54,31 +58,14 @@ namespace Tatan.Data
                 _entityPrototype = (IDataEntity)constructorInfo.Invoke(new object[] { DataEntity.DefaultId });
 
             //初始化SQL语句
-            _insert = string.Format("INSERT INTO {0}({1}) VALUES({2})", Name, GetFields(_entityPrototype), GetParameters(_entityPrototype));
-            _delete = string.Format("DELETE FROM {0} WHERE ", Name);
-            _deleteIdentity = string.Format("{0}{1}={2}", _delete, _identityName, DataSource.Provider.ParameterSymbol + _identityName);
-            _update = string.Format("UPDATE {0} SET {{0}} WHERE ", Name);
-            _updateIdentity = string.Format("{0}{1}={2}", _update, _identityName, DataSource.Provider.ParameterSymbol + _identityName);
-            _counts = string.Format("SELECT COUNT(1) FROM {0}", Name);
-            _count = string.Format("{0} WHERE ", _counts);
-        }
-
-        private static string GetFields(IEnumerable<string> entityPrototype)
-        {
-            if (entityPrototype == null) return string.Empty;
-
-            var builder = new StringBuilder(100);
-            foreach (var name in entityPrototype)
-                builder.Append(',').Append(name);
-            if (builder.Length > 0)
-                builder = builder.Remove(0, 1);
-            return builder.ToString();
-        }
-
-        private string GetParameters(IEnumerable<string> entityPrototype)
-        {
-            return DataSource.Provider.ParameterSymbol +
-                GetFields(entityPrototype).Replace(",", "," + DataSource.Provider.ParameterSymbol);
+            var builder = new SqlBuilder(Name, _identityName, _entityPrototype.ToArray(), DataSource.Provider.ParameterSymbol);
+            _insert = builder.GetInsertStatement();
+            _delete = builder.GetDeleteStatement(" ");
+            _deleteIdentity = builder.GetDeleteStatement();
+            _update = builder.GetUpdateStatement(new[] {"{0}"}, " ");
+            _updateIdentity = builder.GetUpdateStatement(new[] {"{0}"});
+            _counts = builder.GetCountStatement("1=1");
+            _count = builder.GetCountStatement(" ");
         }
 
         #region IDataTable

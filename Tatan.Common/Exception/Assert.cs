@@ -1,17 +1,15 @@
-﻿using System.IO;
-
-namespace Tatan.Common.Exception
+﻿namespace Tatan.Common.Exception
 {
     using System;
     using System.Collections.Generic;
+    using System.Data.Common;
+    using System.IO;
     using System.Text.RegularExpressions;
     using I18n;
     using IO;
-    using Directory = Directory;
-    using File = File;
-    using Collections;
 
     #region 断言处理类
+
     /// <summary>
     /// 断言处理类，不满足条件则抛出异常
     /// </summary>
@@ -37,6 +35,7 @@ namespace Tatan.Common.Exception
         }
 
         #region Exception
+
         /// <summary>
         /// 参数不为空
         /// </summary>
@@ -45,7 +44,7 @@ namespace Tatan.Common.Exception
         public static void ArgumentNotNull(string argName, string arg)
         {
             if (string.IsNullOrEmpty(arg))
-                throw new ArgumentNullException(argName, _exception.GetText("ArgumentNull"));
+                throw new ArgumentNullException(argName);
         }
 
         /// <summary>
@@ -53,11 +52,10 @@ namespace Tatan.Common.Exception
         /// </summary>
         /// <param name="argName"></param>
         /// <param name="arg"></param>
-        public static void ArgumentNotNull<T>(string argName, T arg)
+        public static void ArgumentNotNull<T>(string argName, T arg) where T : class
         {
-// ReSharper disable once CompareNonConstrainedGenericWithNull
             if (arg == null)
-                throw new ArgumentNullException(argName, _exception.GetText("ArgumentNull"));
+                throw new ArgumentNullException(argName);
         }
 
         /// <summary>
@@ -68,7 +66,7 @@ namespace Tatan.Common.Exception
         public static void KeyFound<T>(T key) where T : class
         {
             if (key == null)
-                throw new KeyNotFoundException(_exception.GetText("KeyNotFound"));
+                throw new KeyNotFoundException();
         }
 
         /// <summary>
@@ -80,29 +78,17 @@ namespace Tatan.Common.Exception
         public static void KeyFound<T>(IDictionary<string, T> map, string key)
         {
             if (!map.ContainsKey(key))
-                throw new KeyNotFoundException(_exception.GetText("KeyNotFound"));
-        }
-
-        /// <summary>
-        /// 键存在
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="map"></param>
-        /// <param name="key"></param>
-        public static void KeyFound<T>(ListMap<string, T> map, string key)
-        {
-            if (!map.Contains(key))
-                throw new KeyNotFoundException(_exception.GetText("KeyNotFound"));
+                throw new KeyNotFoundException();
         }
 
         /// <summary>
         /// 索引不越界
         /// </summary>
         /// <param name="index"></param>
-        public static void IndexInOfRange(int index)
+        public static void IndexInRange(int index)
         {
             if (index < 0)
-                throw new IndexOutOfRangeException(_exception.GetText("IndexOutOfRange"));
+                throw new IndexOutOfRangeException();
         }
 
         /// <summary>
@@ -110,10 +96,10 @@ namespace Tatan.Common.Exception
         /// </summary>
         /// <param name="index"></param>
         /// <param name="count"></param>
-        public static void IndexInOfRange(int index, int count)
+        public static void IndexInRange(int index, int count)
         {
             if (index < 0 || index >= count)
-                throw new IndexOutOfRangeException(_exception.GetText("IndexOutOfRange"));
+                throw new IndexOutOfRangeException();
         }
 
         /// <summary>
@@ -122,27 +108,31 @@ namespace Tatan.Common.Exception
         /// <returns></returns>
         public static void NotSupported()
         {
-            throw new NotSupportedException(_exception.GetText("NotSupported"));
-        }
-
-        /// <summary>
-        /// 不支持
-        /// </summary>
-        /// <returns></returns>
-        public static T NotSupported<T>()
-        {
-            throw new NotSupportedException(_exception.GetText("NotSupported"));
+            throw new NotSupportedException();
         }
 
         /// <summary>
         /// 对象没被销毁
         /// </summary>
         /// <param name="isDisposed"></param>
+        /// <param name="name"></param>
         /// <exception cref="ObjectDisposedException"></exception>
-        public static void ObjectNotDisposed(bool isDisposed)
+        public static void ObjectNotDisposed(bool isDisposed, string name)
         {
             if (isDisposed)
-                throw new ObjectDisposedException(_exception.GetText("ObjectDisposed"));
+                throw new ObjectDisposedException(name);
+        }
+
+        /// <summary>
+        /// 对象没被销毁
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="name"></param>
+        /// <exception cref="ObjectDisposedException"></exception>
+        public static void ObjectNotDisposed(object obj, string name)
+        {
+            if (obj == null)
+                throw new ObjectDisposedException(name);
         }
 
         /// <summary>
@@ -152,17 +142,17 @@ namespace Tatan.Common.Exception
         public static void DirectoryFound(string path)
         {
             if (!Directory.Exists(path))
-                throw new DirectoryNotFoundException(_exception.GetText("DirectoryNotFound"));
+                throw new DirectoryNotFoundException();
         }
 
         /// <summary>
-        /// 文件不存在
+        /// 文件存在
         /// </summary>
         /// <param name="path"></param>
         public static void FileFound(string path)
         {
             if (!File.Exists(path))
-                throw new FileNotFoundException(_exception.GetText("FileNotFound"), path);
+                throw new FileNotFoundException();
         }
 
         /// <summary>
@@ -173,7 +163,7 @@ namespace Tatan.Common.Exception
         public static void LegalMatch(Regex regex, string input)
         {
             if (!regex.IsMatch(input))
-                throw new Exception(_exception.GetText("IllegalMatch"));
+                throw new Exception(string.Format(_exception.GetText("IllegalMatch"), regex.ToString(), input));
         }
 
         /// <summary>
@@ -184,40 +174,48 @@ namespace Tatan.Common.Exception
         /// <exception cref="Exception"></exception>
         public static void LegalSql(string sql, string call)
         {
-            if (!sql.StartsWith("SELECT", StringComparison.OrdinalIgnoreCase) &&
-                !sql.StartsWith("UPDATE", StringComparison.OrdinalIgnoreCase) &&
-                !sql.StartsWith("INSERT", StringComparison.OrdinalIgnoreCase) &&
-                !sql.StartsWith("DELETE", StringComparison.OrdinalIgnoreCase) &&
-                !sql.StartsWith("TRUNCATE", StringComparison.OrdinalIgnoreCase) &&
-                !sql.StartsWith(call, StringComparison.OrdinalIgnoreCase))
-                throw new Exception(_exception.GetText("IllegalSql"));
+            sql = sql.ToUpper();
+            if (!sql.StartsWith("SELECT") &&
+                !sql.StartsWith("UPDATE") &&
+                !sql.StartsWith("INSERT") &&
+                !sql.StartsWith("DELETE") &&
+                !sql.StartsWith("TRUNCATE") &&
+                !sql.StartsWith(call.ToUpper()))
+                throw new Exception(string.Format(_exception.GetText("IllegalSql"), sql));
         }
 
         /// <summary>
         /// 数据库错误
         /// </summary>
         /// <param name="ex"></param>
-        public static void DatabaseError(Exception ex)
+        /// <param name="text"></param>
+        public static void DatabaseError(Exception ex, string text)
         {
-            throw new Exception(_exception.GetText("DatabaseError"), ex);
+            var code = string.Empty;
+            var exception = ex as DbException;
+            if (exception != null)
+            {
+                code = exception.ErrorCode.ToString();
+            }
+            throw new Exception(string.Format(_exception.GetText("DatabaseError"), code, text), ex);
         }
 
         /// <summary>
         /// 重复记录
         /// </summary>
         /// <exception cref="Exception"></exception>
-        public static void DuplicateRecords()
+        public static void DuplicateRecords<T>(T id, string name)
         {
-            throw new Exception(_exception.GetText("DuplicateRecords"));
+            throw new Exception(string.Format(_exception.GetText("DuplicateRecords"), id.ToString(), name));
         }
 
         /// <summary>
         /// 不存在此记录
         /// </summary>
         /// <exception cref="Exception"></exception>
-        public static void NotExistRecords()
+        public static void NotExistRecords<T>(T id, string name)
         {
-            throw new Exception(_exception.GetText("NotExistRecords"));
+            throw new Exception(string.Format(_exception.GetText("NotExistRecords"), id.ToString(), name));
         }
 
         /// <summary>
@@ -229,18 +227,40 @@ namespace Tatan.Common.Exception
         public static void IsAllow(int count, int max)
         {
             if (count > max)
-                throw new Exception(_exception.GetText("IsNotAllow"));
+                throw new Exception(string.Format(_exception.GetText("IsNotAllow"), max));
         }
 
         /// <summary>
         /// 类型错误
         /// </summary>
         /// <exception cref="Exception"></exception>
-        public static void TypeError()
+        public static void TypeError(Type no, Type yes)
         {
-            throw new Exception(_exception.GetText("TypeError"));
+            throw new Exception(string.Format(_exception.GetText("TypeError"), yes.FullName, no.FullName));
         }
+
+        /// <summary>
+        /// 类型必须为接口
+        /// </summary>
+        /// <param name="t"></param>
+        public static void TypeIsInterface(Type t)
+        {
+            if (!t.IsInterface)
+                throw new Exception(string.Format(_exception.GetText("TypeIsInterface"), t.FullName));
+        }
+
+        /// <summary>
+        /// 适配器必须存在
+        /// </summary>
+        /// <param name="action"></param>
+        public static void AdapterExists<T>(object action)
+        {
+            if (action == null)
+                throw new Exception(string.Format(_exception.GetText("AdapterExists"), typeof (T).FullName));
+        }
+
         #endregion
     }
+
     #endregion
 }

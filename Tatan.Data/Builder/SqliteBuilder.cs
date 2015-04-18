@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Tatan.Common.Collections;
 using Tatan.Common.IO;
 using Tatan.Data.Relation;
 
@@ -10,7 +9,7 @@ namespace Tatan.Data.Builder
     /// </summary>
     public sealed class SqliteBuilder : TableBuilder
     {
-        private readonly static ListMap<string, string> _types = new ListMap<string, string>(6)
+        private readonly static Dictionary<string, string> _types = new Dictionary<string, string>(6)
             {
                 {"I", "INTEGER"},
                 {"L", "INTEGER"},

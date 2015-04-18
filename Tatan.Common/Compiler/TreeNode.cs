@@ -220,6 +220,10 @@ namespace Tatan.Common.Compiler
             return max + 1;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return string.Format("value:{0}", Value);

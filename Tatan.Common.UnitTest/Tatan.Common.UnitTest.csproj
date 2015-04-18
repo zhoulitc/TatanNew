@@ -71,8 +71,7 @@
     <Compile Include="ExpressionParserTest.cs" />
     <Compile Include="LanguageTest.cs" />
     <Compile Include="LogTest.cs" />
-    <Compile Include="ListMapTest.cs" />
-    <Compile Include="CachesTest.cs" />
+    <Compile Include="CacheTest.cs" />
     <Compile Include="TreeNodeTest.cs" />
   </ItemGroup>
   <ItemGroup>

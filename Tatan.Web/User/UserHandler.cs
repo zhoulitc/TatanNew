@@ -1,4 +1,6 @@
-﻿namespace Tatan.Web.User
+﻿using Tatan.Common.Net;
+
+namespace Tatan.Web.User
 {
     using System;
     using Common;
@@ -57,7 +59,7 @@
                     flag = session.Execute(string.Format(_updateSql, Source.Provider.ParameterSymbol), p =>
                     {
                         p["Id"] = id;
-                        p["LastLoginTime", DataType.Date] = DateTime.Now;
+                        p["LastLoginTime", typeof(DateTime)] = DateTime.Now;
                         p["LastLoginIP"] = _GetIp();
 
                     }) == 1;
@@ -99,7 +101,7 @@
                     string.Format(_logoutSql, Source.Provider.ParameterSymbol), p =>
                             {
                                 p["Id"] = user.Id;
-                                p["LastLogoutTime", DataType.Date] = Date.Now();
+                                p["LastLogoutTime", typeof(DateTime)] = Date.Now();
                             }) == 1))
                 {
                     Http.Cache.Remove(guid);
@@ -111,7 +113,7 @@
             }
             catch (Exception ex)
             {
-                Log.Current.Error(typeof(UserHandler), ex.Message, ex);
+                Log.Error(ex.Message, ex);
             }
             return false;
         }
@@ -201,7 +203,7 @@
             }
             catch (Exception ex)
             {
-                Log.Current.Warn(typeof(UserHandler), ex.Message, ex);
+                Log.Warn(ex.Message, ex);
                 return string.Empty;
             }
         }

@@ -1,0 +1,15 @@
+﻿{
+	"Url": "https://kyfw.12306.cn/otn/confirmPassenger/initDc",
+	"Headers": {
+		"Accept": "text/html, application/xhtml+xml, */*",
+		"Accept-Language": "zh-CN",
+		"Cache-Control": "no-cache",
+		"Connection": "Keep-Alive",
+		"Cookie": "@cookie@",
+		"Host": "kyfw.12306.cn",
+		"User-Agent": "Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko"
+	},
+	"Content": {
+		"_json_att": ""
+	}
+}

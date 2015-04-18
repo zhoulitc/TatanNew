@@ -1,0 +1,11 @@
+﻿{
+	"Url": "@url@",
+	"Headers": {
+		"Accept": "application/javascript, */*;q=0.8",
+		"Accept-Language": "zh-CN",
+		"Connection": "Keep-Alive",
+		"Cookie": "@cookie@",
+		"Host": "kyfw.12306.cn",
+		"User-Agent": "Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko"
+	}
+}

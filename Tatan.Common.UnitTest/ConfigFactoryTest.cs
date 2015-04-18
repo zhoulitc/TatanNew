@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Tatan.Common.Extension.String.IO;
 using Tatan.Common.Serialization;
 
 namespace Tatan.Common.UnitTest
@@ -17,7 +18,8 @@ namespace Tatan.Common.UnitTest
         [TestInitialize]
         public void Init()
         {
-            File.CreateText(_path, w =>
+            _path.CreateFile();
+            _path.AppendText(w =>
                 w.WriteLine(_xml));
         }
 
@@ -50,16 +52,16 @@ namespace Tatan.Common.UnitTest
         [ExpectedException(typeof(System.InvalidOperationException))]
         public void TestGetXmlConfig()
         {
-            var o = ConfigManager.Get<TestConfig>("test");
+            var o = Configurations.Get<TestConfig>("test");
             Assert.AreEqual(o.Name, "wahaha");
 
-            var o2 = ConfigManager.Get<TestConfig2>("test");
+            var o2 = Configurations.Get<TestConfig2>("test");
         }
 
         [TestMethod]
         public void TestAppConfig()
         {
-            var o = ConfigManager.AppConfig;
+            var o = Configurations.App;
             Assert.AreEqual(o["key"], string.Empty);
             Assert.AreEqual(o["s"], "1");
         }
@@ -67,19 +69,19 @@ namespace Tatan.Common.UnitTest
         [TestMethod]
         public void TestConnectionConfig()
         {
-            var o = ConfigManager.ConnectionConfig;
-            Assert.AreEqual(o["key"].ConnectionString, string.Empty);
-            Assert.AreEqual(o["LocalSqlServer"].ProviderName, "System.Data.SqlClient");
+            var o = Configurations.Connection;
+            Assert.AreEqual(o["key", "ConnectionString"], string.Empty);
+            Assert.AreEqual(o["LocalSqlServer", "ProviderName"], "System.Data.SqlClient");
         }
 
         [TestMethod]
         public void TestXmlSerializerExtension()
         {
-            var xml = Serializer.CreateXmlSerializer(
+            var xml = Serializers.CreateXmlSerializer(
                 JsonConvert.SerializeObject,
                 JsonConvert.DeserializeObject
                 );
-            var o = ConfigManager.Get<TestConfig>("test");
+            var o = Configurations.Get<TestConfig>("test");
             var s = xml.Serialize(o);
             Assert.AreEqual(s, "{\"Name\":\"wahaha\"}");
 
@@ -90,14 +92,14 @@ namespace Tatan.Common.UnitTest
         [TestMethod]
         public void TestXmlSerializer()
         {
-            var xml = Serializer.Xml;
+            var xml = Serializers.Xml;
             var s = xml.Serialize(new TestData { Name = "wahaha" });
             Assert.AreEqual(s.Length>0, true);
 
             s = xml.Serialize(new TestConfig2 { Name = "wahaha" });
             Assert.AreEqual(s.Length > 0, true);
 
-            var o = ConfigManager.Get<TestConfig>("test");
+            var o = Configurations.Get<TestConfig>("test");
             s = xml.Serialize(o);
             Assert.AreEqual(s, "<?xml version=\"1.0\"?>\r\n<TestConfig xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <Name>wahaha</Name>\r\n</TestConfig>");
 

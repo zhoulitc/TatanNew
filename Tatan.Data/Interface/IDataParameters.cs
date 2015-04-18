@@ -1,4 +1,7 @@
-﻿// ReSharper disable once CheckNamespace
+﻿using System;
+// ReSharper disable once CheckNamespace
+
+
 namespace Tatan.Data
 {
     /// <summary>
@@ -14,7 +17,7 @@ namespace Tatan.Data
         /// <param name="size">参数大小</param>
         /// <exception cref="System.IndexOutOfRangeException">当索引超出范围时抛出</exception>
         /// <returns>参数值</returns>
-        object this[int index, DataType type = DataType.Object, int size = 0] { set; }
+        object this[int index, Type type = null, int size = 0] { set; }
 
         /// <summary>
         /// 设置一个数字型参数
@@ -34,7 +37,7 @@ namespace Tatan.Data
         /// <param name="size">参数大小</param>
         /// <exception cref="System.ArgumentNullException">当参数名为空时抛出</exception>
         /// <returns>参数值</returns>
-        object this[string name, DataType type = DataType.Object, int size = 0] { set; }
+        object this[string name, Type type = null, int size = 0] { set; }
 
         /// <summary>
         /// 设置一个数字型参数

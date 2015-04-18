@@ -69,6 +69,10 @@ namespace Tatan.Common.Compiler
             get { return _nodes.Count; }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public IEnumerator<TreeNode<T>> GetEnumerator()
         {
             return _nodes.GetEnumerator();

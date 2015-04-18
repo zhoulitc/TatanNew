@@ -3,6 +3,7 @@
     using System;
 
     #region 提供枚举的转换扩展方法
+
     /// <summary>
     /// 提供枚举的转换扩展方法
     /// <para>此方法组不会抛出异常</para>
@@ -10,6 +11,7 @@
     public static class Convert
     {
         #region 将枚举类型转换为int
+
         /// <summary>
         /// 将枚举类型转换为int
         /// </summary>
@@ -26,11 +28,13 @@
         /// <param name="value"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static T AsEnum<T>(this Enum value) where T : struct
+        public static T As<T>(this Enum value) where T : struct
         {
             return (T) Enum.ToObject(typeof (T), AsInt(value));
         }
+
         #endregion
     }
+
     #endregion
 }

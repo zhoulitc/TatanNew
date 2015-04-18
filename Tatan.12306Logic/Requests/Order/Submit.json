@@ -1,0 +1,26 @@
+﻿{
+	"Url": "https://kyfw.12306.cn/otn/confirmPassenger/confirmSingleForQueue",
+	"Headers": {
+		"Accept": "application/json, text/javascript, */*; q=0.01",
+		"Accept-Language": "zh-CN",
+		"Cache-Control": "no-cache",
+		"Connection": "Keep-Alive",
+		"Cookie": "@cookie@",
+		"Host": "kyfw.12306.cn",
+		"Referer": "https://kyfw.12306.cn/otn/confirmPassenger/initDc",
+		"User-Agent": "Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko",
+		"X-Requested-With": "XMLHttpRequest"
+	},
+	"Content": {
+		"passengerTicketStr": "@passenger@",
+		"oldPassengerStr": "@oldPassenger@",
+		"randCode": "@code@",
+		"purpose_codes": "00",
+		"key_check_isChange": "@isChange@",
+		"leftTicketStr": "@yp_info@",
+		"train_location": "@trainLocation@",
+		"dwAll": "N",
+		"_json_att": "",
+		"REPEAT_SUBMIT_TOKEN": "@token@"
+	}
+}

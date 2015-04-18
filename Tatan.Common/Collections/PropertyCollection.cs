@@ -46,7 +46,7 @@
         /// <returns></returns>
         public bool IsString(string name)
         {
-            Assert.ObjectNotDisposed(_isDisposed);
+            Assert.ObjectNotDisposed(_isDisposed, "PropertyCollection");
             Assert.ArgumentNotNull("name", name);
             return Contains(name) && Collection[name].PropertyType.IsAssignableFrom(_stringType);
         }
@@ -97,7 +97,7 @@
         {
             get
             {
-                Assert.ObjectNotDisposed(_isDisposed);
+                Assert.ObjectNotDisposed(_isDisposed, "PropertyCollection");
                 Assert.ArgumentNotNull("instance", instance);
                 Assert.ArgumentNotNull("name", name);
                 Assert.KeyFound(Collection, name);
@@ -105,7 +105,7 @@
             }
             set
             {
-                Assert.ObjectNotDisposed(_isDisposed);
+                Assert.ObjectNotDisposed(_isDisposed, "PropertyCollection");
                 Assert.ArgumentNotNull("instance", instance);
                 Assert.ArgumentNotNull("name", name);
                 Assert.ArgumentNotNull("value", value);

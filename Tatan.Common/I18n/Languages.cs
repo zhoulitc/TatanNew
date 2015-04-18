@@ -7,6 +7,7 @@
     using Xml;
 
     #region 多语言国际化处理
+
     /// <summary>
     /// 多语言国际化处理
     /// </summary>
@@ -14,10 +15,10 @@
     {
         private const string _exception = "ANALYSING XML DOCUMENT ERROR.";
         private const string _notFound = "NOT FOUND THE TEXT.";
-        private const string _buildError = "CONSTRUCTOR ERROR.";
         private const string _defaultCulture = "zh-cn";
 
         #region 公开行为
+
         /// <summary>
         /// 构造一类XML的多语言方案
         /// </summary>
@@ -26,7 +27,7 @@
         public Languages(string directory)
         {
             if (string.IsNullOrEmpty(directory))
-                throw new ArgumentNullException("directory", _buildError);
+                throw new ArgumentNullException("directory");
             if (directory[directory.Length - 1].ToString() != Runtime.Separator)
                 directory += Runtime.Separator;
             _format = directory + "{0}.xml";
@@ -49,7 +50,7 @@
         }
 
         /// <summary>
-        /// 获取异常文本
+        /// 获取文本
         /// </summary>
         /// <param name="key">唯一键</param>
         /// <param name="culture">区域</param>
@@ -71,9 +72,11 @@
                 return _notFound;
             return _informations[culture][key];
         }
+
         #endregion
 
         #region 非公开数据和行为
+
         private readonly IDictionary<string, IDictionary<string, string>> _informations;
         private readonly string _format;
         private static readonly object _syncRoot = new object();
@@ -93,20 +96,17 @@
             return dictionary != null;
         }
 
-        private string GetCulture(string culture)
+        private static string GetCulture(string culture)
         {
             if (string.IsNullOrEmpty(culture))
             {
-                if (CultureInfo.CurrentUICulture != null)
-                    culture = CultureInfo.CurrentUICulture.Name;
-                else if (CultureInfo.CurrentCulture != null)
-                    culture = CultureInfo.CurrentCulture.Name;
-                else
-                    culture = _defaultCulture;
+                culture = CultureInfo.CurrentUICulture.Name;
             }
             return culture.ToLower();
         }
+
         #endregion
     }
+
     #endregion
 }

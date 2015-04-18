@@ -3,12 +3,33 @@
     using System.Text.RegularExpressions;
 
     #region 提供字符串的正则表达式匹配扩展方法
+
     /// <summary>
     /// 提供字符串的正则表达式匹配扩展方法
     /// </summary>
     public static class Regular
     {
+        private static readonly Regex _isInt;
+        private static readonly Regex _isNumber;
+        private static readonly Regex _isBool;
+        private static readonly Regex _isDateTime;
+        private static readonly Regex _isEmail;
+        private static readonly Regex _isPhone;
+
+        static Regular()
+        {
+            _isInt = new Regex(@"^-?[1-9]\d*$");
+            _isNumber = new Regex(@"^-?([1-9]\d*.\d*|0.\d*[1-9]\d*|0?.0+|0)$");
+            _isBool = new Regex(@"^(1|0|true|false)$", RegexOptions.IgnoreCase);
+            _isDateTime =
+                new Regex(
+                    @"^((\d{2}(([02468][048])|([13579][26]))[\-\/\s]?((((0?[13578])|(1[02]))[\-\/\s]?((0?[1-9])|([1-2][0-9])|(3[01])))|(((0?[469])|(11))[\-\/\s]?((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\-\/\s]?((0?[1-9])|([1-2][0-9])))))|(\d{2}(([02468][1235679])|([13579][01345789]))[\-\/\s]?((((0?[13578])|(1[02]))[\-\/\s]?((0?[1-9])|([1-2][0-9])|(3[01])))|(((0?[469])|(11))[\-\/\s]?((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\-\/\s]?((0?[1-9])|(1[0-9])|(2[0-8]))))))(\s(((0?[0-9])|([1-2][0-3]))\:([0-5]?[0-9])((\s)|(\:([0-5]?[0-9])))))?(.\d{7})?$");
+            _isEmail = new Regex(@"^\w+([-+.]\w+)*\@\w+([-.]\w+)*.\w+([-.]\w+)*$");
+            _isPhone = new Regex(@"^(\+86\-)?1[3458]\d{1}(\-)?\d{4}(\-)?\d{4}$");
+        }
+
         #region IsMatch
+
         /// <summary>
         /// 判断是否匹配
         /// </summary>
@@ -20,16 +41,19 @@
         /// <exception cref="System.ArgumentOutOfRangeException">参数超出范围时</exception>
         /// <exception cref="System.Text.RegularExpressions.RegexMatchTimeoutException">解析超时时</exception>
         /// <returns>Boolean</returns>
-        public static bool IsMatch(this string value, string pattern, RegexOptions option = RegexOptions.None, int start = 0)
+        public static bool IsMatch(this string value, string pattern, RegexOptions option = RegexOptions.None,
+            int start = 0)
         {
             if (string.IsNullOrEmpty(pattern) ||
                 start < 0 || start >= value.Length)
                 return false;
             return new Regex(pattern, option).IsMatch(value, start);
         }
+
         #endregion
 
         #region Match
+
         /// <summary>
         /// 获取匹配子串
         /// </summary>
@@ -42,21 +66,24 @@
         /// <exception cref="System.ArgumentOutOfRangeException">参数超出范围时</exception>
         /// <exception cref="System.Text.RegularExpressions.RegexMatchTimeoutException">解析超时时</exception>
         /// <returns>匹配的字符串</returns>
-        public static string Match(this string value, string pattern, RegexOptions option = RegexOptions.None, int start = 0, int length = 0)
+        public static string Match(this string value, string pattern, RegexOptions option = RegexOptions.None,
+            int start = 0, int length = 0)
         {
-            if (string.IsNullOrEmpty(pattern) || 
+            if (string.IsNullOrEmpty(pattern) ||
                 start < 0 || start >= value.Length ||
                 length < 0 || length >= value.Length)
                 return string.Empty;
             var r = new Regex(pattern, option);
-            Match m = length > start ? r.Match(value, start, length) : r.Match(value, start);
+            var m = length > start ? r.Match(value, start, length) : r.Match(value, start);
             if (!m.Success)
                 return string.Empty;
             return m.Value;
         }
+
         #endregion
 
         #region Matches
+
         /// <summary>
         /// 获取匹配子串集合
         /// </summary>
@@ -68,9 +95,10 @@
         /// <exception cref="System.ArgumentOutOfRangeException">参数超出范围时</exception>
         /// <exception cref="System.Text.RegularExpressions.RegexMatchTimeoutException">解析超时时</exception>
         /// <returns>匹配的字符串集合</returns>
-        public static string[] Matches(this string value, string pattern, RegexOptions option = RegexOptions.None, int start = 0)
+        public static string[] Matches(this string value, string pattern, RegexOptions option = RegexOptions.None,
+            int start = 0)
         {
-            if (string.IsNullOrEmpty(pattern) || 
+            if (string.IsNullOrEmpty(pattern) ||
                 start < 0 || start >= value.Length)
                 return new string[0];
             var r = new Regex(pattern, option);
@@ -81,34 +109,42 @@
                     ret[i] = mc[i].Value;
             return ret;
         }
+
         #endregion
 
+        /// <summary>
+        /// 使用正则表达式匹配来替换
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="regex"></param>
+        /// <param name="newValue"></param>
+        /// <returns></returns>
+        public static string Replace(this string value, Regex regex, string newValue)
+        {
+            if (regex == null)
+                return value;
+            var matches = regex.Matches(value);
+            var result = value;
+            foreach (Match match in matches)
+            {
+                result = result.Replace(match.Value, newValue);
+            }
+            return result;
+        }
+
         #region Utility
-        private static readonly Regex _isInt = new Regex(@"^-?[1-9]\d*$");
+
         /// <summary>
         /// 字符串是否为整数
         /// </summary>
         /// <param name="value"></param>
         /// <exception cref="System.Text.RegularExpressions.RegexMatchTimeoutException">解析超时时</exception>
         /// <returns></returns>
-        public static bool IsInt(this string value)
+        public static bool IsInteger(this string value)
         {
             return _isInt.IsMatch(value);
         }
 
-        private static readonly Regex _isUInt = new Regex(@"^[1-9]\d*$");
-        /// <summary>
-        /// 字符串是否为正整数
-        /// </summary>
-        /// <param name="value"></param>
-        /// <exception cref="System.Text.RegularExpressions.RegexMatchTimeoutException">解析超时时</exception>
-        /// <returns></returns>
-        public static bool IsUInt(this string value)
-        {
-            return _isUInt.IsMatch(value);
-        }
-
-        private static readonly Regex _isNumber = new Regex(@"^-?([1-9]\d*.\d*|0.\d*[1-9]\d*|0?.0+|0)$");
         /// <summary>
         /// 字符串是否为数字
         /// </summary>
@@ -120,19 +156,17 @@
             return _isNumber.IsMatch(value);
         }
 
-        private static readonly Regex _isBool = new Regex(@"^(1|0|true|false)$", RegexOptions.IgnoreCase);
         /// <summary>
         /// 字符串是否为布尔
         /// </summary>
         /// <param name="value"></param>
         /// <exception cref="System.Text.RegularExpressions.RegexMatchTimeoutException">解析超时时</exception>
         /// <returns></returns>
-        public static bool IsBool(this string value)
+        public static bool IsBoolean(this string value)
         {
             return _isBool.IsMatch(value);
         }
 
-        private static readonly Regex _isDateTime = new Regex(@"^((\d{2}(([02468][048])|([13579][26]))[\-\/\s]?((((0?[13578])|(1[02]))[\-\/\s]?((0?[1-9])|([1-2][0-9])|(3[01])))|(((0?[469])|(11))[\-\/\s]?((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\-\/\s]?((0?[1-9])|([1-2][0-9])))))|(\d{2}(([02468][1235679])|([13579][01345789]))[\-\/\s]?((((0?[13578])|(1[02]))[\-\/\s]?((0?[1-9])|([1-2][0-9])|(3[01])))|(((0?[469])|(11))[\-\/\s]?((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\-\/\s]?((0?[1-9])|(1[0-9])|(2[0-8]))))))(\s(((0?[0-9])|([1-2][0-3]))\:([0-5]?[0-9])((\s)|(\:([0-5]?[0-9])))))?$");
         /// <summary>
         /// 字符串是否为时间
         /// </summary>
@@ -144,19 +178,6 @@
             return _isDateTime.IsMatch(value);
         }
 
-        private static readonly Regex _isDateTimeOffset = new Regex(@"^((\d{2}(([02468][048])|([13579][26]))[\-\/\s]?((((0?[13578])|(1[02]))[\-\/\s]?((0?[1-9])|([1-2][0-9])|(3[01])))|(((0?[469])|(11))[\-\/\s]?((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\-\/\s]?((0?[1-9])|([1-2][0-9])))))|(\d{2}(([02468][1235679])|([13579][01345789]))[\-\/\s]?((((0?[13578])|(1[02]))[\-\/\s]?((0?[1-9])|([1-2][0-9])|(3[01])))|(((0?[469])|(11))[\-\/\s]?((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\-\/\s]?((0?[1-9])|(1[0-9])|(2[0-8]))))))(\s(((0?[0-9])|([1-2][0-3]))\:([0-5]?[0-9])((\s)|(\:([0-5]?[0-9])))))?(.\d{7})?$");
-        /// <summary>
-        /// 字符串是否为时间
-        /// </summary>
-        /// <param name="value"></param>
-        /// <exception cref="System.Text.RegularExpressions.RegexMatchTimeoutException">解析超时时</exception>
-        /// <returns></returns>
-        public static bool IsDateTimeOffset(this string value)
-        {
-            return _isDateTimeOffset.IsMatch(value);
-        }
-
-        private static readonly Regex _isEmail = new Regex(@"^\w+([-+.]\w+)*\@\w+([-.]\w+)*.\w+([-.]\w+)*$");
         /// <summary>
         /// 字符串是否为邮箱
         /// </summary>
@@ -168,7 +189,6 @@
             return _isEmail.IsMatch(value);
         }
 
-        private static readonly Regex _isPhone = new Regex(@"^(\+86\-)?1[3458]\d{1}(\-)?\d{4}(\-)?\d{4}$");
         /// <summary>
         /// 字符串是否为电话
         /// </summary>
@@ -179,8 +199,10 @@
         {
             return _isPhone.IsMatch(value);
         }
+
         #endregion
     }
+
     #endregion
 }
 
