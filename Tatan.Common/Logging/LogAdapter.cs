@@ -29,10 +29,7 @@
         /// <summary>
         /// 
         /// </summary>
-        public void Dispose()
-        {
-            Log.Undo(_action);
-        }
+        public void Dispose() => Log.Undo(_action);
     }
 
     /// <summary>

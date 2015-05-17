@@ -11,23 +11,14 @@
 
         private static readonly Md5Cipher _instance = new Md5Cipher();
 
-        private Md5Cipher()
-        {
-        }
+        private Md5Cipher() { }
 
-        public static Md5Cipher Instance
-        {
-            get { return _instance; }
-        }
-
+        public static Md5Cipher Instance => _instance;
         #endregion
 
         #region ICipher  
 
-        protected override HashAlgorithm CreateAsymmetricCipher()
-        {
-            return new MD5CryptoServiceProvider();
-        }
+        protected override HashAlgorithm CreateAsymmetricCipher() => new MD5CryptoServiceProvider();
 
         #endregion
     }

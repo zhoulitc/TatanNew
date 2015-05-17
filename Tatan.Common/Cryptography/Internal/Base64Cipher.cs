@@ -11,14 +11,9 @@
 
         private static readonly Base64Cipher _instance = new Base64Cipher();
 
-        private Base64Cipher()
-        {
-        }
+        private Base64Cipher() { }
 
-        public static Base64Cipher Instance
-        {
-            get { return _instance; }
-        }
+        public static Base64Cipher Instance => _instance;
 
         #endregion
 

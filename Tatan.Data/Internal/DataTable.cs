@@ -177,10 +177,7 @@ namespace Tatan.Data
             });
         }
 
-        public long Count()
-        {
-            return DataSource.UseSession(Name, session => session.ExecuteScalar<long>(_counts));
-        }
+        public long Count() => DataSource.UseSession(Name, session => session.ExecuteScalar<long>(_counts));
 
         public long Count<T>(Expression<Func<T, bool>> condition)
             where T : class, IDataEntity

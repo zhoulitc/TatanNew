@@ -17,14 +17,14 @@
         {
             get
             {
-                Assert.ArgumentNotNull("name", name);
+                Assert.ArgumentNotNull(nameof(name), name);
                 Assert.KeyFound(Collection, name);
                 return Collection[name];
             }
             internal set
             {
-                Assert.ArgumentNotNull("name", name);
-               // Assert.ArgumentNotNull("value", value);
+                Assert.ArgumentNotNull(nameof(name), name);
+                // Assert.ArgumentNotNull("value", value);
                 if (Contains(name))
                     Collection[name] = value;
                 else

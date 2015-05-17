@@ -25,10 +25,7 @@
         /// 获取当前时间串
         /// </summary>
         /// <exception cref="System.ArgumentOutOfRangeException">当前区域时间超出范围时</exception>
-        public static string Now(string format = null)
-        {
-            return ToString(DateTime.Now, format);
-        }
+        public static string Now(string format = null) => ToString(DateTime.Now, format);
 
         /// <summary>
         /// 获取指定时间串(String)
@@ -38,9 +35,7 @@
         /// <exception cref="System.ArgumentOutOfRangeException">当前区域时间超出范围时</exception>
         /// <returns>时间串</returns>
         public static string ToString(DateTime dt, string format = null)
-        {
-            return dt.ToString(format ?? _format);
-        }
+            => dt.ToString(format ?? _format);
 
         /// <summary>
         /// 获取指定时间(DateTime)

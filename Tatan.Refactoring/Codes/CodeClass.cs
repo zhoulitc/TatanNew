@@ -10,7 +10,7 @@
         /// <summary>
         /// 代码的可访问级别
         /// </summary>
-        public CodeAccessibility Accessibility { get; set; }
+        public CodeAccessibility Accessibility { get; set; } = CodeAccessibility.Public;
 
         /// <summary>
         /// 类占用的行数

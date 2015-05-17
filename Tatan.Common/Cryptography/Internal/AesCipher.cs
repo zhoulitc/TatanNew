@@ -11,14 +11,9 @@
 
         private static readonly AesCipher _instance = new AesCipher();
 
-        private AesCipher()
-        {
-        }
+        private AesCipher() { }
 
-        public static AesCipher Instance
-        {
-            get { return _instance; }
-        }
+        public static AesCipher Instance => _instance;
 
         private const string _aseKey = "what are you talking ? nothing .";
 
@@ -39,15 +34,9 @@
             return key;
         }
 
-        protected override string GetIv(string key)
-        {
-            return GetKey(key).Substring(16);
-        }
+        protected override string GetIv(string key) => GetKey(key).Substring(16);
 
-        protected override SymmetricAlgorithm CreateSymmetricCipher()
-        {
-            return new AesCryptoServiceProvider();
-        }
+        protected override SymmetricAlgorithm CreateSymmetricCipher() => new AesCryptoServiceProvider();
 
         #endregion
     }

@@ -37,9 +37,9 @@
         /// <returns>用户状态</returns>
         public static UserInfo Login(string username, string password)
         {
-            if (string.IsNullOrEmpty(username))
-                Assert.ArgumentNotNull("username", username);
-            Assert.ArgumentNotNull("password", password);
+            Assert.ArgumentNotNull(nameof(Source), Source);
+            Assert.ArgumentNotNull(nameof(username), username);
+            Assert.ArgumentNotNull(nameof(password), password);
 
             var us = new UserInfo {IsLogin = false, Name = username};
             var result = Source.UseSession(Http.Session.Id, session =>
@@ -48,8 +48,8 @@
                 var trans = session.BeginTransaction(IsolationLevel.ReadCommitted);
                 var id = session.ExecuteScalar<long>(string.Format(_checkSql, Source.Provider.ParameterSymbol), p =>
                 {
-                    p["Name"] = username;
-                    p["Password"] = password.AsEncode("md5");
+                    p[nameof(UserLogin.Name)] = username;
+                    p[nameof(UserLogin.Password)] = password.AsEncode("md5");
                 });
                 if (id > 0)
                 {
@@ -57,9 +57,9 @@
                     us.Guid = (id + username).AsEncode("md5");
                     success = session.Execute(string.Format(_updateSql, Source.Provider.ParameterSymbol), p =>
                     {
-                        p["Id"] = id;
-                        p["LastLoginTime", typeof(DateTime)] = DateTime.Now;
-                        p["LastLoginIP"] = _GetIp();
+                        p[nameof(UserLogin.Id)] = id;
+                        p[nameof(UserLogin.LastLoginTime), typeof(DateTime)] = DateTime.Now;
+                        p[nameof(UserLogin.LastLoginIp)] = _GetIp();
 
                     }) == 1;
                 }
@@ -91,6 +91,8 @@
         /// <returns>是否登出成功</returns>
         public static bool Logout(string guid)
         {
+            Assert.ArgumentNotNull(nameof(Source), Source);
+
             if (string.IsNullOrEmpty(guid)) return false;
             var user = Http.Cache.Get<UserInfo>(guid);
             if (user == null) return false;
@@ -99,8 +101,8 @@
                 if (Source.UseSession(Http.Session.Id, session => session.Execute(
                     string.Format(_logoutSql, Source.Provider.ParameterSymbol), p =>
                             {
-                                p["Id"] = user.Id;
-                                p["LastLogoutTime", typeof(DateTime)] = Date.Now();
+                                p[nameof(UserLogin.Id)] = user.Id;
+                                p[nameof(UserLogin.LastLogoutTime), typeof(DateTime)] = Date.Now();
                             }) == 1))
                 {
                     Http.Cache.Remove(guid);
@@ -126,17 +128,18 @@
         /// <returns></returns>
         public static bool ChangedPassword(string guid, string password, string newPassword)
         {
-            Assert.ArgumentNotNull("guid", guid);
-            Assert.ArgumentNotNull("password", password);
-            Assert.ArgumentNotNull("newPassword", newPassword);
+            Assert.ArgumentNotNull(nameof(Source), Source);
+            Assert.ArgumentNotNull(nameof(guid), guid);
+            Assert.ArgumentNotNull(nameof(password), password);
+            Assert.ArgumentNotNull(nameof(newPassword), newPassword);
 
             var user = Http.Cache.Get<UserInfo>(guid);
             if (user == null) return false;
             return Source.UseSession(Http.Session.Id, session => session.Execute(
                 string.Format(_changedPasswordSql, Source.Provider.ParameterSymbol), p => 
             {
-                p["Name"] = user.Name;
-                p["Password"] = password;
+                p[nameof(UserLogin.Name)] = user.Name;
+                p[nameof(UserLogin.Password)] = password;
                 p["New_Password"] = newPassword;
             }) == 1);
         }
@@ -164,9 +167,9 @@
         /// <returns></returns>
         public static bool Register(string username, string password)
         {
-            Assert.ArgumentNotNull("Source", Source);
-            Assert.ArgumentNotNull("username", username);
-            Assert.ArgumentNotNull("password", password);
+            Assert.ArgumentNotNull(nameof(Source), Source);
+            Assert.ArgumentNotNull(nameof(username), username);
+            Assert.ArgumentNotNull(nameof(password), password);
 
             var user = new UserLogin { Name = username, Password = password, RegisterTime = DateTime.Now };
             return Source.Tables[_userLogin].Insert(user);

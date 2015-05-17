@@ -46,10 +46,7 @@
         /// <summary>
         /// 获取属性集合
         /// </summary>
-        protected override PropertyCollection Properties
-        {
-            get { return _perproties; }
-        }
+        protected override PropertyCollection Properties => _perproties;
 
         /// <summary>
         /// 清理属性
@@ -86,7 +83,7 @@
         /// <summary>
         /// 登陆次数
         /// </summary>
-        public int Count { get; set; }
+        public int Count { get; set; } = 0;
 
         /// <summary>
         /// 最后一次登录时间

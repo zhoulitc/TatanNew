@@ -26,9 +26,7 @@
         /// <exception cref="System.ArgumentException">文件路径包含非法字符时</exception>
         /// <returns></returns>
         public static string ChangeExtension(this string value, string extension)
-        {
-            return Path.ChangeExtension(value, extension);
-        }
+            => Path.ChangeExtension(value, extension);
 
         /// <summary>
         /// 获取路径中的目录名
@@ -37,10 +35,7 @@
         /// <exception cref="System.ArgumentException">文件路径包含非法字符时</exception>
         /// <exception cref="System.IO.PathTooLongException">文件路径或者文件名超长时</exception>
         /// <returns></returns>
-        public static string GetDirectoryName(this string value)
-        {
-            return Path.GetDirectoryName(value);
-        }
+        public static string GetDirectoryName(this string value) => Path.GetDirectoryName(value);
 
         /// <summary>
         /// 获取路径中的扩展名
@@ -48,10 +43,7 @@
         /// <param name="value"></param>
         /// <exception cref="System.ArgumentException">文件路径包含非法字符时</exception>
         /// <returns></returns>
-        public static string GetExtension(this string value)
-        {
-            return Path.GetExtension(value);
-        }
+        public static string GetExtension(this string value) => Path.GetExtension(value);
 
         /// <summary>
         /// 获取路径中的文件名
@@ -61,9 +53,7 @@
         /// <exception cref="System.ArgumentException">文件路径包含非法字符时</exception>
         /// <returns></returns>
         public static string GetFileName(this string value, bool isExtend = true)
-        {
-            return isExtend ? Path.GetFileName(value) : Path.GetFileNameWithoutExtension(value);
-        }
+            => isExtend ? Path.GetFileName(value) : Path.GetFileNameWithoutExtension(value);
 
         /// <summary>
         /// 获取相对路径的绝对路径
@@ -75,10 +65,7 @@
         /// <exception cref="System.Security.SecurityException">没有权限时</exception>
         /// <exception cref="System.NotSupportedException">文件格式无效时</exception>
         /// <returns></returns>
-        public static string GetFullPath(this string value)
-        {
-            return Path.GetFullPath(value);
-        }
+        public static string GetFullPath(this string value) => Path.GetFullPath(value);
 
         /// <summary>
         /// 获取路径的根
@@ -86,10 +73,7 @@
         /// <param name="value"></param>
         /// <exception cref="System.ArgumentException">文件路径包含非法字符时</exception>
         /// <returns></returns>
-        public static string GetPathRoot(this string value)
-        {
-            return Path.GetPathRoot(value);
-        }
+        public static string GetPathRoot(this string value) => Path.GetPathRoot(value);
 
         /// <summary>
         /// 判断是否含有扩展名
@@ -97,10 +81,7 @@
         /// <param name="value"></param>
         /// <exception cref="System.ArgumentException">文件路径包含非法字符时</exception>
         /// <returns></returns>
-        public static bool HasExtension(this string value)
-        {
-            return Path.HasExtension(value);
-        }
+        public static bool HasExtension(this string value) => Path.HasExtension(value);
 
         /// <summary>
         /// 判断是否含有根
@@ -108,10 +89,7 @@
         /// <param name="value"></param>
         /// <exception cref="System.ArgumentException">文件路径包含非法字符时</exception>
         /// <returns></returns>
-        public static bool IsPathRooted(this string value)
-        {
-            return Path.IsPathRooted(value);
-        }
+        public static bool IsPathRooted(this string value) => Path.IsPathRooted(value);
 
         #endregion
 
@@ -168,10 +146,7 @@
         /// <exception cref="System.IO.IOException">发生I/O错误时</exception>
         /// <exception cref="System.NotSupportedException">文件格式无效时</exception>
         /// <returns></returns>
-        public static DirectoryInfo CreateDirectory(this string value)
-        {
-            return Directory.CreateDirectory(value);
-        }
+        public static DirectoryInfo CreateDirectory(this string value) => Directory.CreateDirectory(value);
 
         /// <summary>
         /// 删除一个目录，并指示是否删除所有子目录和子文件
@@ -186,9 +161,7 @@
         /// <exception cref="System.IO.IOException">发生I/O错误时</exception>
         /// <returns></returns>
         public static void DeleteDirectory(this string value, bool recursive = false)
-        {
-            Directory.Delete(value, recursive);
-        }
+            => Directory.Delete(value, recursive);
 
         /// <summary>
         /// 获得路径下的所有目录
@@ -242,10 +215,7 @@
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static bool ExistsDirectory(this string value)
-        {
-            return Directory.Exists(value);
-        }
+        public static bool ExistsDirectory(this string value) => Directory.Exists(value);
 
         /// <summary>
         /// 判断目录是否存在
@@ -258,10 +228,7 @@
         /// <exception cref="System.UnauthorizedAccessException">访问失败时</exception>
         /// <exception cref="System.IO.IOException">发生I/O错误时</exception>
         /// <returns></returns>
-        public static DirectoryInfo GetParentDirectory(this string value)
-        {
-            return Directory.GetParent(value);
-        }
+        public static DirectoryInfo GetParentDirectory(this string value) => Directory.GetParent(value);
 
         /// <summary>
         /// 移动目录
@@ -275,10 +242,7 @@
         /// <exception cref="System.UnauthorizedAccessException">访问失败时</exception>
         /// <exception cref="System.IO.IOException">发生I/O错误时</exception>
         /// <returns></returns>
-        public static void MoveDirectory(this string value, string dest)
-        {
-            Directory.Move(value, dest);
-        }
+        public static void MoveDirectory(this string value, string dest) => Directory.Move(value, dest);
 
         #endregion
 
@@ -323,9 +287,7 @@
         /// <exception cref="System.Security.SecurityException">没有权限时</exception>
         /// <returns></returns>
         public static void CopyFile(this string value, string dest, bool overwrite)
-        {
-            File.Copy(value, dest, overwrite);
-        }
+            => File.Copy(value, dest, overwrite);
 
         /// <summary>
         /// 创建一个文件
@@ -362,20 +324,14 @@
         /// <exception cref="System.NotSupportedException">文件格式无效时</exception>
         /// <exception cref="System.Security.SecurityException">没有权限时</exception>
         /// <returns></returns>
-        public static void DeleteFile(this string value)
-        {
-            File.Delete(value);
-        }
+        public static void DeleteFile(this string value) => File.Delete(value);
 
         /// <summary>
         /// 判断文件是否存在
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static bool ExistsFile(this string value)
-        {
-            return File.Exists(value);
-        }
+        public static bool ExistsFile(this string value) => File.Exists(value);
 
         /// <summary>
         /// 移动文件
@@ -390,10 +346,7 @@
         /// <exception cref="System.IO.IOException">发生I/O错误时</exception>
         /// <exception cref="System.NotSupportedException">文件格式无效时</exception>
         /// <returns></returns>
-        public static void MoveFile(this string value, string dest)
-        {
-            File.Move(value, dest);
-        }
+        public static void MoveFile(this string value, string dest) => File.Move(value, dest);
 
         /// <summary>
         /// 读取文件内容
@@ -408,10 +361,7 @@
         /// <exception cref="System.NotSupportedException">文件格式无效时</exception>
         /// <exception cref="System.Security.SecurityException">没有权限时</exception>
         /// <returns></returns>
-        public static byte[] ReadFile(this string value)
-        {
-            return File.ReadAllBytes(value);
-        }
+        public static byte[] ReadFile(this string value) => File.ReadAllBytes(value);
 
         /// <summary>
         /// 读取文件内容
@@ -514,10 +464,7 @@
         /// <exception cref="System.NotSupportedException">文件格式无效时</exception>
         /// <exception cref="System.Security.SecurityException">没有权限时</exception>
         /// <returns></returns>
-        public static void WriteFile(this string value, byte[] bytes)
-        {
-            File.WriteAllBytes(value, bytes);
-        }
+        public static void WriteFile(this string value, byte[] bytes) => File.WriteAllBytes(value, bytes);
 
         /// <summary>
         /// 将内容写入文件

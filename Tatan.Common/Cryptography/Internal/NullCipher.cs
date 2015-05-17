@@ -9,28 +9,17 @@
 
         private static readonly NullCipher _instance = new NullCipher();
 
-        private NullCipher()
-        {
-        }
+        private NullCipher() { }
 
-        public static NullCipher Instance
-        {
-            get { return _instance; }
-        }
+        public static NullCipher Instance => _instance;
 
         #endregion
 
         #region ICipher
 
-        public string Encrypt(string expressly, string key = null)
-        {
-            return expressly;
-        }
+        public string Encrypt(string expressly, string key = null) => expressly;
 
-        public string Decrypt(string ciphertext, string key = null)
-        {
-            return ciphertext;
-        }
+        public string Decrypt(string ciphertext, string key = null) => ciphertext;
 
         #endregion
     }

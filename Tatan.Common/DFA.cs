@@ -1,6 +1,5 @@
 ﻿namespace Tatan.Common
 {
-    using System.Linq;
     using System;
     using System.Collections.Generic;
     using Exception;
@@ -47,9 +46,7 @@
         /// <param name="function">处理状态的行为</param>
         /// <exception cref="System.ArgumentException">传入相同的状态时</exception>
         public void AddState(Enum state, Func<T, Enum> function)
-        {
-            StateFunctions.Add(state, function);
-        }
+            => StateFunctions.Add(state, function);
 
         /// <summary>
         /// 清空所有状态

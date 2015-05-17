@@ -18,9 +18,7 @@
         /// <param name="targets">标签映射表</param>
         /// <returns>输出文本</returns>
         public static string Replace(this string source, IDictionary<string, string> targets)
-        {
-            return Replace(source, _regex, 2, 2, targets);
-        }
+            => Replace(source, _regex, 2, 2, targets);
 
         /// <summary>
         /// 替换

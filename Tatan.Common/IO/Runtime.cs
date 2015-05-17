@@ -36,22 +36,14 @@
         /// <summary>
         /// 获取平台分隔符
         /// </summary>
-        public static string Separator
-        {
-            get { return Path.DirectorySeparatorChar.ToString(); }
-        }
+        public static string Separator => Path.DirectorySeparatorChar.ToString();
 
         /// <summary>
         /// 获取平台换行符
         /// </summary>
-        public static string NewLine
-        {
-            get { return Environment.NewLine; }
-        }
+        public static string NewLine => Environment.NewLine;
 
         private static bool IsWebProject()
-        {
-            return AppDomain.CurrentDomain.BaseDirectory == Environment.CurrentDirectory + Separator;
-        }
+            => AppDomain.CurrentDomain.BaseDirectory == Environment.CurrentDirectory + Separator;
     }
 }

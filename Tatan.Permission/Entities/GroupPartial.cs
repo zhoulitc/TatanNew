@@ -22,24 +22,18 @@
         /// 组包含的用户关联集合
         /// </summary>
         public UserRelationCollection Users
-        {
-            get { return _users ?? (_users = new UserRelationCollection(this, "UserGroup", "GroupId")); }
-        }
+            => _users ?? (_users = new UserRelationCollection(this, "UserGroup", "GroupId"));
 
         /// <summary>
         /// 组包含的角色关联集合
         /// </summary>
         public RoleRelationCollection Roles
-        {
-            get { return _roles ?? (_roles = new RoleRelationCollection(this, "GroupRole", "GroupId")); }
-        }
+            => _roles ?? (_roles = new RoleRelationCollection(this, "GroupRole", "GroupId"));
 
         /// <summary>
         /// 组包含的权限集合
         /// </summary>
         public PermissionRelationCollection Permissions
-        {
-            get { return _permissions ?? (_permissions = new PermissionRelationCollection(this, "GroupPermission", "GroupId")); }
-        }
+            => _permissions ?? (_permissions = new PermissionRelationCollection(this, "GroupPermission", "GroupId"));
     }
 }

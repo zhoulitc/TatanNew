@@ -38,26 +38,17 @@
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public override bool Contains(string key)
-        {
-            return !string.IsNullOrEmpty(key) && Collection.ContainsKey(key);
-        }
+        public override bool Contains(string key) => !string.IsNullOrEmpty(key) && Collection.ContainsKey(key);
 
         /// <summary>
         /// 获取集合中对象个数
         /// </summary>
-        public override int Count
-        {
-            get { return Collection.Count; }
-        }
+        public override int Count => Collection.Count;
 
         /// <summary>
         /// 获取此集合的迭代
         /// </summary>
         /// <returns></returns>
-        public override IEnumerator<string> GetEnumerator()
-        {
-            return Collection.Keys.GetEnumerator();
-        }
+        public override IEnumerator<string> GetEnumerator() => Collection.Keys.GetEnumerator();
     }
 }

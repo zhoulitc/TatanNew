@@ -149,10 +149,7 @@
         /// <param name="value"></param>
         /// <exception cref="System.Text.RegularExpressions.RegexMatchTimeoutException">解析超时时</exception>
         /// <returns></returns>
-        public static bool IsInteger(this string value)
-        {
-            return _isInt.IsMatch(value);
-        }
+        public static bool IsInteger(this string value) => _isInt.IsMatch(value);
 
         /// <summary>
         /// 字符串是否为数字
@@ -160,10 +157,7 @@
         /// <param name="value"></param>
         /// <exception cref="System.Text.RegularExpressions.RegexMatchTimeoutException">解析超时时</exception>
         /// <returns></returns>
-        public static bool IsNumber(this string value)
-        {
-            return _isNumber.IsMatch(value);
-        }
+        public static bool IsNumber(this string value) => _isNumber.IsMatch(value);
 
         /// <summary>
         /// 字符串是否为布尔
@@ -171,10 +165,7 @@
         /// <param name="value"></param>
         /// <exception cref="System.Text.RegularExpressions.RegexMatchTimeoutException">解析超时时</exception>
         /// <returns></returns>
-        public static bool IsBoolean(this string value)
-        {
-            return _isBool.IsMatch(value);
-        }
+        public static bool IsBoolean(this string value) => _isBool.IsMatch(value);
 
         /// <summary>
         /// 字符串是否为时间
@@ -182,10 +173,7 @@
         /// <param name="value"></param>
         /// <exception cref="System.Text.RegularExpressions.RegexMatchTimeoutException">解析超时时</exception>
         /// <returns></returns>
-        public static bool IsDateTime(this string value)
-        {
-            return _isDateTime.IsMatch(value);
-        }
+        public static bool IsDateTime(this string value) => _isDateTime.IsMatch(value);
 
         /// <summary>
         /// 字符串是否为邮箱
@@ -193,10 +181,7 @@
         /// <param name="value"></param>
         /// <exception cref="System.Text.RegularExpressions.RegexMatchTimeoutException">解析超时时</exception>
         /// <returns></returns>
-        public static bool IsEmail(this string value)
-        {
-            return _isEmail.IsMatch(value);
-        }
+        public static bool IsEmail(this string value) => _isEmail.IsMatch(value);
 
         /// <summary>
         /// 字符串是否为电话

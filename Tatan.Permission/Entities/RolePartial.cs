@@ -22,24 +22,18 @@
         /// 角色包含的用户关联集合
         /// </summary>
         public UserRelationCollection Users
-        {
-            get { return _users ?? (_users = new UserRelationCollection(this, "UserRole", "RoleId")); }
-        }
+            => _users ?? (_users = new UserRelationCollection(this, "UserRole", "RoleId"));
 
         /// <summary>
         /// 角色包含的组关联集合
         /// </summary>
         public GroupRelationCollection Groups
-        {
-            get { return _groups ?? (_groups = new GroupRelationCollection(this, "GroupRole", "RoleId")); }
-        }
+            => _groups ?? (_groups = new GroupRelationCollection(this, "GroupRole", "RoleId"));
 
         /// <summary>
         /// 角色包含的权限关联集合
         /// </summary>
         public PermissionRelationCollection Permissions
-        {
-            get { return _permissions ?? (_permissions = new PermissionRelationCollection(this, "RolePermission", "RoleId")); }
-        }
+            => _permissions ?? (_permissions = new PermissionRelationCollection(this, "RolePermission", "RoleId"));
     }
 }

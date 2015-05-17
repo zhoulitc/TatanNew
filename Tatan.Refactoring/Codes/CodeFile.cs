@@ -10,12 +10,12 @@
         /// <summary>
         /// 文件的路径
         /// </summary>
-        public string Path { get; set; }
+        public string Path { get; set; } = string.Empty;
 
         /// <summary>
         /// 文件扩展名
         /// </summary>
-        public string Extension { get; set; }
+        public string Extension { get; set; } = string.Empty;
 
         /// <summary>
         /// 文件中的类个数

@@ -30,10 +30,7 @@
         /// <param name="key">唯一键</param>
         /// <param name="culture">区域</param>
         /// <returns></returns>
-        public static string GetText(string key, string culture = null)
-        {
-            return _exception.GetText(key, culture);
-        }
+        public static string GetText(string key, string culture = null) => _exception.GetText(key, culture);
 
         #region Exception
 
@@ -44,8 +41,7 @@
         /// <param name="arg"></param>
         public static void ArgumentNotNull(string argName, string arg)
         {
-            if (string.IsNullOrEmpty(arg))
-                throw new ArgumentNullException(argName);
+            if (string.IsNullOrEmpty(arg)) throw new ArgumentNullException(argName);
         }
 
         /// <summary>

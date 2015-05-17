@@ -16,10 +16,7 @@
         /// 注册一个可适配接口对象
         /// </summary>
         /// <param name="adaptable"></param>
-        public static void Register(IAdaptable adaptable)
-        {
-            Assert.ArgumentNotNull(nameof(adaptable), adaptable);
-        }
+        public static void Register(IAdaptable adaptable) => Assert.ArgumentNotNull(nameof(adaptable), adaptable);
 
         /// <summary>
         /// 注册一个适配器接口对象

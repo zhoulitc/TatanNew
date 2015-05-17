@@ -154,14 +154,9 @@
 
             private static readonly InternalCustomCache _instance = new InternalCustomCache();
 
-            private InternalCustomCache()
-            {
-            }
+            private InternalCustomCache() { }
 
-            public static InternalCustomCache Instance
-            {
-                get { return _instance; }
-            }
+            public static InternalCustomCache Instance => _instance;
 
             #endregion
 

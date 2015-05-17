@@ -17,10 +17,7 @@ namespace Tatan.Data
             _source = source;
         }
 
-        internal void Clear()
-        {
-            Collection.Clear();
-        }
+        internal void Clear() => Collection.Clear();
 
         /// <summary>
         /// 根据表名获取数据表

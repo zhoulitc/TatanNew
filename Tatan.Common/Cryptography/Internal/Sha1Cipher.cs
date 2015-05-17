@@ -11,23 +11,15 @@
 
         private static readonly Sha1Cipher _instance = new Sha1Cipher();
 
-        private Sha1Cipher()
-        {
-        }
+        private Sha1Cipher() { }
 
-        public static Sha1Cipher Instance
-        {
-            get { return _instance; }
-        }
+        public static Sha1Cipher Instance => _instance;
 
         #endregion
 
         #region ICipher
 
-        protected override HashAlgorithm CreateAsymmetricCipher()
-        {
-            return new SHA1CryptoServiceProvider();
-        }
+        protected override HashAlgorithm CreateAsymmetricCipher() => new SHA1CryptoServiceProvider();
 
         #endregion
     }

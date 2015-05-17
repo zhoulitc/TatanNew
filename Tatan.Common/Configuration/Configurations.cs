@@ -148,19 +148,13 @@
         /// 获取默认App配置文件项
         /// </summary>
         /// <returns></returns>
-        public static IConfiguration App
-        {
-            get { return _appConfiguration; }
-        }
+        public static IConfiguration App => _appConfiguration;
 
         /// <summary>
         /// 获取默认Conection配置文件项
         /// </summary>
         /// <returns></returns>
-        public static IConfiguration Connection
-        {
-            get { return _connectionConfiguration; }
-        }
+        public static IConfiguration Connection => _connectionConfiguration;
 
         private static void Reload(string name, ISerializer serializer = null)
         {
@@ -196,15 +190,9 @@
 
         private class NullConfig : IConfiguration
         {
-            public string this[string name]
-            {
-                get { return string.Empty; }
-            }
+            public string this[string name] => string.Empty;
 
-            public string this[string section, string name]
-            {
-                get { return string.Empty; }
-            }
+            public string this[string section, string name] => string.Empty;
         }
 
         private class DefaultConfig : IConfiguration
@@ -273,10 +261,7 @@
                 }
             }
 
-            public string this[string section, string name]
-            {
-                get { return this[name]; }
-            }
+            public string this[string section, string name] => this[name];
         }
 
         private class ConnectionStringsConfiguration : IConfiguration

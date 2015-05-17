@@ -25,22 +25,13 @@
         /// 返回一个循环访问集合的枚举器。
         /// </summary>
         /// <returns></returns>
-        public IEnumerator<Fields> GetEnumerator()
-        {
-            return _fields.GetEnumerator();
-        }
+        public IEnumerator<Fields> GetEnumerator() => _fields.GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         /// <summary>
         /// 
         /// </summary>
-        public int Count 
-        {
-            get { return _fields.Count; }
-        }
+        public int Count => _fields.Count;
     }
 }

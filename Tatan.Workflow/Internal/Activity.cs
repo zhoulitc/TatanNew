@@ -18,10 +18,7 @@ namespace Tatan.Workflow.Internal
             Routes = new RouteCollection();
         }
 
-        public IFlow Flow
-        {
-            get { return _flow; }
-        }
+        public IFlow Flow => _flow;
 
         public string Name { get; set; }
 
@@ -83,13 +80,8 @@ namespace Tatan.Workflow.Internal
         }
 
         public IActivityInstance NewInstance(IFlowInstance instance, string remark = null)
-        {
-            return new ActivityInstance(this, instance, remark);
-        }
+            => new ActivityInstance(this, instance, remark);
 
-        public override string ToString()
-        {
-            return Name;
-        }
+        public override string ToString() => Name;
     }
 }

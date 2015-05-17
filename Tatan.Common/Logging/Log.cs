@@ -75,9 +75,7 @@
         /// <param name="message"></param>
         /// <param name="ex"></param>
         public static void Debug(string message, Exception ex = null)
-        {
-            Write(Level.Debug, CurrentLogger, message, ex);
-        }
+            => Write(Level.Debug, CurrentLogger, message, ex);
 
         /// <summary>
         /// 提供Debug级别的日志
@@ -87,9 +85,7 @@
         /// <param name="message"></param>
         /// <param name="ex"></param>
         public static void Debug<T>(string message, Exception ex = null) where T : class
-        {
-            Write(Level.Debug, typeof (T).FullName, message, ex);
-        }
+            => Write(Level.Debug, typeof(T).FullName, message, ex);
 
         #endregion
 
@@ -103,9 +99,7 @@
         /// <param name="message"></param>
         /// <param name="ex"></param>
         public static void Info(string message, Exception ex = null)
-        {
-            Write(Level.Info, CurrentLogger, message, ex);
-        }
+            => Write(Level.Info, CurrentLogger, message, ex);
 
         /// <summary>
         /// 提供Info级别的日志
@@ -115,9 +109,7 @@
         /// <param name="message"></param>
         /// <param name="ex"></param>
         public static void Info<T>(string message, Exception ex = null) where T : class
-        {
-            Write(Level.Info, typeof (T).FullName, message, ex);
-        }
+            =>  Write(Level.Info, typeof (T).FullName, message, ex);
 
         #endregion
 
@@ -132,9 +124,7 @@
         /// <param name="message"></param>
         /// <param name="ex"></param>
         public static void Warn(string message, Exception ex = null)
-        {
-            Write(Level.Warn, CurrentLogger, message, ex);
-        }
+            => Write(Level.Warn, CurrentLogger, message, ex);
 
         /// <summary>
         /// 提供Warn级别的日志
@@ -145,9 +135,7 @@
         /// <param name="message"></param>
         /// <param name="ex"></param>
         public static void Warn<T>(string message, Exception ex = null) where T : class
-        {
-            Write(Level.Warn, typeof (T).FullName, message, ex);
-        }
+            => Write(Level.Warn, typeof(T).FullName, message, ex);
 
         #endregion
 
@@ -162,9 +150,7 @@
         /// <param name="message"></param>
         /// <param name="ex"></param>
         public static void Error(string message, Exception ex = null)
-        {
-            Write(Level.Error, CurrentLogger, message, ex);
-        }
+            => Write(Level.Error, CurrentLogger, message, ex);
 
         /// <summary>
         /// 提供Error级别的日志
@@ -175,9 +161,7 @@
         /// <param name="message"></param>
         /// <param name="ex"></param>
         public static void Error<T>(string message, Exception ex = null) where T : class
-        {
-            Write(Level.Error, typeof (T).FullName, message, ex);
-        }
+            => Write(Level.Error, typeof(T).FullName, message, ex);
 
         #endregion
 
@@ -192,9 +176,7 @@
         /// <param name="message"></param>
         /// <param name="ex"></param>
         public static void Fatal(string message, Exception ex = null)
-        {
-            Write(Level.Fatal, CurrentLogger, message, ex);
-        }
+            => Write(Level.Fatal, CurrentLogger, message, ex);
 
         /// <summary>
         /// 提供Fatal级别的日志
@@ -205,9 +187,7 @@
         /// <param name="message"></param>
         /// <param name="ex"></param>
         public static void Fatal<T>(string message, Exception ex = null) where T : class
-        {
-            Write(Level.Fatal, typeof (T).FullName, message, ex);
-        }
+            => Write(Level.Fatal, typeof(T).FullName, message, ex);
 
         #endregion
 

@@ -49,10 +49,7 @@
         /// <summary>
         /// 获取属性集合
         /// </summary>
-        protected override PropertyCollection Properties
-        {
-            get { return _perproties; }
-        }
+        protected override PropertyCollection Properties => _perproties;
 
         /// <summary>
         /// 清理属性

@@ -23,10 +23,7 @@ namespace Tatan.Workflow.Internal
         public string Name { get; set; }
         public int Type { get; set; }
 
-        public IFlowPersistence Configuration
-        {
-            get { return _persistence; }
-        }
+        public IFlowPersistence Configuration => _persistence;
 
 
         public event Action<IFlowInstance> HandlerBefore;
@@ -88,9 +85,6 @@ namespace Tatan.Workflow.Internal
             }
         }
 
-        public override string ToString()
-        {
-            return Name;
-        }
+        public override string ToString() => Name;
     }
 }

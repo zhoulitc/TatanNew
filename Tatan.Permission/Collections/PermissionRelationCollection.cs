@@ -58,7 +58,7 @@ namespace Tatan.Permission.Collections
 
         static PermissionRelationCollection()
         {
-            _sqlsExtension = new Dictionary<string, string>(4)
+            _sqlsExtension = new Dictionary<string, string>(5)
             {
                 /*
                 SELECT COUNT(1) 
@@ -72,7 +72,7 @@ namespace Tatan.Permission.Collections
                 WHERE t1.{1}UserId{2}={0}UserId 
                 AND (t2.{1}PermissionId{2}={0}PermissionId OR t4.{1}PermissionId{2}={0}PermissionId)
                 */
-                {nameof(UserGroupRoleContains), string.Format(@"
+                [nameof(UserGroupRoleContains)] = string.Format(@"
 SELECT COUNT(1) 
 FROM {{1}}{0}{{2}} AS t1 
 INNER JOIN {{1}}{1}{{2}} AS t2 
@@ -82,11 +82,11 @@ ON t1.{{1}}{5}{{2}}=t3.{{1}}{6}{{2}}
 INNER JOIN {{1}}{7}{{2}} AS t4 
 ON t3.{{1}}{8}{{2}}=t4.{{1}}{9}{{2}} 
 WHERE t1.{{1}}{5}{{2}}={{0}}{5} 
-AND (t2.{{1}}{10}{{2}}={{0}}{10} OR t4.{{1}}{11}{{2}}={{0}}{11})", 
+AND (t2.{{1}}{10}{{2}}={{0}}{10} OR t4.{{1}}{11}{{2}}={{0}}{11})",
 nameof(UserGroup), nameof(GroupPermission), nameof(UserGroup.GroupId), nameof(GroupPermission.GroupId),
-nameof(UserRole), nameof(UserGroup.UserId), nameof(UserRole.UserId),  nameof(RolePermission),
+nameof(UserRole), nameof(UserGroup.UserId), nameof(UserRole.UserId), nameof(RolePermission),
 nameof(UserRole.RoleId), nameof(RolePermission.RoleId), nameof(GroupPermission.PermissionId), nameof(RolePermission.PermissionId)
-)},
+),
                 /*
                 SELECT COUNT(1) 
                 FROM {1}GroupRole{2} AS t1 
@@ -94,7 +94,7 @@ nameof(UserRole.RoleId), nameof(RolePermission.RoleId), nameof(GroupPermission.P
                 ON t1.{1}RoleId{2}=t2.{1}RoleId{2}  
                 WHERE t1.{1}GroupId{2}={0}GroupId AND t2.{1}PermissionId{2}={0}PermissionId
                 */
-                {nameof(GroupRoleContains), string.Format(@"
+                [nameof(GroupRoleContains)] = string.Format(@"
 SELECT COUNT(1) 
 FROM {{1}}{0}{{2}} AS t1 
 LEFT JOIN {{1}}{1}{{2}} AS t2 
@@ -102,7 +102,7 @@ ON t1.{{1}}{2}{{2}}=t2.{{1}}{3}{{2}}
 WHERE t1.{{1}}{4}{{2}}={{0}}{4} AND t2.{{1}}{5}{{2}}={{0}}{5}",
 nameof(GroupRole), nameof(RolePermission), nameof(GroupRole.RoleId), nameof(RolePermission.RoleId),
 nameof(GroupRole.GroupId), nameof(RolePermission.PermissionId)
-)},
+),
 
                 /*
                 SELECT *
@@ -123,7 +123,7 @@ nameof(GroupRole.GroupId), nameof(RolePermission.PermissionId)
                     ON t1.{1}GroupId{2}=t2.{1}GroupId{2} 
                     WHERE t1.{1}UserId{2}={0}UserId AND t2.{1}PermissionId{2}={0}PermissionId)
                 */
-                {nameof(GetByUserGroupRoleId), string.Format(@"
+                [nameof(GetByUserGroupRoleId)] = string.Format(@"
 SELECT *
 FROM {{1}}{0}{{2}} 
 WHERE {{1}}{1}{{2}} IN(
@@ -141,11 +141,11 @@ WHERE {{1}}{1}{{2}} IN(
     LEFT JOIN {{1}}{9}{{2}} AS t2 
     ON t1.{{1}}{10}{{2}}=t2.{{1}}{11}{{2}} 
     WHERE t1.{{1}}{12}{{2}}={{0}}{12} AND t2.{{1}}{13}{{2}}={{0}}{13})",
-nameof(Permission), nameof(Permission.Id),nameof(UserRole), nameof(RolePermission),
+nameof(Permission), nameof(Permission.Id), nameof(UserRole), nameof(RolePermission),
 nameof(UserRole.RoleId), nameof(RolePermission.RoleId), nameof(UserRole.UserId), nameof(RolePermission.PermissionId),
-nameof(UserGroup), nameof(GroupPermission), nameof(UserGroup.GroupId), nameof(GroupPermission.GroupId), 
+nameof(UserGroup), nameof(GroupPermission), nameof(UserGroup.GroupId), nameof(GroupPermission.GroupId),
 nameof(UserGroup.UserId), nameof(GroupPermission.PermissionId)
-)},
+),
                 /*
                 SELECT * 
                 FROM {1}Permission{2} 
@@ -156,7 +156,7 @@ nameof(UserGroup.UserId), nameof(GroupPermission.PermissionId)
                     ON t1.{1}RoleId{2}=t2.{1}RoleId{2} 
                     WHERE t1.{1}GroupId{2}={0}GroupId AND t2.{1}PermissionId{2}={0}PermissionId)
                 */
-                {nameof(GetByGroupRoleId), string.Format(@"
+                [nameof(GetByGroupRoleId)] = string.Format(@"
 SELECT * 
 FROM {{1}}{0}{{2}} 
 WHERE {{1}}{1}{{2}} IN(
@@ -165,9 +165,9 @@ WHERE {{1}}{1}{{2}} IN(
     LEFT JOIN {{1}}{3}{{2}} AS t2 
     ON t1.{{1}}{4}{{2}}=t2.{{1}}{5}{{2}} 
     WHERE t1.{{1}}{6}{{2}}={{0}}{6} AND t2.{{1}}{7}{{2}}={{0}}{7})",
-nameof(Permission), nameof(Permission.Id),nameof(GroupRole), nameof(RolePermission),
+nameof(Permission), nameof(Permission.Id), nameof(GroupRole), nameof(RolePermission),
 nameof(GroupRole.RoleId), nameof(RolePermission.RoleId), nameof(GroupRole.GroupId), nameof(RolePermission.PermissionId)
-)}
+)
             };
         }
 

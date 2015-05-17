@@ -112,14 +112,8 @@ namespace Tatan.Data
             return GetHashCode() == obj.GetHashCode();
         }
 
-        public override int GetHashCode()
-        {
-            return Name.GetHashCode() ^ ConnectionString.GetHashCode();
-        }
+        public override int GetHashCode() => Name.GetHashCode() ^ ConnectionString.GetHashCode();
 
-        public override string ToString()
-        {
-            return String.Format("{0}[{1}]", Name, ConnectionString);
-        }
+        public override string ToString() => string.Format("{0}[{1}]", Name, ConnectionString);
     }
 }

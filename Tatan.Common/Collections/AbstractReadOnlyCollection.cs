@@ -30,10 +30,7 @@ namespace Tatan.Common.Collections
         /// <returns></returns>
         public abstract IEnumerator<T> GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         #endregion
     }

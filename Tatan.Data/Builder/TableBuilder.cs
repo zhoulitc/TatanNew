@@ -49,7 +49,7 @@
         /// </summary>
         /// <param name="inputFile"></param>
         /// <param name="outputFolder"></param>
-        public void Execute(string inputFile, string outputFolder)
+        public virtual void Execute(string inputFile, string outputFolder)
         {
             Assert.FileFound(inputFile);
             Assert.DirectoryFound(outputFolder);
@@ -82,20 +82,14 @@
         /// </summary>
         /// <param name="column"></param>
         /// <returns></returns>
-        protected virtual string GetType(Fields column)
-        {
-            return string.Empty;
-        }
+        protected virtual string GetType(Fields column) => string.Empty;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="column"></param>
         /// <returns></returns>
-        protected virtual string GetNotNull(Fields column)
-        {
-            return column.IsNotNull ? "NOT NULL" : string.Empty;
-        }
+        protected virtual string GetNotNull(Fields column) => column.IsNotNull ? "NOT NULL" : string.Empty;
 
         /// <summary>
         /// 
@@ -111,7 +105,13 @@
             return string.Format("DEFAULT {0}", column.DefaultValue);
         }
 
-        private static void WriteCSharpCode(string inPath, string outPath, IDictionary<string, string> targets)
+        /// <summary>
+        /// 写入文件
+        /// </summary>
+        /// <param name="inPath"></param>
+        /// <param name="outPath"></param>
+        /// <param name="targets"></param>
+        protected static void WriteCSharpCode(string inPath, string outPath, IDictionary<string, string> targets)
         {
             var fileName = outPath + targets["Table"] + ".sql";
             if (!File.Exists(fileName))

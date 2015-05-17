@@ -38,9 +38,7 @@
         /// <param name="encoding"></param>
         /// <returns></returns>
         public static T GetJsonObject<T>(this WebResponse value, Encoding encoding = null) where T : class
-        {
-            return GetContent(value, encoding).Deserialize<T>(Serializers.Json);
-        }
+            => GetContent(value, encoding).Deserialize<T>(Serializers.Json);
 
         /// <summary>
         /// 获取响应内容

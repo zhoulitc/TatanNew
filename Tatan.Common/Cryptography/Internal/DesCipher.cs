@@ -11,23 +11,15 @@
 
         private static readonly DesCipher _instance = new DesCipher();
 
-        private DesCipher()
-        {
-        }
+        private DesCipher() { }
 
-        public static DesCipher Instance
-        {
-            get { return _instance; }
-        }
+        public static DesCipher Instance => _instance;
 
         #endregion
 
         #region ICipher
 
-        protected override SymmetricAlgorithm CreateSymmetricCipher()
-        {
-            return new DESCryptoServiceProvider();
-        }
+        protected override SymmetricAlgorithm CreateSymmetricCipher() => new DESCryptoServiceProvider();
 
         #endregion
     }

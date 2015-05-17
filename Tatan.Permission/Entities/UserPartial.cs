@@ -24,33 +24,24 @@
         /// </summary>
         /// <param name="permissionId"></param>
         /// <returns></returns>
-        public bool IsAuthentication(string permissionId)
-        {
-            return Permissions.Contains(new Permission(permissionId));
-        }
+        public bool IsAuthentication(string permissionId) => Permissions.Contains(new Permission(permissionId));
 
         /// <summary>
         /// 用户包含的组关联集合
         /// </summary>
         public GroupRelationCollection Groups
-        {
-            get { return _groups ?? (_groups = new GroupRelationCollection(this, nameof(UserGroup), nameof(UserGroup.UserId))); }
-        }
+            => _groups ?? (_groups = new GroupRelationCollection(this, nameof(UserGroup), nameof(UserGroup.UserId)));
 
         /// <summary>
         /// 用户包含的角色关联集合
         /// </summary>
         public RoleRelationCollection Roles
-        {
-            get { return _roles ?? (_roles = new RoleRelationCollection(this, nameof(UserRole), nameof(UserRole.UserId))); }
-        }
+            => _roles ?? (_roles = new RoleRelationCollection(this, nameof(UserRole), nameof(UserRole.UserId)));
 
         /// <summary>
         /// 用户包含的权限关联集合
         /// </summary>
         public PermissionRelationCollection Permissions
-        {
-            get { return _permissions ?? (_permissions = new PermissionRelationCollection(this, nameof(UserPermission), nameof(UserPermission.UserId))); }
-        }
+            => _permissions ?? (_permissions = new PermissionRelationCollection(this, nameof(UserPermission), nameof(UserPermission.UserId)));
     }
 }

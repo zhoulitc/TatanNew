@@ -10,7 +10,7 @@
         /// <summary>
         /// 代码目录的路径
         /// </summary>
-        public string Path { get; set; }
+        public string Path { get; set; } = string.Empty;
 
         /// <summary>
         /// 代码目录里面的文件

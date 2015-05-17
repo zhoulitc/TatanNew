@@ -78,15 +78,9 @@
         /// 返回一个循环访问集合的枚举器。
         /// </summary>
         /// <returns></returns>
-        public IEnumerator<string> GetEnumerator()
-        {
-            return Properties.GetEnumerator();
-        }
+        public IEnumerator<string> GetEnumerator() => Properties.GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return Properties.GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => Properties.GetEnumerator();
         #endregion
 
         #region IReplicable
@@ -156,10 +150,7 @@
         /// 获取对象的hash码，如果两个对象相等，则hash码一定相等
         /// </summary>
         /// <returns>hash码</returns>
-        public override int GetHashCode()
-        {
-            return Id.GetHashCode();
-        }
+        public override int GetHashCode() => Id.GetHashCode();
 
         /// <summary>
         /// 获取对象的字符串描述

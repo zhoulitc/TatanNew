@@ -72,10 +72,7 @@
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static bool Contains(string name)
-        {
-            return _integrations.ContainsKey(name);
-        }
+        public static bool Contains(string name) => _integrations.ContainsKey(name);
 
         /// <summary>
         /// 获取一个集成信息对象
@@ -93,20 +90,14 @@
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Uri GetUri(string name)
-        {
-            return Get(name).Uri;
-        }
+        public static Uri GetUri(string name) => Get(name)?.Uri;
 
         /// <summary>
         /// 获取一个集成信息的认证
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static ICertification GetCertification(string name)
-        {
-            return Get(name).Certification;
-        }
+        public static ICertification GetCertification(string name) => Get(name)?.Certification;
 
         /// <summary>
         /// 获取一个集成信息的扩展属性
@@ -125,9 +116,6 @@
         /// 移除一个集成信息
         /// </summary>
         /// <param name="name"></param>
-        public static void Remove(string name)
-        {
-            _integrations.Remove(name);
-        }
+        public static void Remove(string name) => _integrations.Remove(name);
     }
 }

@@ -118,10 +118,7 @@
                     _parameters.Add(key, value);
             }
 
-            internal int Count
-            {
-                get { return _parameters.Count; }
-            }
+            internal int Count => _parameters.Count;
 
             /// <summary>
             /// 
@@ -137,18 +134,12 @@
             /// <summary>
             /// 表达式串
             /// </summary>
-            public string Condition
-            {
-                get { return _condition.ToString(); }
-            }
+            public string Condition => _condition.ToString();
 
             /// <summary>
             /// 参数集合
             /// </summary>
-            public IEnumerable<KeyValuePair<string, object>> Parameters
-            {
-                get { return _parameters; }
-            }
+            public IEnumerable<KeyValuePair<string, object>> Parameters => _parameters;
         }
 
         #endregion
@@ -178,10 +169,7 @@
                 };
             }
 
-            public ParserResult Result
-            {
-                get { return _result; }
-            }
+            public ParserResult Result => _result;
 
             public ExpressionParserVisitor(string symbol)
             {

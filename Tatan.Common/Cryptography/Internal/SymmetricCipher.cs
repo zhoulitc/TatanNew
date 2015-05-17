@@ -14,20 +14,11 @@
         protected const string DefaultKey = "Z1l2t3c4";
         protected static readonly Encoding Encoding = Encoding.UTF8;
 
-        protected virtual string GetKey(string key)
-        {
-            return key;
-        }
+        protected virtual string GetKey(string key) => key;
 
-        protected virtual string GetIv(string key)
-        {
-            return key;
-        }
+        protected virtual string GetIv(string key) => key;
 
-        protected virtual SymmetricAlgorithm CreateSymmetricCipher()
-        {
-            return null;
-        }
+        protected virtual SymmetricAlgorithm CreateSymmetricCipher() => null;
 
         public virtual string Encrypt(string expressly, string key = null)
         {

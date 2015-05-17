@@ -22,6 +22,9 @@ namespace ConsoleTest
 
         static void Main(string[] args)
         {
+            A a = new A();
+            var s = a.G;
+
             dynamic test5 = new Test5();
             test5.Do();
         }

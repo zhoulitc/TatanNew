@@ -47,10 +47,7 @@
         /// 
         /// </summary>
         /// <param name="outputFolder"></param>
-        public void Execute(string outputFolder)
-        {
-            Execute(Runtime.Root + @"Template\Entity.template", outputFolder);
-        }
+        public void Execute(string outputFolder) => Execute(Runtime.Root + @"Template\Entity.template", outputFolder);
 
         /// <summary>
         /// 

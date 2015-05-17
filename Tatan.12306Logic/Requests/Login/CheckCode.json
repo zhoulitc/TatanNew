@@ -1,21 +1,21 @@
 ﻿{
-	"Url": "https://kyfw.12306.cn/otn/passcodeNew/checkRandCodeAnsyn",
-	"Headers": {
-		"Accept": "*/*",
-		"Accept-Encoding": "gzip, deflate",
-		"Accept-Language": "zh-CN",
-		"Cache-Control": "no-cache",
-		"Connection": "Keep-Alive",
-		"Cookie": "@cookie@",
-		"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-		"Host": "kyfw.12306.cn",
-		"Referer": "https://kyfw.12306.cn/otn/login/init",
-		"User-Agent": "Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko",
-		"X-Requested-With": "XMLHttpRequest"
-	},
-	"Content": {
-		"randCode": "@code@",
-		"rand": "sjrand",
-		"randCode_validate": ""
-	}
+  "Url": "https://kyfw.12306.cn/otn/passcodeNew/checkRandCodeAnsyn",
+  "Headers": {
+    "Accept": "*/*",
+    "Accept-Encoding": "gzip, deflate",
+    "Accept-Language": "zh-CN",
+    "Cache-Control": "no-cache",
+    "Connection": "Keep-Alive",
+    "Cookie": "@cookie@",
+    "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+    "Host": "kyfw.12306.cn",
+    "Referer": "https://kyfw.12306.cn/otn/login/init",
+    "User-Agent": "Mozilla/5.0 (Windows NT 6.1; Trident/7.0; rv:11.0) like Gecko",
+    "X-Requested-With": "XMLHttpRequest"
+  },
+  "Content": {
+    "randCode": "@code@",
+    "rand": "sjrand",
+    "randCode_validate": ""
+  }
 }

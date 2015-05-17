@@ -12,10 +12,7 @@
         protected static readonly string DefaultKey = string.Empty;
         protected static readonly Encoding Encoding = Encoding.UTF8;
 
-        protected virtual HashAlgorithm CreateAsymmetricCipher()
-        {
-            return null;
-        }
+        protected virtual HashAlgorithm CreateAsymmetricCipher() => null;
 
         public virtual string Encrypt(string expressly, string key = null)
         {
@@ -35,9 +32,6 @@
             return sb.ToString();
         }
 
-        public string Decrypt(string ciphertext, string key = null)
-        {
-            return ciphertext;
-        }
+        public string Decrypt(string ciphertext, string key = null) => ciphertext;
     }
 }

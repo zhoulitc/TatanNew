@@ -38,9 +38,7 @@
         /// </summary>
         /// <param name="outputFolder"></param>
         public override void Execute(string outputFolder)
-        {
-            Execute(Runtime.Root + @"Template\Sqlite.template", outputFolder);
-        }
+            => Execute(Runtime.Root + @"Template\Sqlite.template", outputFolder);
 
         /// <summary>
         /// 

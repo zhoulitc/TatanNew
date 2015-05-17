@@ -27,10 +27,7 @@
                     new DataContractJsonSerializerSettings {UseSimpleDictionaryFormat = true}));
         }
 
-        public static JsonSerializer Instance
-        {
-            get { return _instance; }
-        }
+        public static JsonSerializer Instance => _instance;
 
         #endregion
 

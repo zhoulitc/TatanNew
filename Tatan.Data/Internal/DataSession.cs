@@ -130,14 +130,10 @@ namespace Tatan.Data
         }
 
         public int Execute(string command, Action<IDataParameters> action = null)
-        {
-            return _Execute(command, action, () => _command.ExecuteNonQuery());
-        }
+            => _Execute(command, action, () => _command.ExecuteNonQuery());
 
         public async Task<int> ExecuteAsync(string command, Action<IDataParameters> action = null)
-        {
-            return await _Execute(command, action, () => _command.ExecuteNonQueryAsync());
-        }
+            => await _Execute(command, action, () => _command.ExecuteNonQueryAsync());
         #endregion
 
         #region 事务处理

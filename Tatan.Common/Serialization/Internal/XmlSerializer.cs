@@ -21,10 +21,7 @@
             _typeMap = new Dictionary<Type, Xml>();
         }
 
-        public static XmlSerializer Instance
-        {
-            get { return _instance; }
-        }
+        public static XmlSerializer Instance => _instance;
 
         #endregion
 

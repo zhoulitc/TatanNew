@@ -10,7 +10,7 @@
         /// <summary>
         /// 根路径
         /// </summary>
-        public string Path { get; set; }
+        public string Path { get; set; } = string.Empty;
 
         /// <summary>
         /// 根下面的模块集合

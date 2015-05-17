@@ -17,9 +17,7 @@
         /// <param name="result"></param>
         /// <typeparam name="T"></typeparam>
         public static void CreateDelegate<T>(this MethodInfo method, out T result)
-        {
-            result = (T) (object) Delegate.CreateDelegate(typeof (T), method);
-        }
+            => result = (T)(object)Delegate.CreateDelegate(typeof(T), method);
 
         /// <summary>
         /// 获得一个类型的单例对象

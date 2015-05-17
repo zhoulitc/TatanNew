@@ -29,26 +29,17 @@
         /// <summary>
         /// 获取Request对象
         /// </summary>
-        public static HttpRequest Request
-        {
-            get { return Context.Request; }
-        }
+        public static HttpRequest Request => Context.Request;
 
         /// <summary>
         /// 获取Response对象
         /// </summary>
-        public static HttpResponse Response
-        {
-            get { return Context.Response; }
-        }
-        
+        public static HttpResponse Response => Context.Response;
+
         /// <summary>
         /// 获取Server对象
         /// </summary>
-        public static HttpServerUtility Server
-        {
-            get { return Context.Server; }
-        }
+        public static HttpServerUtility Server => Context.Server;
 
         #endregion
 
@@ -57,10 +48,7 @@
         /// <summary>
         /// 获取Cache对象
         /// </summary>
-        public static ICache Cache
-        {
-            get { return Caching.Cache.GetCache(); }
-        }
+        public static ICache Cache => Caching.Cache.GetCache();
 
         #endregion
 
@@ -69,10 +57,7 @@
         /// <summary>
         /// 获取Cookies对象
         /// </summary>
-        public static ICookies Cookies
-        {
-            get { return InternalCookies.Instance; }
-        }
+        public static ICookies Cookies => InternalCookies.Instance;
 
         private sealed class InternalCookies : ICookies
         {
@@ -80,29 +65,15 @@
 
             private static readonly InternalCookies _instance = new InternalCookies();
 
-            private InternalCookies()
-            {
-            }
+            private InternalCookies() { }
 
-            public static InternalCookies Instance
-            {
-                get { return _instance; }
-            }
+            public static InternalCookies Instance => _instance;
 
             #endregion
 
-            public void Clear()
-            {
-                Context.Response.Cookies.Clear();
-            }
+            public void Clear() => Context.Response.Cookies.Clear();
 
-            public int Count
-            {
-                get
-                {
-                    return Context.Request.Cookies.Count;
-                }
-            }
+            public int Count => Context.Request.Cookies.Count;
 
             public string this[string key]
             {
@@ -162,10 +133,7 @@
         /// <summary>
         /// 获取Session对象
         /// </summary>
-        public static ISession Session
-        {
-            get { return InternalSession.Instance; }
-        }
+        public static ISession Session => InternalSession.Instance;
 
         private sealed class InternalSession : ISession
         {
@@ -173,21 +141,13 @@
 
             private static readonly InternalSession _instance = new InternalSession();
 
-            private InternalSession()
-            {
-            }
+            private InternalSession() { }
 
-            public static InternalSession Instance
-            {
-                get { return _instance; }
-            }
+            public static InternalSession Instance => _instance;
 
             #endregion
 
-            public void Abandon()
-            {
-                Context.Session.Abandon();
-            }
+            public void Abandon() => Context.Session.Abandon();
 
             public void Clear()
             {
@@ -197,29 +157,11 @@
                 }
             }
 
-            public int Count
-            {
-                get
-                {
-                    return Context.Session.Count;
-                }
-            }
+            public int Count => Context.Session.Count;
 
-            public string Id
-            {
-                get
-                {
-                    return Context.Session.SessionID;
-                }
-            }
+            public string Id => Context.Session.SessionID;
 
-            public bool IsNew
-            {
-                get
-                {
-                    return Context.Session.IsNewSession;
-                }
-            }
+            public bool IsNew => Context.Session.IsNewSession;
 
             public T Get<T>(string key)
             {

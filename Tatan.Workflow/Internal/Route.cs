@@ -32,9 +32,6 @@ namespace Tatan.Workflow.Internal
             return Expression(entry);
         }
 
-        public override string ToString()
-        {
-            return string.Format("{0}->{1}", From.Name, To.Name);
-        }
+        public override string ToString() => string.Format("{0}->{1}", From.Name, To.Name);
     }
 }

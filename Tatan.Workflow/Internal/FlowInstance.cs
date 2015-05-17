@@ -37,15 +37,9 @@ namespace Tatan.Workflow.Internal
             _track = new Track(begin, this, remark);
         }
 
-        public IFlow Flow
-        {
-            get { return _flow; }
-        }
+        public IFlow Flow => _flow;
 
-        public ITrack Track
-        {
-            get { return _track; }
-        }
+        public ITrack Track => _track;
 
         public object this[string key]
         {
@@ -138,9 +132,6 @@ namespace Tatan.Workflow.Internal
         [Field(Name = "Version")]
         public uint Version { get; set; }
 
-        public override string ToString()
-        {
-            return _track.ToString();
-        }
+        public override string ToString() => _track.ToString();
     }
 }

@@ -126,12 +126,12 @@
         /// <summary>
         /// 获取数据供应者
         /// </summary>
-        public IDataProvider Provider { get { return _dataProvider; } }
+        public IDataProvider Provider => _dataProvider;
 
         /// <summary>
         /// 获取数据表集合
         /// </summary>
-        public DataTableCollection Tables { get { return _tables; } }
+        public DataTableCollection Tables => _tables;
 
         /// <summary>
         /// 使用数据会话对象
@@ -139,10 +139,7 @@
         /// <typeparam name="T"></typeparam>
         /// <param name="function"></param>
         /// <returns></returns>
-        public T UseSession<T>(Func<IDataSession, T> function)
-        {
-            return UseSession(null, function);
-        }
+        public T UseSession<T>(Func<IDataSession, T> function) => UseSession(null, function);
 
         /// <summary>
         /// 使用数据会话对象

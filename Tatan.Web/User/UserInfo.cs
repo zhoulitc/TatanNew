@@ -9,7 +9,7 @@
         /// <summary>
         /// 是否登录
         /// </summary>
-        public bool IsLogin { get; set; }
+        public bool IsLogin { get; set; } = false;
 
         /// <summary>
         /// 用户Id
@@ -42,8 +42,9 @@
         /// <returns></returns>
         public override string ToString()
         {
-            return string.Format("Id={0}&IsLogin={1}&Name={2}&Token={3}&State={4}",
-                Id.ToString(), IsLogin, Name, Token, State);
+            return string.Format("{5}={0}&{6}={1}&{7}={2}&{8}={3}&{9}={4}",
+                Id.ToString(), IsLogin, Name, Token, State,
+                nameof(Id), nameof(IsLogin), nameof(Name), nameof(Token), nameof(State));
         }
     }
 }
