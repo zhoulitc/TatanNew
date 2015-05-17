@@ -2,19 +2,22 @@
 {
     using System.Security.Cryptography;
 
+    /// <summary>
+    /// <para>author:zhoulitcqq</para>
+    /// </summary>
     internal sealed class AesCipher : SymmetricCipher
     {
         #region 单例
+
         private static readonly AesCipher _instance = new AesCipher();
+
         private AesCipher()
         {
         }
+
         public static AesCipher Instance
         {
-            get
-            {
-                return _instance;
-            }
+            get { return _instance; }
         }
 
         private const string _aseKey = "what are you talking ? nothing .";
@@ -22,6 +25,7 @@
         #endregion
 
         #region ICipher
+
         protected override string GetKey(string key)
         {
             if (key.Length < 32)
@@ -44,6 +48,7 @@
         {
             return new AesCryptoServiceProvider();
         }
+
         #endregion
     }
 }

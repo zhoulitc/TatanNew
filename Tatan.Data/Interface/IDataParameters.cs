@@ -1,11 +1,11 @@
-﻿using System;
-// ReSharper disable once CheckNamespace
-
-
+﻿// ReSharper disable once CheckNamespace
 namespace Tatan.Data
 {
+    using System;
+
     /// <summary>
     /// 参数集操作接口
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     public interface IDataParameters
     {

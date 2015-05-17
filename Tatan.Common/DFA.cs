@@ -7,9 +7,10 @@
 
     /// <summary>
     /// 有穷状态机，默认字符型
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
 // ReSharper disable once InconsistentNaming
-    public class DFA : DFA<char> 
+    public class DFA : DFA<char>
     {
         /// <summary>
         /// 构造函数
@@ -34,9 +35,9 @@
         /// <param name="capacity">状态个数</param>
         public DFA(int capacity = 0)
         {
-            StateFunctions = capacity == 0 ? 
-                new Dictionary<Enum, Func<T, Enum>>() : 
-                new Dictionary<Enum, Func<T, Enum>>(capacity);
+            StateFunctions = capacity == 0
+                ? new Dictionary<Enum, Func<T, Enum>>()
+                : new Dictionary<Enum, Func<T, Enum>>(capacity);
         }
 
         /// <summary>
@@ -67,7 +68,7 @@
         /// <summary>
         /// 状态机运行时的状态
         /// </summary>
-        protected Enum State { get; set; }    
+        protected Enum State { get; set; }
 
         /// <summary>
         /// 设置状态机结束的处理
@@ -82,14 +83,13 @@
         /// <exception cref="System.ArgumentNullException">传入参数为空时</exception>
         public void Run(IEnumerable<T> tokens, Enum beginState)
         {
-            var enumerable = tokens as T[] ?? tokens.ToArray();
-            Assert.ArgumentNotNull("tokens", enumerable);
-            Assert.ArgumentNotNull("beginState", beginState);
+            Assert.ArgumentNotNull(nameof(tokens), tokens);
+            Assert.ArgumentNotNull(nameof(beginState), beginState);
 
             State = beginState;
             if (StateFunctions.Count > 0)
             {
-                foreach (var token in enumerable)
+                foreach (var token in tokens)
                 {
                     CallStateFunction(token);
                 }

@@ -7,6 +7,7 @@
 
     /// <summary>
     /// 组
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     [Serializable]
     public partial class Group : DataEntity, INameable
@@ -24,7 +25,8 @@
         /// 构造函数
         /// </summary>
         /// <param name="id">唯一标识符</param>
-        public Group(string id)
+        /// <param name="creator"></param>
+        public Group(string id, string creator = null)
             : base(id)
         {
         }

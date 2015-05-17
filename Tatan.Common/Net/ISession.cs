@@ -2,6 +2,7 @@
 {
     /// <summary>
     /// Session会话接口
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     public interface ISession : IDentifiable<string>, IClearable, ICountable
     {

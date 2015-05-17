@@ -4,6 +4,9 @@
     using System.IO;
     using System.Text;
 
+    /// <summary>
+    /// <para>author:zhoulitcqq</para>
+    /// </summary>
     internal abstract class AbstractSerializer : ISerializer
     {
         protected Func<object, string> SerializeFunction;
@@ -37,11 +40,11 @@
             if (string.IsNullOrEmpty(text))
                 return default(T);
             if (DeserializeFunction != null)
-                return (T)DeserializeFunction(text);
+                return (T) DeserializeFunction(text);
 
             using (var ms = new MemoryStream(Encoding.UTF8.GetBytes(text)))
             {
-                return DeserializeAction<T>(typeof(T), ms); 
+                return DeserializeAction<T>(typeof (T), ms);
             }
         }
     }

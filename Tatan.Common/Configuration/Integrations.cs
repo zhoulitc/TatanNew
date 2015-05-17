@@ -1,11 +1,12 @@
 ﻿namespace Tatan.Common.Configuration
 {
     using System;
-    using Exception;
     using System.Collections.Generic;
+    using Exception;
 
     /// <summary>
     /// 集成信息管理者
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     public static class Integrations
     {
@@ -36,7 +37,8 @@
         /// <param name="uri"></param>
         /// <param name="certification"></param>
         /// <param name="properties"></param>
-        public static void Put(string name, Uri uri, ICertification certification = null, IDictionary<string, string> properties = null)
+        public static void Put(string name, Uri uri, ICertification certification = null,
+            IDictionary<string, string> properties = null)
         {
             lock (_lock)
             {

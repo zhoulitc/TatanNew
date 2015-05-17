@@ -2,23 +2,28 @@
 {
     using System;
 
+    /// <summary>
+    /// <para>author:zhoulitcqq</para>
+    /// </summary>
     internal sealed class Base64Cipher : SymmetricCipher
     {
         #region 单例
+
         private static readonly Base64Cipher _instance = new Base64Cipher();
+
         private Base64Cipher()
         {
         }
+
         public static Base64Cipher Instance
         {
-            get
-            {
-                return _instance;
-            }
+            get { return _instance; }
         }
+
         #endregion
 
         #region ICipher
+
         public override string Encrypt(string expressly, string key = null)
         {
             if (string.IsNullOrEmpty(expressly))
@@ -37,6 +42,7 @@
             var data = Convert.FromBase64String(ciphertext);
             return Encoding.GetString(data).Replace(key, "");
         }
+
         #endregion
     }
 }

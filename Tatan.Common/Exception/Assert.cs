@@ -12,6 +12,7 @@
 
     /// <summary>
     /// 断言处理类，不满足条件则抛出异常
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     public static class Assert
     {

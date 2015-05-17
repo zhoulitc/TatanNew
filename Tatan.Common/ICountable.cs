@@ -2,6 +2,7 @@
 {
     /// <summary>
     /// 可计数接口
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     public interface ICountable
     {

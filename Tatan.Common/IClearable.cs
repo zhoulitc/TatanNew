@@ -2,6 +2,7 @@
 {
     /// <summary>
     /// 可清除接口
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     public interface IClearable
     {

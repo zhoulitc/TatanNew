@@ -1,15 +1,15 @@
-﻿using System.IO;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
-using Tatan.Common.Serialization;
-
-namespace Tatan.Common.Extension.Net
+﻿namespace Tatan.Common.Extension.Net
 {
-    using Deserialization;
+    using System.IO;
+    using System.Net;
+    using System.Text;
+    using System.Threading.Tasks;
+    using String.Deserialization;
+    using Serialization;
 
     /// <summary>
     /// Http响应扩展方法
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     public static class WebResponseExtension
     {

@@ -5,6 +5,7 @@
 
     /// <summary>
     /// 串行对象
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     public static class Serializers
     {
@@ -13,10 +14,7 @@
         /// </summary>
         public static ISerializer Json
         {
-            get
-            {
-                return JsonSerializer.Instance;
-            }
+            get { return JsonSerializer.Instance; }
         }
 
         /// <summary>
@@ -35,10 +33,7 @@
         /// </summary>
         public static ISerializer Xml
         {
-            get
-            {
-                return XmlSerializer.Instance;
-            }
+            get { return XmlSerializer.Instance; }
         }
 
         /// <summary>

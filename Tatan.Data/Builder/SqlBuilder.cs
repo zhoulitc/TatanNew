@@ -1,36 +1,39 @@
-﻿using System.Text;
-using Tatan.Common.Exception;
-
-namespace Tatan.Common
+﻿namespace Tatan.Data.Builder
 {
+    using System.Text;
+    using Common.Exception;
+
     /// <summary>
     /// Sql构建器
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     public class SqlBuilder
     {
         private readonly string _keyCondition;
         private readonly string[] _fields;
         private readonly string _table;
-        private readonly string _symbol;
+        private readonly IDataProvider _provider;
 
         /// <summary>
         /// 构造函数
         /// </summary>
         /// <param name="table"></param>
         /// <param name="fields"></param>
-        /// <param name="symbol"></param>
         /// <param name="key"></param>
-        public SqlBuilder(string table, string key, string[] fields, string symbol)
+        /// <param name="provider"></param>
+        public SqlBuilder(string table, string key, string[] fields, IDataProvider provider)
         {
-            Assert.ArgumentNotNull("table", table);
-            Assert.ArgumentNotNull("fields", fields);
+            Assert.ArgumentNotNull(nameof(table), table);
+            Assert.ArgumentNotNull(nameof(fields), fields);
+            Assert.ArgumentNotNull(nameof(provider), provider);
             if (fields.Length <= 0)
                 throw new System.Exception("field is empty.");
 
             _table = table;
-            _keyCondition = string.IsNullOrEmpty(key) ? "1=1" : string.Format("{0}={1}{0}", key, _symbol);
-            _symbol = string.IsNullOrEmpty(symbol) ? "@" : symbol;
+            _provider = provider;
             _fields = fields;
+            _keyCondition = string.IsNullOrEmpty(key) ? "1=1" : string.Format("{2}{0}{3}={1}{0}",
+                key, _provider.ParameterSymbol, _provider.LeftSymbol, _provider.RightSymbol);
         }
 
         /// <summary>
@@ -41,7 +44,8 @@ namespace Tatan.Common
         {
             condition = condition ?? _keyCondition;
 
-            return string.Format("DELETE {0} WHERE {1}", _table, condition);
+            return string.Format("DELETE FROM {0}{1}{2} WHERE {3}",
+                _provider.LeftSymbol, _table, _provider.RightSymbol, condition);
         }
 
         /// <summary>
@@ -53,10 +57,12 @@ namespace Tatan.Common
         {
             fields = fields ?? _fields;
             var columns = string.Join(",", fields);
-            var parameters = _symbol + string.Join("," + _symbol, _fields);
+            var parameters = _provider.ParameterSymbol + _provider.LeftSymbol + 
+                string.Join(_provider.RightSymbol + "," + _provider.ParameterSymbol + _provider.LeftSymbol, 
+                _fields) + _provider.RightSymbol;
 
-            return string.Format("INSERT INTO {0}({1}) VALUES({2})",
-               _table, columns, parameters);
+            return string.Format("INSERT INTO {3}{0}{4}({1}) VALUES({2})",
+                _table, columns, parameters, _provider.LeftSymbol, _provider.RightSymbol);
         }
 
         /// <summary>
@@ -70,11 +76,12 @@ namespace Tatan.Common
             var sets = new StringBuilder(_fields.Length*20);
             foreach (var field in fields)
             {
-                sets.AppendFormat(",{0}={1}{0}", field, _symbol);
+                sets.AppendFormat(",{2}{0}{3}={1}{0}", 
+                    field, _provider.ParameterSymbol, _provider.LeftSymbol, _provider.RightSymbol);
             }
 
-            return string.Format("UPDATE {0} SET {1} WHERE {2}",
-                _table, sets.Remove(0, 1).ToString(), condition);
+            return string.Format("UPDATE {3}{0}{4} SET {3}{1}{4} WHERE {2}",
+                _table, sets.Remove(0, 1).ToString(), condition, _provider.LeftSymbol, _provider.RightSymbol);
         }
 
         /// <summary>
@@ -86,8 +93,8 @@ namespace Tatan.Common
         {
             condition = condition ?? _keyCondition;
 
-            return string.Format("SELECT COUNT(1) FROM {0} WHERE {1}",
-                _table, condition);
+            return string.Format("SELECT COUNT(1) FROM {2}{0}{3} WHERE {1}",
+                _table, condition, _provider.LeftSymbol, _provider.RightSymbol);
         }
 
         /// <summary>
@@ -101,10 +108,11 @@ namespace Tatan.Common
             fields = fields ?? _fields;
             condition = condition ?? _keyCondition;
 
-            var columns = string.Join(",", fields);
+            var columns = _provider.LeftSymbol + 
+                string.Join(_provider.RightSymbol + "," + _provider.LeftSymbol, fields) + _provider.RightSymbol;
 
-            return string.Format("SELECT {0} FROM {1} WHERE {2}",
-                _table, columns, condition);
+            return string.Format("SELECT {0} FROM {3}{1}{4} WHERE {2}",
+                _table, columns, condition, _provider.LeftSymbol, _provider.RightSymbol);
         }
     }
 }

@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using Tatan.Common;
 using Tatan.Common.Exception;
 using Tatan.Common.Logging;
 using Tatan.Data;
 using Tatan.Data.Attribute;
+using Tatan.Data.Builder;
 
 namespace Tatan.Workflow.Internal
 {
@@ -48,7 +48,7 @@ namespace Tatan.Workflow.Internal
                 if (_sqlInsertBusiness == null)
                 {
                     var builder = new SqlBuilder(_flow.BusinessTable, _flow.BusinessKey,
-                        null, _dataSource.Provider.ParameterSymbol);
+                        null, _dataSource.Provider);
                     _sqlInsertBusiness = builder.GetInsertStatement();
                 }
                 return _sqlInsertBusiness;
@@ -62,7 +62,7 @@ namespace Tatan.Workflow.Internal
                 if (_sqlCountBusiness == null)
                 {
                     var builder = new SqlBuilder(_flow.BusinessTable, _flow.BusinessKey,
-                        _flow.BusinessFields.Keys.ToArray(), _dataSource.Provider.ParameterSymbol);
+                        _flow.BusinessFields.Keys.ToArray(), _dataSource.Provider);
                     _sqlCountBusiness = builder.GetCountStatement();
                 }
                 return _sqlCountBusiness;
@@ -76,7 +76,7 @@ namespace Tatan.Workflow.Internal
                 if (_sqlUpdateBusiness == null)
                 {
                     var builder = new SqlBuilder(_flow.BusinessTable, _flow.BusinessKey,
-                        _flow.BusinessFields.Keys.ToArray(), _dataSource.Provider.ParameterSymbol);
+                        _flow.BusinessFields.Keys.ToArray(), _dataSource.Provider);
                     _sqlUpdateBusiness = builder.GetUpdateStatement();
                 }
                 return _sqlUpdateBusiness;
@@ -90,7 +90,7 @@ namespace Tatan.Workflow.Internal
                 if (_sqlCountFlow == null)
                 {
                     var builder = new SqlBuilder(_flowTable, _flowKey,
-                        null, _dataSource.Provider.ParameterSymbol);
+                        null, _dataSource.Provider);
                     _sqlCountFlow = builder.GetCountStatement();
                 }
                 return _sqlCountFlow;
@@ -104,7 +104,7 @@ namespace Tatan.Workflow.Internal
                 if (_sqlInsertFlow == null)
                 {
                     var builder = new SqlBuilder(_flowTable, _flowKey,
-                        _flowFields.ToArray(), _dataSource.Provider.ParameterSymbol);
+                        _flowFields.ToArray(), _dataSource.Provider);
                     _sqlInsertFlow = builder.GetInsertStatement();
                 }
                 return _sqlInsertFlow;
@@ -118,7 +118,7 @@ namespace Tatan.Workflow.Internal
                 if (_sqlUpdateFlow == null)
                 {
                     var builder = new SqlBuilder(_flowTable, _flowKey,
-                        _flowFields.ToArray(), _dataSource.Provider.ParameterSymbol);
+                        _flowFields.ToArray(), _dataSource.Provider);
                     _sqlUpdateFlow = builder.GetUpdateStatement();
                 }
                 return _sqlUpdateFlow;
@@ -132,7 +132,7 @@ namespace Tatan.Workflow.Internal
                 if (_sqlInsertActivity == null)
                 {
                     var builder = new SqlBuilder(_activityTable, null,
-                        _activityFields.ToArray(), _dataSource.Provider.ParameterSymbol);
+                        _activityFields.ToArray(), _dataSource.Provider);
                     _sqlInsertActivity = builder.GetInsertStatement();
                 }
                 return _sqlInsertActivity;

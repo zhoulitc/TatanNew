@@ -5,6 +5,19 @@ using Tatan.Permission.Entities;
 
 namespace Tatan.Permission.UnitTest
 {
+    internal class GroupPermission
+    {
+        /// <summary>
+        /// 关联组Id
+        /// </summary>
+        public int GroupId { get; set; }
+
+        /// <summary>
+        /// 关联权限Id
+        /// </summary>
+        public int PermissionId { get; set; }
+    }
+
     [TestClass]
     public class RelationTest
     {
@@ -31,21 +44,21 @@ namespace Tatan.Permission.UnitTest
 
             try
             {
-                user.Groups.Remove(group);
+                user.Groups.Remove(group); //用户退出id=3的组
             }
             catch
             {
             }
 
-            Assert.IsFalse(user.Groups.Contains(group));
-            Assert.IsTrue(user.Groups.Add(group));
+            Assert.IsFalse(user.Groups.Contains(group)); //验证用户是否属于组3
+            Assert.IsTrue(user.Groups.Add(group)); //用户加入组3
             try
             {
                 Assert.IsTrue(user.Groups.Add(group));
             }
             catch (Exception ex)
             {
-                Assert.AreEqual(ex.Message, "重复记录。");
+                Assert.IsTrue(ex.Message.Contains("重复记录。"));
             }
             Assert.IsTrue(user.Groups.Contains(group));
             var g = user.Groups.GetById("3");
@@ -58,7 +71,7 @@ namespace Tatan.Permission.UnitTest
             }
             catch (Exception ex)
             {
-                Assert.AreEqual(ex.Message, "不存在此记录。");
+                Assert.IsTrue(ex.Message.Contains("不存在此记录。"));
             }
             Assert.IsFalse(user.Groups.Contains(group));
         }

@@ -1,12 +1,13 @@
-﻿using System.IO;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Tatan.Common.Extension.Net
+﻿namespace Tatan.Common.Extension.Net
 {
+    using System.IO;
+    using System.Net;
+    using System.Text;
+    using System.Threading.Tasks;
+
     /// <summary>
     /// Http请求扩展方法
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     public static class WebRequestExtension
     {

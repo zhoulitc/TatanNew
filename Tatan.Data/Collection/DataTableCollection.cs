@@ -7,6 +7,7 @@ namespace Tatan.Data
 
     /// <summary>
     /// 数据记录
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     public sealed class DataTableCollection : ReadOnlyCollection<IDataTable>
     {
@@ -30,10 +31,21 @@ namespace Tatan.Data
         {
             get
             {
-                Assert.ArgumentNotNull("name", name);
+                Assert.ArgumentNotNull(nameof(name), name);
                 Assert.KeyFound(Collection, name);
                 return Collection[name];
             }
+        }
+
+        /// <summary>
+        /// 根据表名获取数据表
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public IDataTable Get<T>() where T : IDataEntity
+        {
+            var name = typeof (T).Name;
+            return this[name];
         }
 
         /// <summary>

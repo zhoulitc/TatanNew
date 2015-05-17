@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Runtime.Serialization;
-
-namespace Tatan.Common.Net
+﻿namespace Tatan.Common.Net
 {
+    using System.Collections.Generic;
+    using System.Runtime.Serialization;
+
     /// <summary>
     /// 从Json文件中读取的请求对象
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     [DataContract]
     public class Request
@@ -22,7 +23,7 @@ namespace Tatan.Common.Net
         public IDictionary<string, string> Headers { get; set; }
 
         /// <summary>
-        /// 请求体，没有请求体时，Method为GET。否则会去Headers中寻找Method，如果Method错误或者没有，则设置Method为POST
+        /// 请求体
         /// </summary>
         [DataMember]
         public IDictionary<string, string> Content { get; set; }
@@ -44,6 +45,34 @@ namespace Tatan.Common.Net
                 }
                 return s.Substring(1);
             }
+        }
+
+        /// <summary>
+        /// 获取请求方法
+        /// </summary>
+        public string Method
+        {
+            get
+            {
+                if (Content == null || Content.Count <= 0)
+                    return "GET";
+
+                if (Headers.ContainsKey("Method"))
+                {
+                    var method = Headers["Method"];
+                    if (_methods.Contains(method))
+                        return method;
+                }
+
+                return "POST";
+            }
+        }
+
+        private static readonly HashSet<string> _methods;
+
+        static Request()
+        {
+            _methods = new HashSet<string> {"GET", "POST", "PUT", "DELETE"};
         }
     }
 }

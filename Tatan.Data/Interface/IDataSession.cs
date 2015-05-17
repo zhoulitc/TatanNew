@@ -2,12 +2,14 @@
 namespace Tatan.Data
 {
     using System;
+    using System.Collections.Generic;
     using System.Data;
     using System.Threading.Tasks;
     using Common;
 
     /// <summary>
     /// 数据会话接口
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     public interface IDataSession : IDentifiable<string>
     {
@@ -20,7 +22,7 @@ namespace Tatan.Data
         /// <param name="request">请求串，向数据源请求数据，例如SQL、存储过程等</param>
         /// <param name="action">参数设置行为</param>
         /// <returns>泛型列表</returns>
-        IDataEntities<T> GetEntities<T>(string request, Action<IDataParameters> action = null) 
+        IReadOnlyList<T> GetEntities<T>(string request, Action<IDataParameters> action = null) 
             where T : IDataEntity, new();
 
         /// <summary>
@@ -31,7 +33,7 @@ namespace Tatan.Data
         /// <param name="request">请求串，向数据源请求数据，例如SQL、存储过程等</param>
         /// <param name="action">参数设置行为</param>
         /// <returns>泛型列表</returns>
-        Task<IDataEntities<T>> GetEntitiesAsync<T>(string request, Action<IDataParameters> action = null) 
+        Task<IReadOnlyList<T>> GetEntitiesAsync<T>(string request, Action<IDataParameters> action = null) 
             where T : IDataEntity, new();
 
         /// <summary>

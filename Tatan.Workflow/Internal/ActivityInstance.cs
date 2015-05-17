@@ -18,7 +18,7 @@ namespace Tatan.Workflow.Internal
             Id = Guid.New();
             FlowId = instance.Id;
             Creator = instance.Creator;
-            CreatedDate = DateTime.Now;
+            CreatedTime = DateTime.Now;
             Remark = remark ?? string.Empty;
         }
 
@@ -39,8 +39,8 @@ namespace Tatan.Workflow.Internal
         [Field(Name = "Creator", IsReadOnly = true)]
         public string Creator { get; private set; }
 
-        [Field(Name = "CreatedDate", IsReadOnly = true)]
-        public DateTime CreatedDate { get; private set; }
+        [Field(Name = "CreatedTime", IsReadOnly = true)]
+        public DateTime CreatedTime { get; private set; }
 
         public override string ToString()
         {

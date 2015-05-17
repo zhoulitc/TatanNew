@@ -6,6 +6,7 @@
     #region Tables的实体类，无法继承
     /// <summary>
     /// Tables的实体类，无法继承。此实体保存了表的信息
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     [Serializable]
     public partial class Tables : DataEntity
@@ -18,14 +19,14 @@
         public Tables()
             : base(string.Empty)
         {
-            
         }
 
         /// <summary>
         /// 构造函数
         /// </summary>
         /// <param name="id">唯一标识符</param>
-        public Tables(string id)
+        /// <param name="creator"></param>
+        public Tables(string id, string creator = null)
             : base(id)
         {
         }

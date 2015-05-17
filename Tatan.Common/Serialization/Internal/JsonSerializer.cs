@@ -6,26 +6,32 @@
     using System.IO;
     using System.Runtime.Serialization.Json;
 
+    /// <summary>
+    /// <para>author:zhoulitcqq</para>
+    /// </summary>
     internal sealed class JsonSerializer : AbstractSerializer
     {
         #region 单例
+
         private static readonly JsonSerializer _instance = new JsonSerializer();
-        private static readonly Type _dictionaryType = typeof(IDictionary);
+        private static readonly Type _dictionaryType = typeof (IDictionary);
         private readonly IDictionary<Type, DataContractJsonSerializer> _typeMap;
+
         private JsonSerializer()
             : base(null, null)
         {
             _typeMap = new Dictionary<Type, DataContractJsonSerializer>();
-            var type = typeof(IDictionary<string, object>);
-            _typeMap.Add(type, new DataContractJsonSerializer(type, new DataContractJsonSerializerSettings { UseSimpleDictionaryFormat = true }));
+            var type = typeof (IDictionary<string, object>);
+            _typeMap.Add(type,
+                new DataContractJsonSerializer(type,
+                    new DataContractJsonSerializerSettings {UseSimpleDictionaryFormat = true}));
         }
+
         public static JsonSerializer Instance
         {
-            get
-            {
-                return _instance;
-            }
+            get { return _instance; }
         }
+
         #endregion
 
         public JsonSerializer(Func<object, string> serializeFunction, Func<string, object> deserializeFunction)
@@ -51,14 +57,15 @@
             {
                 lock (_typeMap)
                 {
-                    _typeMap.Add(type, new DataContractJsonSerializer(type, 
-                        new DataContractJsonSerializerSettings() { UseSimpleDictionaryFormat = true }));
+                    _typeMap.Add(type, new DataContractJsonSerializer(type,
+                        new DataContractJsonSerializerSettings() {UseSimpleDictionaryFormat = true}));
                 }
             }
-            return (T)_typeMap[type].ReadObject(ms);
+            return (T) _typeMap[type].ReadObject(ms);
         }
 
         #region 自定义转换为JSON字符串的方法
+
         ///// <summary>
         ///// Json序列化类
         ///// </summary>
@@ -356,6 +363,7 @@
         //        return new StringBuilder(count * avg);
         //    }
         //}
+
         #endregion
     }
 }

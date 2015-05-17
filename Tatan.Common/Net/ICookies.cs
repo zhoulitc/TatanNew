@@ -2,6 +2,7 @@
 {
     /// <summary>
     /// Cookies接口
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     public interface ICookies : IClearable, ICountable
     {

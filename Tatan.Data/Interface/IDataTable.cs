@@ -4,9 +4,11 @@ namespace Tatan.Data
     using System;
     using System.Collections.Generic;
     using System.Linq.Expressions;
+    using Builder;
 
     /// <summary>
     /// 数据表
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     public interface IDataTable
     {
@@ -21,6 +23,11 @@ namespace Tatan.Data
         IDataSource DataSource { get; }
 
         /// <summary>
+        /// 获取表的Sql构造器
+        /// </summary>
+        SqlBuilder SqlBuilder { get; }
+
+        /// <summary>
         /// 添加一个属于此表的实体
         /// <para>使用此方法还需要使用Add方法才可以将元素加入到集合中</para>
         /// </summary>
@@ -29,6 +36,14 @@ namespace Tatan.Data
         /// <returns>数据项</returns>
         bool Insert<T>(T entity) 
             where T : class, IDataEntity;
+
+        /// <summary>
+        /// 移除一个实体
+        /// </summary>
+        /// <param name="id"></param>
+        /// <exception cref="System.ArgumentNullException">参数为空时抛出</exception>
+        /// <returns></returns>
+        bool Delete(string id);
 
         /// <summary>
         /// 移除一个实体
@@ -96,7 +111,7 @@ namespace Tatan.Data
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        T NewEntity<T>(string id)
+        T NewEntity<T>(string id = null)
             where T : class, IDataEntity;
 
 
@@ -105,7 +120,16 @@ namespace Tatan.Data
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        IDataResult<T> Query<T>(Func<IDataQuery<T>, IDataQuery<T>> queryFunction)
+        IReadOnlyList<T> Query<T>(Func<IDataQuery<T>, IDataQuery<T>> queryFunction)
+            where T : class, IDataEntity, new();
+
+        /// <summary>
+        /// 查询唯一实体
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        T Query<T>(string id)
             where T : class, IDataEntity, new();
     }
 }

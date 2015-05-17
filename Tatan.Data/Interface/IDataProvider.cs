@@ -3,6 +3,7 @@ namespace Tatan.Data
 {
     /// <summary>
     /// 数据提供者
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     public interface IDataProvider
     {
@@ -35,5 +36,15 @@ namespace Tatan.Data
         /// 调用存储过程命令
         /// </summary>
         string CallStoredProcedure { get; }
+
+        /// <summary>
+        /// 名称左符号
+        /// </summary>
+        string LeftSymbol { get; }
+
+        /// <summary>
+        /// 名称右符号
+        /// </summary>
+        string RightSymbol { get; }
     }
 }

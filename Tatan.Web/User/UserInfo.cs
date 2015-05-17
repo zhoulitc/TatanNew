@@ -2,6 +2,7 @@
 {
     /// <summary>
     /// 用户信息
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     public class UserInfo
     {

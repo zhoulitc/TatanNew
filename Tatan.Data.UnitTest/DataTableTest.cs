@@ -4,6 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tatan.Data;
 using Tatan.Common.Serialization;
 using Tatan.Common.Configuration;
+using Tatan.Data.Extension;
 using Tatan.Data.Relation;
 
 
@@ -53,11 +54,11 @@ namespace Tatan.Data.UnitTest
 
             var result = _source.Tables["Fields"].Query<Fields>(query => query.
                Where(tde => tde.Name == "col1").
-               OrderBy("Name", DataSort.Descending));
+               OrderBy("Name", DataSort.Descending)).GetPager();
 
             Assert.AreEqual(result.TotalCount, 1);
-            Assert.AreEqual(result.Entities.Count, 1);
-            Assert.AreEqual(result.Entities[0].Name, "col1");
+            Assert.AreEqual(result.PageIndex, 1);
+            Assert.AreEqual(result.Current[0].Name, "col1");
             Assert.AreEqual(_source.Tables["Fields"].Count(),1);
 
             var t = new Tables
@@ -89,7 +90,7 @@ namespace Tatan.Data.UnitTest
                 table => table.Name == "table1"), 1);
 
             Assert.AreEqual(_source.Tables["Tables"].Delete(new Tables("1")), false);
-
+            Assert.AreEqual(_source.Tables["Tables"].Delete("1"), false);
             Assert.AreEqual(_source.Tables["Fields"].Delete<Fields>(field=>field.Id=="1"), 0);
         }
 

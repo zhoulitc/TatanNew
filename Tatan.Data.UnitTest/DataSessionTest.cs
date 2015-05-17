@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -84,7 +85,7 @@ namespace Tatan.Data.UnitTest
             return ss;
         }
 
-        private async Task<IDataEntities<Fields>> GetResult3()
+        private async Task<IReadOnlyList<Fields>> GetResult3()
         {
             var ss = await _source.UseSession("sdsa1", session => session.GetEntitiesAsync<Fields>("SELECT * FROM Fields"));
             return ss;

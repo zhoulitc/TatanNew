@@ -2,6 +2,7 @@
 {
     /// <summary>
     /// 用户组表，关联表
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     internal class UserGroup
     {

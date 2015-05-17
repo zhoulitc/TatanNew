@@ -1,5 +1,5 @@
 ﻿using Tatan.Common;
-using Tatan.Data.Interface;
+using Tatan.Data;
 
 namespace Tatan.Workflow
 {

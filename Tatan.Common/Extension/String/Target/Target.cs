@@ -1,13 +1,13 @@
-﻿using Tatan.Common.Exception;
-
-namespace Tatan.Common.Extension.String.Target
+﻿namespace Tatan.Common.Extension.String.Target
 {
     using System.Collections.Generic;
     using System.Text;
     using System.Text.RegularExpressions;
+    using Exception;
 
     /// <summary>
-    /// 标签处理
+    /// 模板引擎处理
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     public static class Target
     {
@@ -32,7 +32,8 @@ namespace Tatan.Common.Extension.String.Target
         /// <exception cref="System.ArgumentOutOfRangeException">参数超出范围时</exception>
         /// <exception cref="System.Text.RegularExpressions.RegexMatchTimeoutException">解析超时时</exception>
         /// <returns>输出文本</returns>
-        public static string Replace(this string source, string leftMatch, string rightMatch, IDictionary<string, string> targets)
+        public static string Replace(this string source, string leftMatch, string rightMatch,
+            IDictionary<string, string> targets)
         {
             if (string.IsNullOrEmpty(leftMatch))
                 leftMatch = "{%";
@@ -47,7 +48,9 @@ namespace Tatan.Common.Extension.String.Target
 
         private static readonly Regex _regex = new Regex("{%([A-Za-z0-9_-])*%}");
         private static readonly Regex _regexLetterOrDigit = new Regex("([^A-Za-z0-9])");
-        private static string Replace(this string source, Regex regex, int leftLength, int rightLength, IDictionary<string, string> targets)
+
+        private static string Replace(this string source, Regex regex, int leftLength, int rightLength,
+            IDictionary<string, string> targets)
         {
             if (targets == null)
                 return source;

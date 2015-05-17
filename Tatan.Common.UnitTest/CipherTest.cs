@@ -110,6 +110,71 @@ namespace Tatan.Common.UnitTest
         }
 
         [TestMethod]
+        public void TestHtmlCodec()
+        {
+            var s1 = ("<wahaha>").AsEncode("html");
+            Assert.AreEqual(s1, "&lt;wahaha&gt;");
+            string s2 = "&lt;wahaha&gt;";
+            s1 = s2.AsDecode("html");
+            Assert.AreEqual(s1, "<wahaha>");
+            var s3 = ("sdsadsa").AsEncode("html");
+            Assert.AreEqual(s3, "sdsadsa");
+            s3 = ("sdsadsa").AsDecode("html");
+            Assert.AreEqual(s3, "sdsadsa");
+            var s4 = string.Empty;
+            s3 = s4.AsDecode("html");
+            Assert.AreEqual(s3, string.Empty);
+            s3 = s4.AsEncode("html");
+            Assert.AreEqual(s3, string.Empty);
+            s4 = "&lt;wahaha&gt;";
+            s3 = s4.AsDecode("sdsa");
+            Assert.AreEqual(s3, "&lt;wahaha&gt;");
+            s4 = "<wahaha>";
+            s3 = s4.AsDecode("sdsa");
+            Assert.AreEqual(s3, "<wahaha>");
+            s4 = "<wahaha>";
+            s3 = s4.AsDecode();
+            Assert.AreEqual(s3, "<wahaha>");
+            s4 = "&lt;wahaha&gt;";
+            s3 = s4.AsDecode();
+            Assert.AreEqual(s3, "&lt;wahaha&gt;");
+        }
+
+        [TestMethod]
+        public void TestUrlCodec()
+        {
+            var s1 = ("我擦").AsEncode("url");
+            Assert.AreEqual(s1, "%e6%88%91%e6%93%a6");
+            string s2 = "%e6%88%91%e6%93%a6";
+            s1 = s2.AsDecode("url");
+            Assert.AreEqual(s1, "我擦");
+            var s3 = ("sdsadsa").AsEncode("url");
+            Assert.AreEqual(s3, "sdsadsa");
+            s3 = ("sdsadsa").AsDecode("url");
+            Assert.AreEqual(s3, "sdsadsa");
+            var s4 = string.Empty;
+            s3 = s4.AsDecode("url");
+            Assert.AreEqual(s3, string.Empty);
+            s3 = s4.AsEncode("url");
+            Assert.AreEqual(s3, string.Empty);
+            s4 = "%e6%88%91%e6%93%a6";
+            s3 = s4.AsDecode("sdsa");
+            Assert.AreEqual(s3, "%e6%88%91%e6%93%a6");
+            s4 = "我擦";
+            s3 = s4.AsDecode("sdsa");
+            Assert.AreEqual(s3, "我擦");
+            s4 = "我擦";
+            s3 = s4.AsDecode();
+            Assert.AreEqual(s3, "我擦");
+            s4 = "%e6%88%91%e6%93%a6";
+            s3 = s4.AsDecode();
+            Assert.AreEqual(s3, "%e6%88%91%e6%93%a6");
+            s4 = "%e6%88%91%e6%93%a6";
+            s3 = s4.AsDecode("url", "utf-16");
+            Assert.AreEqual(s3, "裦ꚓ");
+        }
+
+        [TestMethod]
         public void TestNullEncrypt()
         {
             var s1 = ("c86fdd4105b631118cfa7e4a06c21").AsEncode();

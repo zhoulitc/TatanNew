@@ -10,6 +10,7 @@
 
     /// <summary>
     /// 日志可适配接口
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     public class LogAdapter : IAdapter
     {
@@ -25,6 +26,9 @@
             Log.Register(_action);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void Dispose()
         {
             Log.Undo(_action);
@@ -80,7 +84,7 @@
             var path = GetPath(l);
             var content = GetContent(logger, message, ex);
             if (!File.Exists(path)) File.Create(path).Close();
-            path.AppendText(writer => writer.Write(content));
+            path.AppendText(writer => writer.WriteAsync(content));
         }
 
         private bool CanWirte(string level)

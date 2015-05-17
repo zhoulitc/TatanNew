@@ -2,6 +2,7 @@
 {
     /// <summary>
     /// 串行接口，提供序列化和反序列化方法
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     public interface ISerializer
     {

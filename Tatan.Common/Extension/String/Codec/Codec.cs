@@ -4,11 +4,12 @@
     using System.Collections.Generic;
     using System.Text;
     using System.Web;
-
     using Cryptography;
+    using Logging;
 
     /// <summary>
     /// 编解码器，默认统一为UTF8格式
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     public static class Codec
     {
@@ -34,36 +35,36 @@
         }
 
         private static readonly IDictionary<string, Func<string, string, string>> _encodes = GetEncodes();
+
         private static IDictionary<string, Func<string, string, string>> GetEncodes()
         {
             var codes = new Dictionary<string, Func<string, string, string>>
             {
-                { "md5", (s, k) => CipherFactory.GetCipher("md5").Encrypt(s, k) },
-                { "sha1", (s, k) => CipherFactory.GetCipher("sha1").Encrypt(s, k) },
-                { "des", (s, k) => CipherFactory.GetCipher("des").Encrypt(s, k) },
-                { "aes", (s, k) => CipherFactory.GetCipher("aes").Encrypt(s, k) },
-                { "base64", (s, k) => CipherFactory.GetCipher("base64").Encrypt(s, k) },
-
-                { "html", (s, k) => HttpUtility.HtmlEncode(s) },
-                { "url", (s, k) => HttpUtility.UrlEncode(s, GetEncoding(k)) },
+                {"md5", (s, k) => CipherFactory.GetCipher("md5").Encrypt(s, k)},
+                {"sha1", (s, k) => CipherFactory.GetCipher("sha1").Encrypt(s, k)},
+                {"des", (s, k) => CipherFactory.GetCipher("des").Encrypt(s, k)},
+                {"aes", (s, k) => CipherFactory.GetCipher("aes").Encrypt(s, k)},
+                {"base64", (s, k) => CipherFactory.GetCipher("base64").Encrypt(s, k)},
+                {"html", (s, k) => HttpUtility.HtmlEncode(s)},
+                {"url", (s, k) => HttpUtility.UrlEncode(s, GetEncoding(k))},
             };
 
             return codes;
         }
 
         private static readonly IDictionary<string, Func<string, string, string>> _decodes = GetDecodes();
+
         private static IDictionary<string, Func<string, string, string>> GetDecodes()
         {
             var codes = new Dictionary<string, Func<string, string, string>>
             {
-                { "md5", (s, k) => CipherFactory.GetCipher("md5").Decrypt(s, k) },
-                { "sha1", (s, k) => CipherFactory.GetCipher("sha1").Decrypt(s, k) },
-                { "des", (s, k) => CipherFactory.GetCipher("des").Decrypt(s, k) },
-                { "aes", (s, k) => CipherFactory.GetCipher("aes").Decrypt(s, k) },
-                { "base64", (s, k) => CipherFactory.GetCipher("base64").Decrypt(s, k) },
-
-                { "html", (s, k) => HttpUtility.HtmlDecode(s) },
-                { "url", (s, k) => HttpUtility.UrlDecode(s, GetEncoding(k)) },
+                {"md5", (s, k) => CipherFactory.GetCipher("md5").Decrypt(s, k)},
+                {"sha1", (s, k) => CipherFactory.GetCipher("sha1").Decrypt(s, k)},
+                {"des", (s, k) => CipherFactory.GetCipher("des").Decrypt(s, k)},
+                {"aes", (s, k) => CipherFactory.GetCipher("aes").Decrypt(s, k)},
+                {"base64", (s, k) => CipherFactory.GetCipher("base64").Decrypt(s, k)},
+                {"html", (s, k) => HttpUtility.HtmlDecode(s)},
+                {"url", (s, k) => HttpUtility.UrlDecode(s, GetEncoding(k))},
             };
 
             return codes;
@@ -85,8 +86,9 @@
             {
                 return _encodes[format.ToLower()](value, key);
             }
-            catch
+            catch (Exception ex)
             {
+                Log.Warn(ex.Message, ex);
                 return value;
             }
         }
@@ -107,8 +109,9 @@
             {
                 return _decodes[format.ToLower()](value, key);
             }
-            catch
+            catch (Exception ex)
             {
+                Log.Warn(ex.Message, ex);
                 return value;
             }
         }

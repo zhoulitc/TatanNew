@@ -4,6 +4,7 @@
 
     /// <summary>
     /// 只读集合
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     public class ReadOnlyCollection<T> : AbstractReadOnlyCollection<string>
     {
@@ -17,9 +18,9 @@
         /// </summary>
         protected ReadOnlyCollection(int capacity = 0)
         {
-            Collection = capacity == 0 ?
-                new Dictionary<string, T>() :
-                new Dictionary<string, T>(capacity);
+            Collection = capacity == 0
+                ? new Dictionary<string, T>()
+                : new Dictionary<string, T>(capacity);
         }
 
         /// <summary>
@@ -27,9 +28,9 @@
         /// </summary>
         protected ReadOnlyCollection(IDictionary<string, T> dictionary)
         {
-            Collection = dictionary == null ? 
-                new Dictionary<string, T>() : 
-                new Dictionary<string, T>(dictionary);
+            Collection = dictionary == null
+                ? new Dictionary<string, T>()
+                : new Dictionary<string, T>(dictionary);
         }
 
         /// <summary>
@@ -45,7 +46,7 @@
         /// <summary>
         /// 获取集合中对象个数
         /// </summary>
-        public override int Count 
+        public override int Count
         {
             get { return Collection.Count; }
         }

@@ -14,7 +14,7 @@ namespace Tatan._12306Logic.Common
         private static readonly Regex _regex = new Regex("[Pp][Aa][Tt][Hh]=/(otn)?(,)?", RegexOptions.Compiled);
         public static HttpWebResponse Request(string name, IDictionary<string, string> tags = null)
         {
-            Assert.ArgumentNotNull("name", name);
+            Assert.ArgumentNotNull(nameof(name), name);
 
             var jsonFile = AppDomain.CurrentDomain.BaseDirectory + "Requests\\" + name;
             return RequestHandler.Request(jsonFile, tags);
@@ -27,13 +27,13 @@ namespace Tatan._12306Logic.Common
             if (string.IsNullOrEmpty(cookie)) return;
 
             cookie = cookie.Replace(_regex, "").Trim().Trim(';');
-            if (!input.ContainsKey("cookie"))
+            if (!input.ContainsKey(nameof(cookie)))
             {
-                input["cookie"] = cookie.Trim().Trim(';');
+                input[nameof(cookie)] = cookie.Trim().Trim(';');
             }
-            else if (!input["cookie"].Contains(cookie))
+            else if (!input[nameof(cookie)].Contains(cookie))
             {
-                input["cookie"] = input["cookie"] + "; " + cookie;
+                input[nameof(cookie)] = input[nameof(cookie)] + "; " + cookie;
             }
         }
     }

@@ -5,10 +5,21 @@
 
     /// <summary>
     /// 时间操作
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     public static class Date
     {
+        static Date()
+        {
+            DisplayFormat = "yyyy-MM-dd HH:mm:ss";
+        }
+
         private const string _format = "yyyyMMddhhmmss";
+
+        /// <summary>
+        /// 获取或设置时间的显示格式
+        /// </summary>
+        public static string DisplayFormat { get; set; }
 
         /// <summary>
         /// 获取当前时间串

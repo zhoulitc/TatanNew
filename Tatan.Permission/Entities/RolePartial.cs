@@ -5,6 +5,7 @@
 
     /// <summary>
     /// 角色，角色的权限为自身的权限
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     public partial class Role
     {

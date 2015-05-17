@@ -1,17 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Text;
-using Tatan.Common.Exception;
-using Tatan.Common.Extension.Net;
-using Tatan.Common.Extension.String.Convert;
-using Tatan.Common.Extension.String.IO;
-using Tatan.Common.Serialization;
-
-namespace Tatan.Common.Net
+﻿namespace Tatan.Common.Net
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Net;
+    using System.Text;
+    using Exception;
+    using Extension.Net;
+    using Extension.String.Convert;
+    using Extension.String.IO;
+    using Extension.String.Target;
+    using Serialization;
+
     /// <summary>
     /// 请求处理类
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     public static class RequestHandler
     {
@@ -22,19 +24,19 @@ namespace Tatan.Common.Net
         /// <param name="tags"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public static HttpWebResponse Request(string jsonFile, IEnumerable<KeyValuePair<string, string>> tags = null)
+        public static HttpWebResponse Request(string jsonFile, IDictionary<string, string> tags = null)
         {
             var entity = Create(jsonFile, tags);
             if (entity == null)
             {
-                throw new System.Exception("request is null. jsonFile:" + jsonFile);
+                throw new Exception("request is null. jsonFile:" + jsonFile);
             }
 
             var request = GetRequest(entity);
             var response = request.GetResponse(entity.Body) as HttpWebResponse;
             if (response == null)
             {
-                throw new System.Exception("response is null. url:" + entity.Url);
+                throw new Exception("response is null. url:" + entity.Url);
             }
             return response;
         }
@@ -44,9 +46,9 @@ namespace Tatan.Common.Net
         /// </summary>
         /// <param name="jsonFile"></param>
         /// <param name="tags"></param>
-        public static Request Create(string jsonFile, IEnumerable<KeyValuePair<string, string>> tags = null)
+        public static Request Create(string jsonFile, IDictionary<string, string> tags = null)
         {
-            Assert.ArgumentNotNull("jsonFile", jsonFile);
+            Assert.ArgumentNotNull(nameof(jsonFile), jsonFile);
 
             if (jsonFile.GetExtension().ToLower() != "json")
                 jsonFile += ".json";
@@ -56,10 +58,7 @@ namespace Tatan.Common.Net
             var content = jsonFile.ReadFile(Encoding.UTF8);
             if (tags != null)
             {
-                foreach (var tag in tags)
-                {
-                    content = content.Replace("@" + tag.Key + "@", tag.Value);
-                }
+                content = content.Replace("@", "@", tags);
             }
 
             return Serializers.Json.Deserialize<Request>(content);

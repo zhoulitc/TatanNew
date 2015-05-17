@@ -8,6 +8,7 @@
 
     /// <summary>
     /// 数据源
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     public sealed class DataSource : IDataSource
     {
@@ -36,8 +37,8 @@
         /// <returns></returns>
         public static IDataSource Connect(string providerName, string connectionString)
         {
-            Assert.ArgumentNotNull("providerName", providerName);
-            Assert.ArgumentNotNull("connectionString", connectionString);
+            Assert.ArgumentNotNull(nameof(providerName), providerName);
+            Assert.ArgumentNotNull(nameof(connectionString), connectionString);
             var provider = new DataProvider(providerName, connectionString);
             if (!_sources.ContainsKey(provider))
             {
@@ -59,7 +60,7 @@
         /// <returns></returns>
         public static IDataSource Connect(string configName)
         {
-            Assert.ArgumentNotNull("configName", configName);
+            Assert.ArgumentNotNull(nameof(configName), configName);
             var config = Configurations.Connection[configName, "ConnectionString"];
             var provider = Configurations.Connection[configName, "ProviderName"];
             return Connect(provider, config);
@@ -152,7 +153,7 @@
         /// <returns></returns>
         public T UseSession<T>(string identity, Func<IDataSession, T> function)
         {
-            Assert.ArgumentNotNull("function", function);
+            Assert.ArgumentNotNull(nameof(function), function);
             if (string.IsNullOrEmpty(identity) || identity.Length > 128)
                 return function(_session);
             if (!Sessions.ContainsKey(identity))

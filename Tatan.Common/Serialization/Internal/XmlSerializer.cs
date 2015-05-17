@@ -5,23 +5,27 @@
     using System.IO;
     using Xml = System.Xml.Serialization.XmlSerializer;
 
+    /// <summary>
+    /// <para>author:zhoulitcqq</para>
+    /// </summary>
     internal sealed class XmlSerializer : AbstractSerializer
     {
         #region 单例
+
         private static readonly XmlSerializer _instance = new XmlSerializer();
         private readonly IDictionary<Type, Xml> _typeMap;
+
         private XmlSerializer()
             : base(null, null)
         {
             _typeMap = new Dictionary<Type, Xml>();
         }
-        public static XmlSerializer Instance 
-        { 
-            get 
-            { 
-                return _instance; 
-            } 
+
+        public static XmlSerializer Instance
+        {
+            get { return _instance; }
         }
+
         #endregion
 
         public XmlSerializer(Func<object, string> serializeFunction, Func<string, object> deserializeFunction)
@@ -50,10 +54,11 @@
                     _typeMap.Add(type, new Xml(type));
                 }
             }
-            return (T)_typeMap[type].Deserialize(ms);
+            return (T) _typeMap[type].Deserialize(ms);
         }
 
         #region 自定义XML转换方法
+
         //internal static class CustomXMLSerialize
         //{
         //    public static readonly string LIST_FLAG = "_";
@@ -226,6 +231,7 @@
         //        return new StringBuilder(count * avg);
         //    }
         //}
+
         #endregion
     }
 }

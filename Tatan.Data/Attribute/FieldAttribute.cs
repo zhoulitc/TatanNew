@@ -1,13 +1,14 @@
-﻿using System;
-using Tatan.Common;
-
-namespace Tatan.Data.Attribute
+﻿namespace Tatan.Data.Attribute
 {
+    using System;
+    using Common;
+
     /// <summary>
     /// 字段特性
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     [AttributeUsage(AttributeTargets.Property, Inherited=false)]
-    public class FieldAttribute : System.Attribute, INameable
+    public class FieldAttribute : Attribute, INameable
     {
         /// <summary>
         /// 

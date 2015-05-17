@@ -2,6 +2,7 @@
 {
     /// <summary>
     /// 用户权限表，关联表
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     internal class UserPermission
     {

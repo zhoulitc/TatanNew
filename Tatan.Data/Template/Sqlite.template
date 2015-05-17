@@ -1,4 +1,5 @@
-﻿CREATE TABLE [{%Table%}](
+﻿--author:zhoulitcqq
+CREATE TABLE [{%Table%}](
 	[Id] INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
 	{%Columns%}
 );

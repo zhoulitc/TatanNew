@@ -4,6 +4,7 @@
 
     /// <summary>
     /// 属性变更通知接口
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     public interface IPropertyChanged
     {

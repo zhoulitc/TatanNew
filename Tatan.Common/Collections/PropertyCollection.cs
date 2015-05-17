@@ -6,6 +6,7 @@
 
     /// <summary>
     /// 属性集合
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     public sealed class PropertyCollection : ReadOnlyCollection<PropertyInfo>, IDisposable
     {
@@ -20,7 +21,7 @@
         /// <exception cref="System.Reflection.AmbiguousMatchException">找到多个有指定名称且与指定绑定约束匹配的属性时抛出</exception>
         public PropertyCollection(Type type, params string[] names)
         {
-            Assert.ArgumentNotNull("type", type);
+            Assert.ArgumentNotNull(nameof(type), type);
             if (names.Length == 0)
             {
                 var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
@@ -46,12 +47,13 @@
         /// <returns></returns>
         public bool IsString(string name)
         {
-            Assert.ObjectNotDisposed(_isDisposed, "PropertyCollection");
-            Assert.ArgumentNotNull("name", name);
+            Assert.ObjectNotDisposed(_isDisposed, nameof(PropertyCollection));
+            Assert.ArgumentNotNull(nameof(name), name);
             return Contains(name) && Collection[name].PropertyType.IsAssignableFrom(_stringType);
         }
 
         #region IDisposable
+
         /// <summary>
         /// 析构函数
         /// </summary>
@@ -97,18 +99,18 @@
         {
             get
             {
-                Assert.ObjectNotDisposed(_isDisposed, "PropertyCollection");
-                Assert.ArgumentNotNull("instance", instance);
-                Assert.ArgumentNotNull("name", name);
+                Assert.ObjectNotDisposed(_isDisposed, nameof(PropertyCollection));
+                Assert.ArgumentNotNull(nameof(instance), instance);
+                Assert.ArgumentNotNull(nameof(name), name);
                 Assert.KeyFound(Collection, name);
                 return Collection[name].GetValue(instance);
             }
             set
             {
-                Assert.ObjectNotDisposed(_isDisposed, "PropertyCollection");
-                Assert.ArgumentNotNull("instance", instance);
-                Assert.ArgumentNotNull("name", name);
-                Assert.ArgumentNotNull("value", value);
+                Assert.ObjectNotDisposed(_isDisposed, nameof(PropertyCollection));
+                Assert.ArgumentNotNull(nameof(instance), instance);
+                Assert.ArgumentNotNull(nameof(name), name);
+                Assert.ArgumentNotNull(nameof(value), value);
                 Assert.KeyFound(Collection, name);
                 Collection[name].SetValue(instance, value);
             }

@@ -11,8 +11,6 @@ namespace Tatan.Workflow.UnitTest
         [TestMethod]
         public void TestMethod1()
         {
-            var dataSource = DataSource.Connect("default");
-
             //初始化工作流引擎
             var flow = Flows.GetFlow("test");
             flow.Configuration.SetDatabase("");

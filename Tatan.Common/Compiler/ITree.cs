@@ -5,7 +5,7 @@ namespace Tatan.Common.Compiler
     /// <summary>
     /// 树
     /// </summary>
-    public class Tree<T> : IObject
+    public class Tree<T>
     {
         /// <summary>
         /// 树的根节点
@@ -31,10 +31,7 @@ namespace Tatan.Common.Compiler
                 if (Root.IsLeaf) return 1;
 
                 var count = 0;
-                TreeNode<T>.LayerVisit(Root, n =>
-                {
-                    count++;
-                });
+                TreeNode<T>.LayerVisit(Root, n => { count++; });
                 return count;
             }
         }

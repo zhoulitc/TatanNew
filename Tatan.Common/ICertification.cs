@@ -2,6 +2,7 @@
 {
     /// <summary>
     /// 证书接口
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     public interface ICertification
     {

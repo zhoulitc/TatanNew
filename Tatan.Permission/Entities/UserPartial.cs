@@ -2,9 +2,11 @@
 {
     using System;
     using Collections;
+    using Relation;
 
     /// <summary>
     /// 用户，用户的权限为自身权限和关联角色、关联组权限的集合
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     public partial class User
     {
@@ -18,11 +20,21 @@
         private PermissionRelationCollection _permissions;
 
         /// <summary>
+        /// 判断用户是否有权限
+        /// </summary>
+        /// <param name="permissionId"></param>
+        /// <returns></returns>
+        public bool IsAuthentication(string permissionId)
+        {
+            return Permissions.Contains(new Permission(permissionId));
+        }
+
+        /// <summary>
         /// 用户包含的组关联集合
         /// </summary>
         public GroupRelationCollection Groups
         {
-            get { return _groups ?? (_groups = new GroupRelationCollection(this, "UserGroup", "UserId")); }
+            get { return _groups ?? (_groups = new GroupRelationCollection(this, nameof(UserGroup), nameof(UserGroup.UserId))); }
         }
 
         /// <summary>
@@ -30,7 +42,7 @@
         /// </summary>
         public RoleRelationCollection Roles
         {
-            get { return _roles ?? (_roles = new RoleRelationCollection(this, "UserRole", "UserId")); }
+            get { return _roles ?? (_roles = new RoleRelationCollection(this, nameof(UserRole), nameof(UserRole.UserId))); }
         }
 
         /// <summary>
@@ -38,7 +50,7 @@
         /// </summary>
         public PermissionRelationCollection Permissions
         {
-            get { return _permissions ?? (_permissions = new PermissionRelationCollection(this, "UserPermission", "UserId")); }
+            get { return _permissions ?? (_permissions = new PermissionRelationCollection(this, nameof(UserPermission), nameof(UserPermission.UserId))); }
         }
     }
 }

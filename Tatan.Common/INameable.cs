@@ -2,6 +2,7 @@
 {
     /// <summary>
     /// 可命名的对象接口
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     public interface INameable
     {

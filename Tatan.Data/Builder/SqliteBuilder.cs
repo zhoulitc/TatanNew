@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
-using Tatan.Common.IO;
-using Tatan.Data.Relation;
-
-namespace Tatan.Data.Builder
+﻿namespace Tatan.Data.Builder
 {
+    using System.Collections.Generic;
+    using Common.IO;
+    using Relation;
+
     /// <summary>
     /// Sqlite建表生成器
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     public sealed class SqliteBuilder : TableBuilder
     {

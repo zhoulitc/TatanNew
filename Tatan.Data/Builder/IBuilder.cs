@@ -2,6 +2,7 @@
 {
     /// <summary>
     /// 生成器接口
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     public interface IBuilder
     {

@@ -2,6 +2,7 @@
 {
     /// <summary>
     /// 配置文件对象
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     public interface IConfiguration
     {

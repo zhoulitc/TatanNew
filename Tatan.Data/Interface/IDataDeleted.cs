@@ -1,7 +1,9 @@
-﻿namespace Tatan.Data.Interface
+﻿// ReSharper disable once CheckNamespace
+namespace Tatan.Data
 {
     /// <summary>
     /// 可删除数据接口
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     public interface IDataDeleted
     {

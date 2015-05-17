@@ -1,11 +1,11 @@
-﻿using System.Diagnostics;
-
-namespace Tatan.Common.Logging
+﻿namespace Tatan.Common.Logging
 {
     using System;
+    using System.Diagnostics;
 
     /// <summary>
     /// 日志类
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     public static class Log
     {

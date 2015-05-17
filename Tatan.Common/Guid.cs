@@ -2,6 +2,7 @@
 {
     /// <summary>
     /// 操作全局唯一标识符 (GUID)
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     public static class Guid
     {
@@ -21,7 +22,7 @@
         public static string New(string format = null)
         {
             if (string.IsNullOrEmpty(format))
-                return System.Guid.NewGuid().ToString("n");
+                return System.Guid.NewGuid().ToString();
             return System.Guid.NewGuid().ToString(format);
         }
     }

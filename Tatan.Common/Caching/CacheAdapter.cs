@@ -1,16 +1,16 @@
-﻿using Tatan.Common.Component;
-
-namespace Tatan.Common.Caching
+﻿namespace Tatan.Common.Caching
 {
     using System;
     using System.Collections.Generic;
     using System.Threading;
     using System.Web;
     using System.Web.Caching;
+    using Component;
     using Exception;
 
     /// <summary>
     /// 通用缓存可适配接口
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     public class CacheAdapter : IAdaptable
     {
@@ -70,7 +70,7 @@ namespace Tatan.Common.Caching
         public bool Contains(string key)
         {
             if (_cache == null)
-                throw new ObjectDisposedException("_cache");
+                throw new ObjectDisposedException(nameof(_cache));
 
             return _cache.Get(key) != null;
         }
@@ -78,8 +78,8 @@ namespace Tatan.Common.Caching
         public T Get<T>(string key)
         {
             if (_cache == null)
-                throw new ObjectDisposedException("_cache");
-            Assert.ArgumentNotNull("key", key);
+                throw new ObjectDisposedException(nameof(_cache));
+            Assert.ArgumentNotNull(nameof(key), key);
 
             var value = _cache.Get(key);
             if (!(value is T))
@@ -103,7 +103,7 @@ namespace Tatan.Common.Caching
             if (_cache == null)
                 return;
 
-            Assert.ArgumentNotNull("key", key);
+            Assert.ArgumentNotNull(nameof(key), key);
             _cache.Remove(key);
         }
 
@@ -113,7 +113,7 @@ namespace Tatan.Common.Caching
             if (_cache == null)
                 return;
 
-            Assert.ArgumentNotNull("key", key);
+            Assert.ArgumentNotNull(nameof(key), key);
 
             if (removeCallback == null)
                 _cache.Insert(key, value, null, System.Web.Caching.Cache.NoAbsoluteExpiration, slidingExpiration);
@@ -189,10 +189,7 @@ namespace Tatan.Common.Caching
                     }
                     foreach (var key in removes)
                     {
-                        var callback = _caches[key].RemoveCallback;
-                        var value = _caches[key].Value;
-                        if (_caches.Remove(key) && callback != null)
-                            callback(key, value);
+                        RemoveItem(key);
                     }
                 }
             }, null, 1000*Cache.Timeout.Minutes, 1000*Cache.Timeout.Minutes);
@@ -206,7 +203,7 @@ namespace Tatan.Common.Caching
 
             public void Clear()
             {
-                Assert.ObjectNotDisposed(_isDisposed, "InternalCustomCache");
+                Assert.ObjectNotDisposed(_isDisposed, nameof(InternalCustomCache));
                 lock (_lock)
                 {
                     _caches.Clear();
@@ -217,21 +214,21 @@ namespace Tatan.Common.Caching
             {
                 get
                 {
-                    Assert.ObjectNotDisposed(_isDisposed, "InternalCustomCache");
+                    Assert.ObjectNotDisposed(_isDisposed, nameof(InternalCustomCache));
                     return _caches.Count;
                 }
             }
 
             public bool Contains(string key)
             {
-                Assert.ObjectNotDisposed(_isDisposed, "InternalCustomCache");
+                Assert.ObjectNotDisposed(_isDisposed, nameof(InternalCustomCache));
                 return _caches.ContainsKey(key);
             }
 
             public T Get<T>(string key)
             {
-                Assert.ObjectNotDisposed(_isDisposed, "InternalCustomCache");
-                Assert.ArgumentNotNull("key", key);
+                Assert.ObjectNotDisposed(_isDisposed, nameof(InternalCustomCache));
+                Assert.ArgumentNotNull(nameof(key), key);
                 if (!Contains(key))
                     Assert.KeyFound(key);
                 var item = _caches[key];
@@ -249,8 +246,8 @@ namespace Tatan.Common.Caching
 
             public void Set<T>(string key, T value, Action<string, object> removeCallback = null)
             {
-                Assert.ObjectNotDisposed(_isDisposed, "InternalCustomCache");
-                Assert.ArgumentNotNull("key", key);
+                Assert.ObjectNotDisposed(_isDisposed, nameof(InternalCustomCache));
+                Assert.ArgumentNotNull(nameof(key), key);
                 lock (_lock)
                 {
                     SetCacheItem(key, value, Cache.Timeout, removeCallback);
@@ -260,8 +257,8 @@ namespace Tatan.Common.Caching
             public void Set<T>(string key, T value, TimeSpan slidingExpiration,
                 Action<string, object> removeCallback = null)
             {
-                Assert.ObjectNotDisposed(_isDisposed, "InternalCustomCache");
-                Assert.ArgumentNotNull("key", key);
+                Assert.ObjectNotDisposed(_isDisposed, nameof(InternalCustomCache));
+                Assert.ArgumentNotNull(nameof(key), key);
                 lock (_lock)
                 {
                     SetCacheItem(key, value, slidingExpiration, removeCallback);
@@ -270,18 +267,23 @@ namespace Tatan.Common.Caching
 
             public void Remove(string key)
             {
-                Assert.ObjectNotDisposed(_isDisposed, "InternalCustomCache");
-                Assert.ArgumentNotNull("key", key);
+                Assert.ObjectNotDisposed(_isDisposed, nameof(InternalCustomCache));
+                Assert.ArgumentNotNull(nameof(key), key);
                 if (!Contains(key))
                     return;
 
                 lock (_lock)
                 {
-                    var callback = _caches[key].RemoveCallback;
-                    var value = _caches[key].Value;
-                    if (_caches.Remove(key) && callback != null)
-                        callback(key, value);
+                    RemoveItem(key);
                 }
+            }
+
+            private static void RemoveItem(string key)
+            {
+                var callback = _caches[key].RemoveCallback;
+                var value = _caches[key].Value;
+                if (_caches.Remove(key) && callback != null)
+                    callback(key, value);
             }
 
             private void SetCacheItem(string key, object value, TimeSpan sliding, Action<string, object> removeCallback)

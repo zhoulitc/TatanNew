@@ -5,6 +5,7 @@
 
     /// <summary>
     /// 组，组的权限为自身权限和关联角色权限的集合
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     public partial class Group
     {

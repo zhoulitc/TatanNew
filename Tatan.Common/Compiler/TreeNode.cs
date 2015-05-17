@@ -6,7 +6,7 @@ namespace Tatan.Common.Compiler
     /// <summary>
     /// 树节点
     /// </summary>
-    public class TreeNode<T> : IObject
+    public class TreeNode<T>
     {
         /// <summary>
         /// 构造一个节点

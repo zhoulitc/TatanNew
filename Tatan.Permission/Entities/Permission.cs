@@ -7,6 +7,7 @@
 
     /// <summary>
     /// 权限
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     public partial class Permission : DataEntity, INameable
     {
@@ -23,7 +24,8 @@
         /// 构造函数
         /// </summary>
         /// <param name="id">唯一标识符</param>
-        public Permission(string id)
+        /// <param name="creator"></param>
+        public Permission(string id, string creator = null)
             : base(id)
         {
         }

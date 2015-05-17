@@ -1,9 +1,11 @@
-﻿using System;
-
-namespace Tatan.Data.Interface
+﻿// ReSharper disable once CheckNamespace
+namespace Tatan.Data
 {
+    using System;
+
     /// <summary>
     /// 可创建数据接口
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     public interface IDataCreated
     {
@@ -15,6 +17,6 @@ namespace Tatan.Data.Interface
         /// <summary>
         /// 数据创建时间
         /// </summary>
-        DateTime CreatedDate { get; }
+        DateTime CreatedTime { get; }
     }
 }

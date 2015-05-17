@@ -6,9 +6,7 @@ using Tatan.Common.Extension.String.IO;
 
 namespace Tatan.Common.UnitTest
 {
-    using Tatan.Common.IO;
-    using SystemFile = System.IO.File;
-    using SystemDirectory = System.IO.Directory;
+    using IO;
 
     [TestClass]
     public class IOTest
@@ -20,35 +18,35 @@ namespace Tatan.Common.UnitTest
         [TestInitialize]
         public void Init()
         {
-            if (SystemDirectory.Exists(olddir))
-                SystemDirectory.Delete(olddir, true);
-            if (SystemDirectory.Exists(newdir))
-                SystemDirectory.Delete(newdir, true);
+            if (Directory.Exists(olddir))
+                Directory.Delete(olddir, true);
+            if (Directory.Exists(newdir))
+                Directory.Delete(newdir, true);
 
-            SystemDirectory.CreateDirectory(olddir);
+            Directory.CreateDirectory(olddir);
             var testdir = olddir + "testdir\\";
-            SystemDirectory.CreateDirectory(testdir).CreateSubdirectory("testsubdir\\");
-            SystemFile.Create(testdir + "testfile.txt").Close();
+            Directory.CreateDirectory(testdir).CreateSubdirectory("testsubdir\\");
+            File.Create(testdir + "testfile.txt").Close();
 
-            SystemFile.Create(file).Close();
+            File.Create(file).Close();
         }
 
         [TestCleanup]
         public void Cleanup()
         {
-            if (SystemDirectory.Exists(olddir))
-                SystemDirectory.Delete(olddir, true);
-            if (SystemDirectory.Exists(newdir))
-                SystemDirectory.Delete(newdir, true);
+            if (Directory.Exists(olddir))
+                Directory.Delete(olddir, true);
+            if (Directory.Exists(newdir))
+                Directory.Delete(newdir, true);
 
-            SystemFile.Delete(Runtime.Root + "testfile.txt");
+            File.Delete(Runtime.Root + "testfile.txt");
         }
 
         [TestMethod]
         public void DirectoryTestCopy()
         {
             olddir.CopyDirectory(newdir);
-            Assert.AreEqual(SystemDirectory.Exists(newdir + "testdir\\"), true);
+            Assert.AreEqual(Directory.Exists(newdir + "testdir\\"), true);
 
             try
             {
@@ -56,7 +54,7 @@ namespace Tatan.Common.UnitTest
             }
             catch (System.Exception e)
             {
-                Assert.AreEqual(e.Message, "参数为空。\r\n参数名: source");
+                Assert.IsTrue(e.Message.Contains("参数名"));
             }
         }
 
@@ -69,7 +67,7 @@ namespace Tatan.Common.UnitTest
             }
             catch (System.Exception e)
             {
-                Assert.AreEqual(e.Message, "参数为空。\r\n参数名: source");
+                Assert.IsTrue(e.Message.Contains("参数名"));
             }
         }
 
@@ -77,7 +75,7 @@ namespace Tatan.Common.UnitTest
         public void FileTestAppendText()
         {
             file.AppendText(a => a.Write("a"));
-            byte[] ss = new byte[512];
+            var ss = new byte[512];
             file.OpenRead(a => a.Read(ss, 0, ss.Length));
             Assert.AreEqual(ss[0], 97);
 
@@ -87,7 +85,7 @@ namespace Tatan.Common.UnitTest
             }
             catch (System.Exception e)
             {
-                Assert.AreEqual(e.Message, "参数为空。\r\n参数名: path");
+                Assert.IsTrue(e.Message.Contains("参数名"));
             }
 
             try
@@ -96,7 +94,7 @@ namespace Tatan.Common.UnitTest
             }
             catch (System.Exception e)
             {
-                Assert.AreEqual(e.Message, "参数为空。\r\n参数名: action");
+                Assert.IsTrue(e.Message.Contains("参数名"));
             }
         }
 
@@ -104,7 +102,7 @@ namespace Tatan.Common.UnitTest
         public void FileTestCreate()
         {
             file.CreateFile(a => a.Write(Encoding.UTF8.GetBytes("a"), 0, 1));
-            byte[] ss = new byte[512];
+            var ss = new byte[512];
             file.OpenRead(a => a.Read(ss, 0, ss.Length));
             Assert.AreEqual(ss[0], 97);
 
@@ -114,7 +112,7 @@ namespace Tatan.Common.UnitTest
             }
             catch (System.Exception e)
             {
-                Assert.AreEqual(e.Message, "参数为空。\r\n参数名: path");
+                Assert.IsTrue(e.Message.Contains("参数名"));
             }
         }
 
@@ -130,7 +128,7 @@ namespace Tatan.Common.UnitTest
             }
             catch (System.Exception e)
             {
-                Assert.AreEqual(e.Message, "参数为空。\r\n参数名: path");
+                Assert.IsTrue(e.Message.Contains("参数名"));
             }
             try
             {
@@ -138,7 +136,7 @@ namespace Tatan.Common.UnitTest
             }
             catch (System.Exception e)
             {
-                Assert.AreEqual(e.Message, "参数为空。\r\n参数名: action");
+                Assert.IsTrue(e.Message.Contains("参数名"));
             }
             try
             {
@@ -146,7 +144,7 @@ namespace Tatan.Common.UnitTest
             }
             catch (System.Exception e)
             {
-                Assert.AreEqual(e.Message, "参数为空。\r\n参数名: path");
+                Assert.IsTrue(e.Message.Contains("参数名"));
             }
             try
             {
@@ -154,7 +152,7 @@ namespace Tatan.Common.UnitTest
             }
             catch (System.Exception e)
             {
-                Assert.AreEqual(e.Message, "参数为空。\r\n参数名: action");
+                Assert.IsTrue(e.Message.Contains("参数名"));
             }
         }
 

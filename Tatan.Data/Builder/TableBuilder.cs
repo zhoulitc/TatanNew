@@ -1,16 +1,16 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using Tatan.Common.Exception;
-using Tatan.Common.Extension.String.Target;
-using Tatan.Common.IO;
-using Tatan.Data.Relation;
-using File = System.IO.File;
-
-namespace Tatan.Data.Builder
+﻿namespace Tatan.Data.Builder
 {
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Text;
+    using Common.Exception;
+    using Common.Extension.String.Target;
+    using Common.IO;
+    using Relation;
+
     /// <summary>
     /// sql建表生成器
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     public abstract class TableBuilder : IBuilder
     {
@@ -53,7 +53,7 @@ namespace Tatan.Data.Builder
         {
             Assert.FileFound(inputFile);
             Assert.DirectoryFound(outputFolder);
-            Assert.ArgumentNotNull("DataSource", Source);
+            Assert.ArgumentNotNull(nameof(Source), Source);
 
             if (!outputFolder.EndsWith(Runtime.Separator))
                 outputFolder += Runtime.Separator;

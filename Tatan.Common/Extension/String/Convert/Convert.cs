@@ -1,17 +1,18 @@
-﻿using System.Reflection;
-using Tatan.Common.Extension.Reflect;
-
-namespace Tatan.Common.Extension.String.Convert
+﻿namespace Tatan.Common.Extension.String.Convert
 {
-    using Logging;
     using System;
     using System.Text;
+    using System.Reflection;
+    using Logging;
+    using Reflect;
 
     internal delegate bool TryParse<T>(string value, out T def);
 
     #region 提供字符串的转换扩展方法
+
     /// <summary>
     /// 提供字符串的转换扩展方法
+    /// <para>author:zhoulitcqq</para>
     /// <para>此方法组不会抛出异常</para>
     /// </summary>
     public static class Convert
@@ -120,6 +121,7 @@ namespace Tatan.Common.Extension.String.Convert
         }
 
         #region 转换为Bytes
+
         /// <summary>
         /// 转换为Bytes，不会抛出异常。转换失败则返回空的Bytes
         /// </summary>
@@ -143,7 +145,9 @@ namespace Tatan.Common.Extension.String.Convert
             }
             return ret;
         }
+
         #endregion
     }
+
     #endregion
 }

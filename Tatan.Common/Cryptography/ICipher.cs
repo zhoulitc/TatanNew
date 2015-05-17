@@ -2,6 +2,7 @@
 {
     /// <summary>
     /// 密码加解密接口
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     internal interface ICipher
     {

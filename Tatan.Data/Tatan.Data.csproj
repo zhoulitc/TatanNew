@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Tatan.Data</RootNamespace>
     <AssemblyName>Tatan.Data</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -51,20 +51,19 @@
     <Compile Include="Enum\DataSort.cs" />
     <Compile Include="Builder\SqliteBuilder.cs" />
     <Compile Include="Builder\TableBuilder.cs" />
+    <Compile Include="Extension\DataExtension.cs" />
     <Compile Include="Interface\IDataProvider.cs" />
     <Compile Include="Interface\IDataCreated.cs" />
-    <Compile Include="Interface\IDataResult.cs" />
     <Compile Include="Interface\IDataQuery.cs" />
     <Compile Include="Interface\IDataModified.cs" />
     <Compile Include="Interface\IDataDeleted.cs" />
+    <Compile Include="Interface\IDataPager.cs" />
     <Compile Include="Internal\DataProvider.cs" />
     <Compile Include="Internal\DataTable.cs" />
     <Compile Include="Interface\IDataSession.cs" />
     <Compile Include="Interface\IDataSource.cs" />
-    <Compile Include="Enum\DataType.cs" />
     <Compile Include="Internal\DataSession.cs" />
     <Compile Include="Interface\IDataTable.cs" />
-    <Compile Include="Interface\IDataEntities.cs" />
     <Compile Include="Interface\IDataParameters.cs" />
     <Compile Include="Interface\IDataEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -74,6 +73,7 @@
     <Compile Include="Relation\Tables.cs" />
     <Compile Include="Relation\TablesPartial.cs" />
     <Compile Include="Relation\Collections\FieldsCollection.cs" />
+    <Compile Include="Builder\SqlBuilder.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Template\Entity.template">

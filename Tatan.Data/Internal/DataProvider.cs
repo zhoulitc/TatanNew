@@ -3,6 +3,9 @@ namespace Tatan.Data
 {
     using System;
 
+    /// <summary>
+    /// <para>author:zhoulitcqq</para>
+    /// </summary>
     internal sealed class DataProvider : IDataProvider
     {
         public string Name { get; set; }
@@ -17,6 +20,10 @@ namespace Tatan.Data
 
         public string CallStoredProcedure { get; set; }
 
+        public string LeftSymbol { get; set; }
+
+        public string RightSymbol { get; set; }
+
         public DataProvider(string name, string connectionString)
         {
             Name = name;
@@ -28,54 +35,72 @@ namespace Tatan.Data
                     StringSplicingSymbol = "||";
                     FuzzyMatchingSymbol = "*";
                     CallStoredProcedure = "CALL";
+                    LeftSymbol = "[";
+                    RightSymbol = "]";
                     break;
                 case "IBM.Data.DB2":
                     ParameterSymbol = "?";
                     StringSplicingSymbol = "||";
                     FuzzyMatchingSymbol = "%";
                     CallStoredProcedure = "CALL";
+                    LeftSymbol = "";
+                    RightSymbol = "";
                     break;
                 case "IBM.Data.Informix":
                     ParameterSymbol = "?";
                     StringSplicingSymbol = "||";
                     FuzzyMatchingSymbol = "%";
                     CallStoredProcedure = "CALL";
+                    LeftSymbol = "";
+                    RightSymbol = "";
                     break;
                 case "MySql.Data.MySqlClient":
                     ParameterSymbol = "?";
                     StringSplicingSymbol = "||";
                     FuzzyMatchingSymbol = "%";
                     CallStoredProcedure = "CALL";
+                    LeftSymbol = "`";
+                    RightSymbol = "`";
                     break;
                 case "System.Data.OracleClient":
                     ParameterSymbol = "?";
                     StringSplicingSymbol = "||";
                     FuzzyMatchingSymbol = "%";
                     CallStoredProcedure = "CALL";
+                    LeftSymbol = "";
+                    RightSymbol = "";
                     break;
                 case "Npgsql":
                     ParameterSymbol = "?";
                     StringSplicingSymbol = "||";
                     FuzzyMatchingSymbol = "%";
                     CallStoredProcedure = "CALL";
+                    LeftSymbol = "";
+                    RightSymbol = "";
                     break;
                 case "System.Data.SQLite":
                     ParameterSymbol = "$";
                     StringSplicingSymbol = "||";
                     FuzzyMatchingSymbol = "%";
                     CallStoredProcedure = "";
+                    LeftSymbol = "[";
+                    RightSymbol = "]";
                     break;
                 case "Sybase.Data.AseClient":
                     ParameterSymbol = "?";
                     StringSplicingSymbol = "||";
                     FuzzyMatchingSymbol = "%";
                     CallStoredProcedure = "CALL";
+                    LeftSymbol = "";
+                    RightSymbol = "";
                     break;
                 case "System.Data.SqlClient":
                     ParameterSymbol = "@";
                     StringSplicingSymbol = "+";
                     FuzzyMatchingSymbol = "%";
                     CallStoredProcedure = "EXEC";
+                    LeftSymbol = "[";
+                    RightSymbol = "]";
                     break;
             }
         }

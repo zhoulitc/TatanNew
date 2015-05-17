@@ -72,9 +72,12 @@ namespace Tatan.Common.UnitTest
             ComponentManager.Register(new LogAdapter(new TestLog2().WriteLog));
             Log.Debug("yeye");
             Log.Info("yeye");
+            Log.Debug<string>("yeye");
             Log.Warn("yeye");
+            Log.Warn<string>("yeye");
             Log.Error("yeye");
             Log.Fatal(null);
+            Log.Fatal<string>("yeye");
             Log.Debug("yeye");
             Log.Info<string>("yeye");
             Log.Warn("yeye");

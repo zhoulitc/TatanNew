@@ -6,6 +6,7 @@
 
     /// <summary>
     /// Fields集合
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     public sealed class FieldsCollection : IEnumerable<Fields>, ICountable
     {

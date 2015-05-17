@@ -5,6 +5,7 @@
 
     /// <summary>
     /// 非对称密码抽象类
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     internal abstract class AsymmetricCipher : ICipher
     {

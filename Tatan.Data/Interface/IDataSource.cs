@@ -5,6 +5,7 @@ namespace Tatan.Data
 
     /// <summary>
     /// 数据源
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     public interface IDataSource : IDisposable
     {

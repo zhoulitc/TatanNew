@@ -21,6 +21,7 @@ namespace Tatan.Common.UnitTest
             _path.CreateFile();
             _path.AppendText(w =>
                 w.WriteLine(_xml));
+            Configurations.Register<TestConfig>(_path);
         }
 
         [TestCleanup]
@@ -43,19 +44,46 @@ namespace Tatan.Common.UnitTest
             public string Name { get; set; }
         }
 
+        [XmlRoot]
         public class TestData
         {
+            [XmlElement]
             public string Name { get; set; }
         }
 
         [TestMethod]
-        [ExpectedException(typeof(System.InvalidOperationException))]
+        public void TestLoadConfig()
+        {
+            Configurations.Register(Runtime.Root + "Configuration\\config.json");
+            Assert.AreEqual(Configurations.Current["1"], "1");
+            Assert.AreEqual(Configurations.Current["2", "22"], "22");
+        }
+
+        [TestMethod]
+        public void TestGetConfig()
+        {
+            Configurations.Register(Runtime.Root + "Configuration\\config.xml");
+            var config = Configurations.Get("config");
+            Assert.AreEqual(config["1"], "1");
+            Assert.AreEqual(config["2", "22"], "22");
+            Assert.AreEqual(config["2", "232"], string.Empty);
+            Assert.AreEqual(config["22", "232"], string.Empty);
+            Assert.AreEqual(config["22"], string.Empty);
+        }
+
+        [TestMethod]
+        public void TestGetNullConfig()
+        {
+            var config = Configurations.Get("config1");
+            Assert.AreEqual(config["1"], string.Empty);
+            Assert.AreEqual(config["2", "22"], string.Empty);
+        }
+
+        [TestMethod]
         public void TestGetXmlConfig()
         {
             var o = Configurations.Get<TestConfig>("test");
             Assert.AreEqual(o.Name, "wahaha");
-
-            var o2 = Configurations.Get<TestConfig2>("test");
         }
 
         [TestMethod]
@@ -63,6 +91,7 @@ namespace Tatan.Common.UnitTest
         {
             var o = Configurations.App;
             Assert.AreEqual(o["key"], string.Empty);
+            Assert.AreEqual(o["s", "1"], string.Empty);
             Assert.AreEqual(o["s"], "1");
         }
 
@@ -72,6 +101,9 @@ namespace Tatan.Common.UnitTest
             var o = Configurations.Connection;
             Assert.AreEqual(o["key", "ConnectionString"], string.Empty);
             Assert.AreEqual(o["LocalSqlServer", "ProviderName"], "System.Data.SqlClient");
+            Assert.AreEqual(o["LocalSqlServer", "sdas"], string.Empty);
+            Assert.AreEqual(o["LocalSqlServer"], @"data source=.\SQLEXPRESS;Integrated Security=SSPI;AttachDBFilename=|DataDirectory|aspnetdb.mdf;User Instance=true");
+            Assert.AreEqual(o["LocalSsdsadsaqlServer"], string.Empty);
         }
 
         [TestMethod]

@@ -1,20 +1,20 @@
-﻿using System.Collections.Generic;
-
-namespace Tatan.Permission.Collections
+﻿namespace Tatan.Permission.Collections
 {
+    using System.Collections.Generic;
     using Common;
     using Common.Exception;
     using Data;
 
     /// <summary>
     /// 关联集合
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     public abstract class AbstractRelationCollection<T> where T : class, IDentifiable, INameable, IDataEntity, new()
     {
-// ReSharper disable once StaticFieldInGenericType
         /// <summary>
         /// 
         /// </summary>
+        // ReSharper disable once StaticFieldInGenericType
         protected static readonly Dictionary<string, string> Sqls;
 
         /// <summary>
@@ -44,12 +44,12 @@ namespace Tatan.Permission.Collections
 
         static AbstractRelationCollection()
         {
-            Sqls = new Dictionary<string, string>(4)
+            Sqls = new Dictionary<string, string>(5)
             {
-                {"contains", "SELECT COUNT(1) FROM [{0}] WHERE {2}={1}{2} AND {3}={1}{3}"},
-                {"add", "INSERT INTO [{0}]({2},{3}) VALUES({1}{2},{1}{3})"},
-                {"remove", "DELETE FROM [{0}] WHERE {2}={1}{2} AND {3}={1}{3}"},
-                {"getById", "SELECT * FROM [{0}] WHERE Id=(SELECT {3} FROM [{1}] WHERE {3}={2}{3} AND {4}={2}{4})"}
+                {nameof(Contains), "SELECT COUNT(1) FROM {4}{0}{5} WHERE {4}{2}{5}={1}{2} AND {4}{3}{5}={1}{3}"},
+                {nameof(Add), "INSERT INTO {4}{0}{5}({4}{2}{5},{4}{3}{5}) VALUES({1}{2},{1}{3})"},
+                {nameof(Remove), "DELETE FROM {4}{0}{5} WHERE {4}{2}{5}={1}{2} AND {4}{3}{5}={1}{3}"},
+                {nameof(GetById), "SELECT * FROM {5}{0}{6} WHERE {5}Id{6}=(SELECT {5}{3}{6} FROM {5}{1}{6} WHERE {5}{3}{6}={2}{3} AND {5}{4}{6}={2}{4})"}
             };
         }
 
@@ -81,9 +81,11 @@ namespace Tatan.Permission.Collections
         /// <returns></returns>
         public virtual bool Contains(T relation)
         {
-            Assert.ArgumentNotNull("Source", Source);
-            Assert.ArgumentNotNull("relation", relation);
-            var sql = string.Format(Sqls["contains"], TableName, Source.Provider.ParameterSymbol, ThisName, ThatName);
+            Assert.ArgumentNotNull(nameof(Source), Source);
+            Assert.ArgumentNotNull(nameof(relation), relation);
+            var sql = string.Format(Sqls[nameof(Contains)], 
+                TableName, Source.Provider.ParameterSymbol, ThisName, ThatName,
+                Source.Provider.LeftSymbol, Source.Provider.RightSymbol);
             return Source.UseSession(TableName, session => session.ExecuteScalar<long>(sql, parameters =>
             {
                 parameters[ThisName] = relation.Id;
@@ -98,10 +100,12 @@ namespace Tatan.Permission.Collections
         /// <returns></returns>
         public bool Add(T relation)
         {
-            Assert.ArgumentNotNull("Source", Source);
+            Assert.ArgumentNotNull(nameof(Source), Source);
             if (Contains(relation))
                 Assert.DuplicateRecords(relation.Id, relation.Name);
-            var sql = string.Format(Sqls["add"], TableName, Source.Provider.ParameterSymbol, ThisName, ThatName);
+            var sql = string.Format(Sqls[nameof(Add)], 
+                TableName, Source.Provider.ParameterSymbol, ThisName, ThatName,
+                Source.Provider.LeftSymbol, Source.Provider.RightSymbol);
             return Source.UseSession(sql, session => session.Execute(sql, parameters =>
             {
                 parameters[ThisName] = relation.Id;
@@ -116,10 +120,12 @@ namespace Tatan.Permission.Collections
         /// <returns></returns>
         public bool Remove(T relation)
         {
-            Assert.ArgumentNotNull("Source", Source);
+            Assert.ArgumentNotNull(nameof(Source), Source);
             if (!Contains(relation))
                 Assert.NotExistRecords(relation.Id, relation.Name);
-            var sql = string.Format(Sqls["remove"], TableName, Source.Provider.ParameterSymbol, ThisName, ThatName);
+            var sql = string.Format(Sqls[nameof(Remove)], 
+                TableName, Source.Provider.ParameterSymbol, ThisName, ThatName,
+                Source.Provider.LeftSymbol, Source.Provider.RightSymbol);
             return Source.UseSession(TableName, session => session.Execute(sql, parameters =>
             {
                 parameters[ThisName] = relation.Id;
@@ -133,8 +139,10 @@ namespace Tatan.Permission.Collections
         /// <param name="id"></param>
         public virtual T GetById(string id)
         {
-            Assert.ArgumentNotNull("Source", Source);
-            var sql = string.Format(Sqls["getById"], TypeName, TableName, Source.Provider.ParameterSymbol, ThisName, ThatName);
+            Assert.ArgumentNotNull(nameof(Source), Source);
+            var sql = string.Format(Sqls[nameof(GetById)], 
+                TypeName, TableName, Source.Provider.ParameterSymbol, ThisName, ThatName,
+                Source.Provider.LeftSymbol, Source.Provider.RightSymbol);
             return Source.UseSession(TableName, session =>
             {
                 var entities = session.GetEntities<T>(sql, parameters =>

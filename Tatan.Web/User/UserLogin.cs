@@ -6,6 +6,7 @@
 
     /// <summary>
     /// 用户登录信息
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     [Serializable]
     public partial class UserLogin : DataEntity

@@ -6,6 +6,7 @@
     #region Fields的实体类，无法继承
     /// <summary>
     /// Fields的实体类，无法继承。此实体保存了表的列信息
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     [Serializable]
     public partial class Fields : DataEntity
@@ -25,7 +26,8 @@
         /// 构造函数
         /// </summary>
         /// <param name="id">唯一标识符</param>
-        public Fields(string id)
+        /// <param name="creator"></param>
+        public Fields(string id, string creator = null)
             : base(id)
         {
         }

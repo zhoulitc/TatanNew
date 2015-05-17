@@ -6,6 +6,7 @@
 
     /// <summary>
     /// Xml解析类
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     public static class XmlParser
     {

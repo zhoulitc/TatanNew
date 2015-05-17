@@ -1,15 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Tatan.Common.IO;
-
-namespace Tatan.Common.Extension.String.IO
+﻿namespace Tatan.Common.Extension.String.IO
 {
+    using System;
+    using System.Collections.Generic;
     using System.IO;
+    using System.Text;
+    using Exception;
+    using Common.IO;
 
     #region 提供枚举的转换扩展方法
+
     /// <summary>
     /// 提供枚举的转换扩展方法
+    /// <para>author:zhoulitcqq</para>
     /// <para>此方法组不会抛出异常</para>
     /// </summary>
     public static class Io
@@ -130,6 +132,7 @@ namespace Tatan.Common.Extension.String.IO
         /// <exception cref="System.NotSupportedException">文件格式无效时</exception>
         public static void CopyDirectory(this string value, string dest)
         {
+            Assert.ArgumentNotNull(nameof(value), value);
             if (dest[dest.Length - 1].ToString() != Runtime.Separator)
             {
                 dest += Runtime.Separator;
@@ -138,7 +141,7 @@ namespace Tatan.Common.Extension.String.IO
             {
                 Directory.CreateDirectory(dest);
             }
-            var sourcePaths = Directory.GetFileSystemEntries(dest);
+            var sourcePaths = Directory.GetFileSystemEntries(value);
             foreach (var sourcePath in sourcePaths)
             {
                 string destinationPath = dest + Path.GetFileName(sourcePath);
@@ -207,7 +210,8 @@ namespace Tatan.Common.Extension.String.IO
         {
             if (string.IsNullOrEmpty(pattern))
                 return Directory.EnumerateDirectories(value);
-            return Directory.EnumerateDirectories(value, pattern, deep ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
+            return Directory.EnumerateDirectories(value, pattern,
+                deep ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
         }
 
         /// <summary>
@@ -229,7 +233,8 @@ namespace Tatan.Common.Extension.String.IO
         {
             if (string.IsNullOrEmpty(pattern))
                 return Directory.EnumerateFiles(value);
-            return Directory.EnumerateFiles(value, pattern, deep ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
+            return Directory.EnumerateFiles(value, pattern,
+                deep ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
         }
 
         /// <summary>
@@ -539,5 +544,6 @@ namespace Tatan.Common.Extension.String.IO
 
         #endregion
     }
+
     #endregion
 }

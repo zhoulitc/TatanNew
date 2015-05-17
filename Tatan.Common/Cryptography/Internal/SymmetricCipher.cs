@@ -1,13 +1,13 @@
-﻿using System;
-
-namespace Tatan.Common.Cryptography.Internal
+﻿namespace Tatan.Common.Cryptography.Internal
 {
+    using System;
     using System.IO;
     using System.Text;
     using System.Security.Cryptography;
 
     /// <summary>
     /// 对称密码抽象类
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     internal abstract class SymmetricCipher : ICipher
     {
@@ -62,10 +62,10 @@ namespace Tatan.Common.Cryptography.Internal
             if (string.IsNullOrEmpty(ciphertext))
                 return result;
             key = string.IsNullOrEmpty(key) ? DefaultKey : key;
-            var len = ciphertext.Length / 2;
+            var len = ciphertext.Length/2;
             var data = new byte[len];
             for (var i = 0; i < len; i++)
-                data[i] = Convert.ToByte(Convert.ToInt32(ciphertext.Substring(i * 2, 2), 16));
+                data[i] = Convert.ToByte(Convert.ToInt32(ciphertext.Substring(i*2, 2), 16));
             using (var sa = CreateSymmetricCipher())
             {
                 sa.Key = Encoding.GetBytes(GetKey(key));

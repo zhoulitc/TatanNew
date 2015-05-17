@@ -1,9 +1,11 @@
-﻿using System;
-
-namespace Tatan.Data.Interface
+﻿// ReSharper disable once CheckNamespace
+namespace Tatan.Data
 {
+    using System;
+
     /// <summary>
     /// 可修改数据接口
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     public interface IDataModified
     {
@@ -15,7 +17,7 @@ namespace Tatan.Data.Interface
         /// <summary>
         /// 数据最后修改时间
         /// </summary>
-        DateTime ModifiedDate { get; set; }
+        DateTime ModifiedTime { get; set; }
 
         /// <summary>
         /// 数据版本号，每次修改后加一

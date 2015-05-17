@@ -4,7 +4,8 @@
     using Extension.Reflect;
 
     /// <summary>
-    ///缓存操作类
+    /// 缓存操作类
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     public static class Cache
     {
@@ -103,12 +104,7 @@
         /// <param name="cache"></param>
         internal static void Regsiter(ICache cache)
         {
-            if (cache == null)
-            {
-                _cache = InternalWebCache.Instance;
-                return;
-            }
-            _cache = cache;
+            _cache = cache ?? InternalWebCache.Instance;
         }
 
         internal static ICache GetCache()

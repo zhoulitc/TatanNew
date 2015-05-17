@@ -5,10 +5,15 @@
 
     /// <summary>
     /// 通用Path操作
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     public static class Runtime
     {
-        #region 运行时根目录
+        /// <summary>
+        /// 获取或设置时间的显示格式
+        /// </summary>
+        public static string DisplayFormat { get; set; }
+
         /// <summary>
         /// 运行时根目录
         /// </summary>
@@ -48,6 +53,5 @@
         {
             return AppDomain.CurrentDomain.BaseDirectory == Environment.CurrentDirectory + Separator;
         }
-        #endregion
     }
 }

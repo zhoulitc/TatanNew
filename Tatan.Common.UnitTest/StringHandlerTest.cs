@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using System.Text.RegularExpressions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tatan.Common.Extension.Enum;
 using Tatan.Common.Extension.String.Regular;
@@ -40,7 +41,7 @@ namespace Tatan.Common.UnitTest
             }
             catch (System.Exception e)
             {
-                Assert.AreEqual(e.Message, "非法匹配。");
+                Assert.IsTrue(e.Message.Contains("非法匹配。"));
             }
 
 
@@ -50,7 +51,7 @@ namespace Tatan.Common.UnitTest
             }
             catch (System.Exception e)
             {
-                Assert.AreEqual(e.Message, "非法匹配。");
+                Assert.IsTrue(e.Message.Contains("非法匹配。"));
             }
         }
 
@@ -113,6 +114,9 @@ namespace Tatan.Common.UnitTest
             var z2 = "s12".AsBytes(Encoding.ASCII);
             Assert.AreEqual(z1.Length, 2);
             Assert.AreEqual(z2.Length, 3);
+            string dsa = null;
+            z1 = dsa.AsBytes();
+            Assert.AreEqual(z1.Length, 0);
 
             var w1 = "2014-05-10".As<DateTime>();
             var w2 = "s12".As(new DateTime(2014, 5, 10));
@@ -151,6 +155,7 @@ namespace Tatan.Common.UnitTest
             Assert.IsTrue("13899999999".IsPhone());
             Assert.IsFalse("138999999992".IsPhone());
 
+            Assert.IsTrue("431021198805280038".IsIdCard18());
 
             Assert.IsTrue("13899999999".IsMatch(@"^\d"));
             Assert.IsFalse("-138999999992".IsMatch(@"^\d"));
@@ -177,6 +182,11 @@ namespace Tatan.Common.UnitTest
             Assert.AreEqual(ss.Length, 0);
             ss = "138999999992".Matches(null, start: 1000);
             Assert.AreEqual(ss.Length, 0);
+
+            var ss1 = "true1".Replace(new Regex("true"), "false");
+            Assert.AreEqual(ss1, "false1");
+            ss1 = "true1".Replace((Regex)null, "false");
+            Assert.AreEqual(ss1, "true1");
         }
 
         [TestMethod]
@@ -195,6 +205,10 @@ namespace Tatan.Common.UnitTest
                 var s = ex.Message;
             }
 
+            Assert.AreEqual("A".AsEnum<T1>(), T1.A);
+            Assert.AreEqual("0".AsEnum<T2>(), T2.AA);
+            string ss = null;
+            Assert.AreEqual(ss.AsEnum<T1>(T1.A), T1.A);
         }
 
         public struct Test

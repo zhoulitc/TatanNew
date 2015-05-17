@@ -4,6 +4,7 @@
 
     /// <summary>
     /// 缓存接口
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     public interface ICache : IClearable, ICountable
     {

@@ -43,7 +43,7 @@ namespace Tatan.Common.UnitTest
             }
             catch (System.Exception ex)
             {
-                Assert.AreEqual(ex.Message, "CONSTRUCTOR ERROR.\r\n参数名: directory");
+                Assert.IsTrue(ex.Message.Contains("参数名"));
             }
             Assert.IsTrue(l.Reload("en-us"));
             Assert.IsTrue(l.Reload(null));

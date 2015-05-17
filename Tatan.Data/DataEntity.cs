@@ -9,6 +9,7 @@
     #region 抽象通用实体类
     /// <summary>
     /// 抽象通用实体类
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     [Serializable]
     public abstract class DataEntity : IDataEntity
@@ -17,13 +18,17 @@
         internal readonly static string DefaultId = string.Empty;
 
         #region 构造函数
+
         /// <summary>
         /// 
         /// </summary>
         /// <param name="id"></param>
-        protected DataEntity(string id)
+        /// <param name="creator"></param>
+        protected DataEntity(string id, string creator = null)
         {
             Id = id;
+            Creator = creator ?? "System";
+            CreatedTime = DateTime.Now;
         }
         #endregion
 
@@ -51,9 +56,12 @@
             set
             {
                 var oldValue = Properties[this, name];
-                Properties[this, name] = value;
-                if (PropertyChanged != null && oldValue != value)
-                    PropertyChanged(this, name);
+                if (oldValue != value)
+                {
+                    Properties[this, name] = value;
+                    if (PropertyChanged != null)
+                        PropertyChanged(this, name);
+                }
             }
         }
         #endregion
@@ -62,7 +70,7 @@
         /// <summary>
         /// 一个自动生成的唯一标识符
         /// </summary>
-        public string Id { get; set; }
+        public string Id { get; internal set; }
         #endregion
 
         #region IEnumerable
@@ -92,6 +100,8 @@
             entity.Clear();
             entity.Id = DefaultId;
             entity.PropertyChanged = null;
+            entity.Creator = Creator;
+            entity.CreatedTime = DateTime.Now;
             return entity;
         }
 
@@ -115,6 +125,18 @@
         /// 属性改变时的行为
         /// </summary>
         public event Action<object, string> PropertyChanged;
+        #endregion
+
+        #region IPropertyChanged
+        /// <summary>
+        /// 创建者
+        /// </summary>
+        public string Creator { get; internal set; }
+
+        /// <summary>
+        /// 创建时间
+        /// </summary>
+        public DateTime CreatedTime { get; internal set; }
         #endregion
 
         #region Object
@@ -146,18 +168,19 @@
         /// <returns>对象的字符串描述</returns>
         public override string ToString()
         {
-            var builder = new StringBuilder(Properties.Count * 20);         
-            builder.AppendFormat("\"Id\":{0}", Id);
+            var builder = new StringBuilder(Properties.Count * 20);
+            builder.AppendFormat("\"Id\":{0},\"Creator\":\"{1}\",\"CreatedTime\":\"{2}\"", 
+                Id, Creator, CreatedTime.ToString("yyyy-MM-dd hh:mm:ss"));
             foreach (var property in Properties)
             {
-                if (property == "Id") continue;
+                if (property == "Id" || property == "Creator" || property == "CreatedTime") continue;
 // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
                 if (Properties.IsString(property))
                     builder.AppendFormat(",\"{0}\":\"{1}\"", property, Properties[this, property]);
                 else
                     builder.AppendFormat(",\"{0}\":{1}", property, Properties[this, property]);
             }
-            return String.Format("{{{0}}}", builder);
+            return string.Format("{{{0}}}", builder);
         }
         #endregion
     }

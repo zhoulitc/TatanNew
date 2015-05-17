@@ -25,7 +25,7 @@ namespace Tatan.Workflow.Internal
             Type = _flow.Type;
             State = FlowInstanceState.Running;
             Creator = string.IsNullOrEmpty(creator) ? "System" : creator;
-            CreatedDate = DateTime.Now;
+            CreatedTime = DateTime.Now;
             Version = 0;
             if (flow.BusinessFields != null)
             {
@@ -126,14 +126,14 @@ namespace Tatan.Workflow.Internal
         [Field(Name = "Creator", IsReadOnly = true)]
         public string Creator { get; private set; }
 
-        [Field(Name = "CreatedDate", IsReadOnly = true)]
-        public DateTime CreatedDate { get; private set; }
+        [Field(Name = "CreatedTime", IsReadOnly = true)]
+        public DateTime CreatedTime { get; private set; }
 
         [Field(Name = "Modifier")]
         public string Modifier { get; set; }
 
-        [Field(Name = "ModifiedDate")]
-        public DateTime ModifiedDate { get; set; }
+        [Field(Name = "ModifiedTime")]
+        public DateTime ModifiedTime { get; set; }
 
         [Field(Name = "Version")]
         public uint Version { get; set; }

@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
-
-namespace Tatan.Data.Attribute
+﻿namespace Tatan.Data.Attribute
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Reflection;
+
     /// <summary>
     /// 特性操作方法
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     public static class DataAttributes
     {

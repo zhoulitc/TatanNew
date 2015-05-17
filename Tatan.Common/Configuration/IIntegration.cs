@@ -5,6 +5,7 @@
 
     /// <summary>
     /// 集成信息接口
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     public interface IIntegration
     {

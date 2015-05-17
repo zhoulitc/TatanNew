@@ -4,6 +4,7 @@ namespace Tatan.Common
 {
     /// <summary>
     /// 可通知接口
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     public interface INotifiable<out T>
     {
@@ -15,6 +16,7 @@ namespace Tatan.Common
 
     /// <summary>
     /// 可通知接口
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     public interface INotifiable
     {

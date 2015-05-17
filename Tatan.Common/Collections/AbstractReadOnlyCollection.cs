@@ -5,6 +5,7 @@ namespace Tatan.Common.Collections
 
     /// <summary>
     /// 只读抽象集合
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public abstract class AbstractReadOnlyCollection<T> : IEnumerable<T>, ICountable
@@ -22,6 +23,7 @@ namespace Tatan.Common.Collections
         public abstract int Count { get; }
 
         #region IEnumerable
+
         /// <summary>
         /// 获取此集合的迭代
         /// </summary>
@@ -32,6 +34,7 @@ namespace Tatan.Common.Collections
         {
             return GetEnumerator();
         }
+
         #endregion
     }
 }

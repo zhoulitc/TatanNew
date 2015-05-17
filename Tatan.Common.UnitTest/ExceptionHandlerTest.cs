@@ -13,7 +13,7 @@ namespace Tatan.Common.UnitTest
         public void TestGetText()
         {
             var s = Tatan.Common.Exception.Assert.GetText("IllegalSql");
-            Microsoft.VisualStudio.TestTools.UnitTesting.Assert.AreEqual(s, "非法的数据库命令。数据库命令只支持Select、Insert、Update、Delete、Truncate和存储过程调用。");
+            Microsoft.VisualStudio.TestTools.UnitTesting.Assert.AreEqual(s, "非法的数据库命令。数据库命令只支持Select、Insert、Update、Delete、Truncate和存储过程调用。sql：{0}");
         }
 
         [TestMethod]

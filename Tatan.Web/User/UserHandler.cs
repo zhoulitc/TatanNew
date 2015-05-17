@@ -1,17 +1,16 @@
-﻿using Tatan.Common.Net;
-
-namespace Tatan.Web.User
+﻿namespace Tatan.Web.User
 {
     using System;
+    using System.Data;
     using Common;
     using Common.Extension.String.Codec;
     using Common.Exception;
     using Common.Logging;
+    using Common.Net;
     using Data;
-    using Net;
 
     /// <summary>
-    /// 
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     public static class UserHandler
     {
@@ -45,8 +44,8 @@ namespace Tatan.Web.User
             var us = new UserInfo {IsLogin = false, Name = username};
             var result = Source.UseSession(Http.Session.Id, session =>
             {
-                var flag = false;
-                var trans = session.BeginTransaction(System.Data.IsolationLevel.ReadCommitted);
+                var success = false;
+                var trans = session.BeginTransaction(IsolationLevel.ReadCommitted);
                 var id = session.ExecuteScalar<long>(string.Format(_checkSql, Source.Provider.ParameterSymbol), p =>
                 {
                     p["Name"] = username;
@@ -56,7 +55,7 @@ namespace Tatan.Web.User
                 {
                     us.Id = id;
                     us.Guid = (id + username).AsEncode("md5");
-                    flag = session.Execute(string.Format(_updateSql, Source.Provider.ParameterSymbol), p =>
+                    success = session.Execute(string.Format(_updateSql, Source.Provider.ParameterSymbol), p =>
                     {
                         p["Id"] = id;
                         p["LastLoginTime", typeof(DateTime)] = DateTime.Now;
@@ -64,7 +63,7 @@ namespace Tatan.Web.User
 
                     }) == 1;
                 }
-                if (flag)
+                if (success)
                 {
                     trans.Commit();
                 }
@@ -72,7 +71,7 @@ namespace Tatan.Web.User
                 {
                     trans.Rollback();
                 }
-                return flag;
+                return success;
             });
             if (!result) return us;
             us.IsLogin = true;

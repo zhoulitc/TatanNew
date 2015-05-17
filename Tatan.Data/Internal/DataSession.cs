@@ -2,16 +2,18 @@
 namespace Tatan.Data
 {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Data;
     using System.Data.Common;
     using System.Threading.Tasks;
     using Common.Exception;
+    using Common.Extension.String.Convert;
     using Common.Logging;
 
     /// <summary>
     /// 数据库抽象会话类，处理一些通用的会话操作
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     internal sealed class DataSession : IDataSession, IDisposable
     {
@@ -21,21 +23,22 @@ namespace Tatan.Data
 
         private static readonly object _lock = new object();
         private static readonly Type _readerType = typeof (IDataReader);
-        private static readonly Dictionary<string, DbProviderFactory> _dbFactories; //工厂集
+        private static readonly Dictionary<string, DbProviderFactory> _dbFactories;
 
         #endregion
 
         #region 构造函数
         public DataSession(string id, IDataProvider provider)
         {
-            Assert.ArgumentNotNull("provider", provider);
+            Assert.ArgumentNotNull(nameof(provider), provider);
             if (string.IsNullOrEmpty(id) || id.Length > 128)
                 id = "0";
             Id = id;
 
             var dbFactory = Get(provider.Name);
             var connection = dbFactory.CreateConnection();
-            Assert.ArgumentNotNull("connection", connection);
+            Assert.ArgumentNotNull(nameof(connection), connection);
+// ReSharper disable once PossibleNullReferenceException
             connection.ConnectionString = provider.ConnectionString;
             _command = connection.CreateCommand();
             _provider = provider;
@@ -43,7 +46,7 @@ namespace Tatan.Data
 
         static DataSession()
         {
-            _dbFactories = new Dictionary<string, DbProviderFactory>(20);
+            _dbFactories = new Dictionary<string, DbProviderFactory>(5);
         }
         #endregion
 
@@ -52,7 +55,7 @@ namespace Tatan.Data
         public int Timeout { private get; set; }
 
         #region 数据处理
-        public IDataEntities<T> GetEntities<T>(string request, Action<IDataParameters> action = null)
+        public IReadOnlyList<T> GetEntities<T>(string request, Action<IDataParameters> action = null)
             where T : IDataEntity, new()
         {
             using (var reader = _Execute(request, action, () => _command.ExecuteReader()))
@@ -61,7 +64,7 @@ namespace Tatan.Data
             }
         }
 
-        public async Task<IDataEntities<T>> GetEntitiesAsync<T>(string request, Action<IDataParameters> action = null)
+        public async Task<IReadOnlyList<T>> GetEntitiesAsync<T>(string request, Action<IDataParameters> action = null)
             where T : IDataEntity, new()
         {
             using (var reader = await _Execute(request, action, () => _command.ExecuteReaderAsync()))
@@ -200,7 +203,7 @@ namespace Tatan.Data
                 set
                 {
                     if (index < 0 || index > _parameters.Count)
-                        throw new IndexOutOfRangeException(Assert.GetText("IndexOutOfRange"));
+                        throw new IndexOutOfRangeException();
                     SetOtherValue(TryCreate(index), type ?? _defaultType, size, value);
                 }
             }
@@ -210,7 +213,7 @@ namespace Tatan.Data
                 set
                 {
                     if (index < 0 || index > _parameters.Count)
-                        throw new IndexOutOfRangeException(Assert.GetText("IndexOutOfRange"));
+                        throw new IndexOutOfRangeException();
                     SetNumberValue(TryCreate(index), size, scale, value);
                 }
             }
@@ -219,7 +222,7 @@ namespace Tatan.Data
             {
                 set
                 {
-                    Assert.ArgumentNotNull("name", name);
+                    Assert.ArgumentNotNull(nameof(name), name);
                     SetOtherValue(TryCreate(name), type ?? _defaultType, size, value);
                 }
             }
@@ -228,7 +231,7 @@ namespace Tatan.Data
             {
                 set 
                 {
-                    Assert.ArgumentNotNull("name", name);
+                    Assert.ArgumentNotNull(nameof(name), name);
                     SetNumberValue(TryCreate(name), size, scale, value);
                 }
             }
@@ -329,46 +332,6 @@ namespace Tatan.Data
         }
         #endregion
 
-        #region IDataEntities
-        private class DataEntities<T> : IDataEntities<T>
-            where T : IDataEntity, new()
-        {
-            public readonly IList<T> Entities;
-            public DataEntities(int capacity)
-            {
-                Entities = new List<T>(capacity);
-            }
-
-            #region IReadOnlyList
-            public int Count
-            {
-                get
-                {
-                    return Entities.Count;
-                }
-            }
-            public T this[int index] 
-            {
-                get
-                {
-                    Assert.IndexInRange(index, Count);
-                    return Entities[index];
-                }
-            }
-
-            public IEnumerator<T> GetEnumerator()
-            {
-                return Entities.GetEnumerator();
-            }
-
-            IEnumerator IEnumerable.GetEnumerator()
-            {
-                return Entities.GetEnumerator();
-            }
-            #endregion
-        }
-        #endregion
-
         #region Protected Method
         private void _PrepareCommand(string text)
         {
@@ -397,7 +360,7 @@ namespace Tatan.Data
         private T _Execute<T>(string text, Action<IDataParameters> action, Func<T> function)
         {
             var result = default(T);
-            Assert.ArgumentNotNull("text", text);
+            Assert.ArgumentNotNull(nameof(text), text);
             try
             {
                 _PrepareCommand(text);
@@ -414,34 +377,30 @@ namespace Tatan.Data
             return result;
         }
 
-        private static DataEntities<T> _GetEntities<T>(IDataReader reader)
+        private static IReadOnlyList<T> _GetEntities<T>(IDataReader reader)
             where T : IDataEntity, new()
         {
             if (reader == null)
-                return new DataEntities<T>(0);
-            var entities = new DataEntities<T>(20);
+                return new ReadOnlyCollection<T>(new List<T>(0));
+            var entities = new List<T>(23);
             while (reader.Read())
             {
                 var entity = new T();
+                var dataEntity = entity as DataEntity;
                 for (var j = 0; j < reader.FieldCount; j++)
                 {
-                    if (reader.GetName(j) == "Id")
-                        SetId(entity, reader[j].ToString());
+                    if (reader.GetName(j) == "Id" && dataEntity != null)
+                        dataEntity.Id = reader[j].ToString();
+                    else if (reader.GetName(j) == "Creator" && dataEntity != null)
+                        dataEntity.Creator = reader[j].ToString();
+                    else if (reader.GetName(j) == "CreatedTime" && dataEntity != null)
+                        dataEntity.CreatedTime = reader[j].ToString().As(DateTime.Now);
                     else if (!reader.IsDBNull(j))
                         entity[reader.GetName(j)] = reader.GetValue(j);
                 }
-                entities.Entities.Add(entity);
+                entities.Add(entity);
             }
-            return entities;
-        }
-
-        private static void SetId(object obj, string id)
-        {
-            var entity = obj as DataEntity;
-            if (entity != null)
-            {
-                entity.Id = id;
-            }
+            return new ReadOnlyCollection<T>(entities);
         }
 
         private static DbProviderFactory Get(string name)

@@ -2,10 +2,12 @@
 namespace Tatan.Data
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq.Expressions;
 
     /// <summary>
     /// 实体查询接口
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     /// <typeparam name="T">实体类型</typeparam>
     public interface IDataQuery<T> : IDisposable
@@ -27,17 +29,9 @@ namespace Tatan.Data
         IDataQuery<T> OrderBy(string name, DataSort sort = DataSort.Ascending);
 
         /// <summary>
-        /// 设置查询区间
-        /// </summary>
-        /// <param name="begin"></param>
-        /// <param name="end"></param>
-        /// <returns></returns>
-        IDataQuery<T> Range(uint begin, uint end);
-
-        /// <summary>
         /// 执行并获取返回结果
         /// </summary>
         /// <returns></returns>
-        IDataResult<T> Execute();
+        IReadOnlyList<T> Execute();
     }
 }

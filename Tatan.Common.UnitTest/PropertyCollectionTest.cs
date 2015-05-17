@@ -24,7 +24,7 @@
             }
             catch (System.Exception ex)
             {
-                Assert.AreEqual(ex.Message, "参数为空。\r\n参数名: type");
+                Assert.IsTrue(ex.Message.Contains("参数名"));
             }
         }
 
@@ -42,7 +42,7 @@
             }
             catch (System.Exception ex)
             {
-                Assert.AreEqual(ex.Message, "参数为空。\r\n参数名: instance");
+                Assert.IsTrue(ex.Message.Contains("参数名"));
             }
             try
             {
@@ -50,7 +50,7 @@
             }
             catch (System.Exception ex)
             {
-                Assert.AreEqual(ex.Message, "参数为空。\r\n参数名: name");
+                Assert.IsTrue(ex.Message.Contains("参数名"));
             }
             try
             {
@@ -58,7 +58,7 @@
             }
             catch (System.Exception ex)
             {
-                Assert.AreEqual(ex.Message, "键不存在。");
+                Assert.AreEqual(ex.Message.Length > 0, true);
             }
         }
 
@@ -77,7 +77,7 @@
             }
             catch (System.Exception ex)
             {
-                Assert.AreEqual(ex.Message, "参数为空。\r\n参数名: instance");
+                Assert.IsTrue(ex.Message.Contains("参数名"));
             }
             try
             {
@@ -85,7 +85,7 @@
             }
             catch (System.Exception ex)
             {
-                Assert.AreEqual(ex.Message, "参数为空。\r\n参数名: name");
+                Assert.IsTrue(ex.Message.Contains("参数名"));
             }
             try
             {
@@ -93,7 +93,7 @@
             }
             catch (System.Exception ex)
             {
-                Assert.AreEqual(ex.Message, "键不存在。");
+                Assert.IsTrue(ex.Message.Length > 0);
             }
         }
 
@@ -121,7 +121,7 @@
             }
             catch (System.Exception ex)
             {
-                Assert.AreEqual(ex.Message, "参数为空。\r\n参数名: name");
+                Assert.IsTrue(ex.Message.Contains("参数名"));
             }
             try
             {
@@ -129,7 +129,7 @@
             }
             catch (System.Exception ex)
             {
-                Assert.AreEqual(ex.Message, "参数为空。\r\n参数名: name");
+                Assert.IsTrue(ex.Message.Contains("参数名"));
             }
         }
 

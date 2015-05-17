@@ -8,12 +8,13 @@
     using Exception;
 
     /// <summary>
-    /// 表达数解析器
+    /// 表达式解析器
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     public static class ExpressionParser
     {
         /// <summary>
-        /// 解析一个判断表达数，返回判断字符串以及参数字典
+        /// 解析一个判断表达式，返回判断字符串以及参数字典
         /// </summary>
         /// <param name="expression"></param>
         /// <param name="symbol"></param>
@@ -21,7 +22,7 @@
         /// <returns></returns>
         public static ParserResult Parse<T>(Expression<Func<T, bool>> expression, string symbol)
         {
-            Assert.ArgumentNotNull("symbol", symbol);
+            Assert.ArgumentNotNull(nameof(symbol), symbol);
             var visitor = new ExpressionParserVisitor(symbol);
             visitor.Visit(expression);
             return visitor.Result.Trim();
@@ -35,8 +36,8 @@
         /// <returns></returns>
         public static ParserResult Parse(IDictionary<string, object> sets, string symbol)
         {
-            Assert.ArgumentNotNull("sets", sets);
-            Assert.ArgumentNotNull("symbol", symbol);
+            Assert.ArgumentNotNull(nameof(sets), sets);
+            Assert.ArgumentNotNull(nameof(symbol), symbol);
             var set = new ParserResult(sets);
             foreach (var key in sets.Keys)
             {
@@ -53,8 +54,8 @@
         /// <returns></returns>
         public static ParserResult Parse(object entity, string symbol)
         {
-            Assert.ArgumentNotNull("entity", entity);
-            Assert.ArgumentNotNull("symbol", symbol);
+            Assert.ArgumentNotNull(nameof(entity), entity);
+            Assert.ArgumentNotNull(nameof(symbol), symbol);
             var properties = entity.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public);
             var set = new ParserResult();
             foreach (var property in properties)
@@ -164,7 +165,7 @@
             static ExpressionParserVisitor()
             {
                 _paramName = "param";
-                _types = new Dictionary<ExpressionType, string>(8)
+                _types = new Dictionary<ExpressionType, string>(11)
                 {
                     {ExpressionType.AndAlso, " AND "},
                     {ExpressionType.OrElse, " OR "},

@@ -4,6 +4,7 @@
 
     /// <summary>
     /// 密码学工厂
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     internal static class CipherFactory
     {

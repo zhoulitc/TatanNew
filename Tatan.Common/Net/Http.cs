@@ -1,24 +1,18 @@
-﻿using System;
-using System.Web;
-using Tatan.Common.Caching;
-using Tatan.Common.Exception;
-
-namespace Tatan.Common.Net
+﻿namespace Tatan.Common.Net
 {
+    using System;
+    using System.Web;
+    using Caching;
+    using Exception;
+
     /// <summary>
-    ///Http操作类
+    /// Http操作类
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     public static class Http
     {
-        private static HttpContext _context;
-        private static readonly object _lock = new object();
-
-        static Http()
-        {
-            _context = HttpContext.Current;
-        }
-
         #region HttpContext
+
         /// <summary>
         /// 获取或设置HTTP的上下文
         /// </summary>
@@ -26,15 +20,9 @@ namespace Tatan.Common.Net
         {
             get
             {
-                Assert.ArgumentNotNull("context", _context);
-                return _context;
-            }
-            set
-            {
-                lock (_lock)
-                {
-                    _context = value;
-                }
+                var context = HttpContext.Current;
+                Assert.ArgumentNotNull("context", context);
+                return context;
             }
         }
 
@@ -43,11 +31,7 @@ namespace Tatan.Common.Net
         /// </summary>
         public static HttpRequest Request
         {
-            get 
-            {
-                Assert.ArgumentNotNull("context", _context);
-                return _context.Request;
-            }
+            get { return Context.Request; }
         }
 
         /// <summary>
@@ -55,15 +39,21 @@ namespace Tatan.Common.Net
         /// </summary>
         public static HttpResponse Response
         {
-            get
-            {
-                Assert.ArgumentNotNull("context", _context);
-                return _context.Response;
-            }
+            get { return Context.Response; }
         }
+        
+        /// <summary>
+        /// 获取Server对象
+        /// </summary>
+        public static HttpServerUtility Server
+        {
+            get { return Context.Server; }
+        }
+
         #endregion
 
         #region Cache
+
         /// <summary>
         /// 获取Cache对象
         /// </summary>
@@ -71,9 +61,11 @@ namespace Tatan.Common.Net
         {
             get { return Caching.Cache.GetCache(); }
         }
+
         #endregion
 
         #region Cookies
+
         /// <summary>
         /// 获取Cookies对象
         /// </summary>
@@ -85,46 +77,51 @@ namespace Tatan.Common.Net
         private sealed class InternalCookies : ICookies
         {
             #region 单例
+
             private static readonly InternalCookies _instance = new InternalCookies();
-            private InternalCookies() { }
-            public static InternalCookies Instance { get { return _instance; } }
+
+            private InternalCookies()
+            {
+            }
+
+            public static InternalCookies Instance
+            {
+                get { return _instance; }
+            }
+
             #endregion
 
             public void Clear()
             {
-                Assert.ArgumentNotNull("context", _context);
-                _context.Response.Cookies.Clear();
+                Context.Response.Cookies.Clear();
             }
 
-            public int Count 
+            public int Count
             {
                 get
                 {
-                    Assert.ArgumentNotNull("context", _context);
-                    return _context.Request.Cookies.Count;
-                } 
+                    return Context.Request.Cookies.Count;
+                }
             }
 
-            public string this[string key] 
+            public string this[string key]
             {
                 get //从Request中读取
                 {
-                    Assert.ArgumentNotNull("key", key);
-                    Assert.ArgumentNotNull("context", _context);
-                    var cookie = _context.Request.Cookies[key];
+                    Assert.ArgumentNotNull(nameof(key), key);
+                    var cookie = Context.Request.Cookies[key];
                     if (cookie == null)
                         return string.Empty;
                     return cookie.Value;
                 }
                 set //从Response中写入
                 {
-                    Assert.ArgumentNotNull("key", key);
-                    Assert.ArgumentNotNull("context", _context);
-                    var cookie = _context.Response.Cookies[key];
+                    Assert.ArgumentNotNull(nameof(key), key);
+                    var cookie = Context.Response.Cookies[key];
                     if (cookie == null) //Add
                     {
                         if (!string.IsNullOrEmpty(value))
-                            _context.Response.Cookies.Add(new HttpCookie(key, value));
+                            Context.Response.Cookies.Add(new HttpCookie(key, value));
                     }
                     else
                     {
@@ -136,7 +133,7 @@ namespace Tatan.Common.Net
                         {
                             cookie.Value = value;
                         }
-                        _context.Response.Cookies.Set(cookie);
+                        Context.Response.Cookies.Set(cookie);
                     }
                 }
             }
@@ -148,19 +145,20 @@ namespace Tatan.Common.Net
             /// <param name="expires">过期时间，单位分钟</param>
             public void SetExpires(string key, double expires)
             {
-                Assert.ArgumentNotNull("key", key);
-                Assert.ArgumentNotNull("context", _context);
-                var cookie = _context.Response.Cookies[key];
+                Assert.ArgumentNotNull(nameof(key), key);
+                var cookie = Context.Response.Cookies[key];
                 if (cookie != null)
                 {
                     cookie.Expires = DateTime.Now.AddMinutes(expires);
-                    _context.Response.Cookies.Set(cookie);
+                    Context.Response.Cookies.Set(cookie);
                 }
             }
         }
+
         #endregion
 
         #region Session
+
         /// <summary>
         /// 获取Session对象
         /// </summary>
@@ -172,23 +170,30 @@ namespace Tatan.Common.Net
         private sealed class InternalSession : ISession
         {
             #region 单例
+
             private static readonly InternalSession _instance = new InternalSession();
-            private InternalSession() { }
-            public static InternalSession Instance { get { return _instance; } }
+
+            private InternalSession()
+            {
+            }
+
+            public static InternalSession Instance
+            {
+                get { return _instance; }
+            }
+
             #endregion
 
             public void Abandon()
             {
-                Assert.ArgumentNotNull("context", _context);
-                _context.Session.Abandon();
+                Context.Session.Abandon();
             }
 
             public void Clear()
             {
-                Assert.ArgumentNotNull("context", _context);
-                lock (_context.Session.SyncRoot)
+                lock (Context.Session.SyncRoot)
                 {
-                    _context.Session.Clear();
+                    Context.Session.Clear();
                 }
             }
 
@@ -196,8 +201,7 @@ namespace Tatan.Common.Net
             {
                 get
                 {
-                    Assert.ArgumentNotNull("context", _context);
-                    return _context.Session.Count;
+                    return Context.Session.Count;
                 }
             }
 
@@ -205,8 +209,7 @@ namespace Tatan.Common.Net
             {
                 get
                 {
-                    Assert.ArgumentNotNull("context", _context);
-                    return _context.Session.SessionID;
+                    return Context.Session.SessionID;
                 }
             }
 
@@ -214,41 +217,38 @@ namespace Tatan.Common.Net
             {
                 get
                 {
-                    Assert.ArgumentNotNull("context", _context);
-                    return _context.Session.IsNewSession;
+                    return Context.Session.IsNewSession;
                 }
             }
 
             public T Get<T>(string key)
             {
-                Assert.ArgumentNotNull("key", key);
-                Assert.ArgumentNotNull("context", _context);
-                return (T)_context.Session[key];
+                Assert.ArgumentNotNull(nameof(key), key);
+                return (T) Context.Session[key];
             }
 
             public object this[string key]
             {
                 set
                 {
-                    Assert.ArgumentNotNull("key", key);
-                    Assert.ArgumentNotNull("context", _context);
-                    var oldValue = _context.Session[key];
-                    lock (_context.Session.SyncRoot)
+                    Assert.ArgumentNotNull(nameof(key), key);
+                    var oldValue = Context.Session[key];
+                    lock (Context.Session.SyncRoot)
                     {
                         if (oldValue == null) //Add
                         {
                             if (value != null)
-                                _context.Session.Add(key, value);
+                                Context.Session.Add(key, value);
                         }
                         else
                         {
                             if (value == null) //Delete
                             {
-                                _context.Session.Remove(key);
+                                Context.Session.Remove(key);
                             }
                             else //Edit
                             {
-                                _context.Session[key] = value;
+                                Context.Session[key] = value;
                             }
                         }
                     }
@@ -259,19 +259,18 @@ namespace Tatan.Common.Net
             {
                 get
                 {
-                    Assert.ArgumentNotNull("context", _context);
-                    return _context.Session.Timeout;
+                    return Context.Session.Timeout;
                 }
                 set
                 {
-                    Assert.ArgumentNotNull("context", _context);
-                    lock (_context.Session.SyncRoot)
+                    lock (Context.Session.SyncRoot)
                     {
-                        _context.Session.Timeout = value;
+                        Context.Session.Timeout = value;
                     }
                 }
             }
         }
+
         #endregion
     }
 }

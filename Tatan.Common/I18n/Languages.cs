@@ -10,6 +10,7 @@
 
     /// <summary>
     /// 多语言国际化处理
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     public class Languages
     {
@@ -27,7 +28,7 @@
         public Languages(string directory)
         {
             if (string.IsNullOrEmpty(directory))
-                throw new ArgumentNullException("directory");
+                throw new ArgumentNullException(nameof(directory));
             if (directory[directory.Length - 1].ToString() != Runtime.Separator)
                 directory += Runtime.Separator;
             _format = directory + "{0}.xml";

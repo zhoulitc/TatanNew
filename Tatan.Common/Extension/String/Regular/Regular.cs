@@ -1,11 +1,14 @@
 ﻿namespace Tatan.Common.Extension.String.Regular
 {
+    using System;
     using System.Text.RegularExpressions;
+    using Convert;
 
     #region 提供字符串的正则表达式匹配扩展方法
 
     /// <summary>
     /// 提供字符串的正则表达式匹配扩展方法
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     public static class Regular
     {
@@ -15,6 +18,9 @@
         private static readonly Regex _isDateTime;
         private static readonly Regex _isEmail;
         private static readonly Regex _isPhone;
+        private static readonly string[] _verifyCodes;
+        private static readonly int[] _wi;
+        private static readonly string _addresses;
 
         static Regular()
         {
@@ -26,6 +32,9 @@
                     @"^((\d{2}(([02468][048])|([13579][26]))[\-\/\s]?((((0?[13578])|(1[02]))[\-\/\s]?((0?[1-9])|([1-2][0-9])|(3[01])))|(((0?[469])|(11))[\-\/\s]?((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\-\/\s]?((0?[1-9])|([1-2][0-9])))))|(\d{2}(([02468][1235679])|([13579][01345789]))[\-\/\s]?((((0?[13578])|(1[02]))[\-\/\s]?((0?[1-9])|([1-2][0-9])|(3[01])))|(((0?[469])|(11))[\-\/\s]?((0?[1-9])|([1-2][0-9])|(30)))|(0?2[\-\/\s]?((0?[1-9])|(1[0-9])|(2[0-8]))))))(\s(((0?[0-9])|([1-2][0-3]))\:([0-5]?[0-9])((\s)|(\:([0-5]?[0-9])))))?(.\d{7})?$");
             _isEmail = new Regex(@"^\w+([-+.]\w+)*\@\w+([-.]\w+)*.\w+([-.]\w+)*$");
             _isPhone = new Regex(@"^(\+86\-)?1[3458]\d{1}(\-)?\d{4}(\-)?\d{4}$");
+            _addresses = "11|22|35|44|53|12|23|36|45|54|13|31|37|46|61|14|32|41|50|62|15|33|42|51|63|21|34|43|52|64|65|71|81|82|91";
+            _verifyCodes = ("1,0,x,9,8,7,6,5,4,3,2").Split(',');
+            _wi = new[] { 7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2 };
         }
 
         #region IsMatch
@@ -198,6 +207,84 @@
         public static bool IsPhone(this string value)
         {
             return _isPhone.IsMatch(value);
+        }
+
+        /// <summary>
+        /// 字符串是否为18位身份证
+        /// </summary>
+        /// <param name="value"></param>
+        /// <exception cref="System.Text.RegularExpressions.RegexMatchTimeoutException">解析超时时</exception>
+        /// <returns></returns>
+        public static bool IsIdCard18(this string value)
+        {
+            if (value.Length != 18)
+            {
+                return false; //长度验证 
+            }
+
+            var prefix = value.Remove(17);
+            var suffix = value.Substring(17).ToLower();
+            if (!prefix.IsInteger())
+            {
+                return false; //前17位身份验证
+            }
+            if (!suffix.IsInteger() && suffix != "x")
+            {
+                return false; //最后一位身份验证
+            }
+
+            if (_addresses.IndexOf(value.Remove(2)) == -1)
+            {
+                return false;//省份验证             
+            }
+
+            var birth = value.Substring(6, 8).Insert(6, "-").Insert(4, "-");
+            if (birth.As(DateTime.MinValue) == DateTime.MinValue)
+            {
+                return false;//生日验证            
+            }
+
+            var sum = 0;
+            for (var i = 0; i < prefix.Length; i++)
+            {
+                sum += _wi[i] * value[i].ToString().As<int>();
+            }
+            if (_verifyCodes[sum % 11] != suffix)
+            {
+                return false;//校验码验证            
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// 字符串是否为15位身份证
+        /// </summary>
+        /// <param name="value"></param>
+        /// <exception cref="System.Text.RegularExpressions.RegexMatchTimeoutException">解析超时时</exception>
+        /// <returns></returns>
+        public static bool IsIdCard15(this string value)
+        {
+            if (value.Length != 15)
+            {
+                return false; //长度验证 
+            }
+
+            if (!value.IsInteger())
+            {
+                return false; //数字验证
+            }
+
+            if (_addresses.IndexOf(value.Remove(2)) == -1)
+            {
+                return false; //省份验证              
+            }
+
+            var birth = value.Substring(6, 6).Insert(4, "-").Insert(2, "-");
+            if (birth.As(DateTime.MinValue) == DateTime.MinValue)
+            {
+                return false; //生日验证            
+            }
+            return true;
         }
 
         #endregion

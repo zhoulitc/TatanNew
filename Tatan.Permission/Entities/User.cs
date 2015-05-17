@@ -7,6 +7,7 @@
 
     /// <summary>
     /// 用户
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     [Serializable]
     public partial class User : DataEntity, INameable
@@ -24,7 +25,8 @@
         /// 构造函数
         /// </summary>
         /// <param name="id">唯一标识符</param>
-        public User(string id)
+        /// <param name="creator"></param>
+        public User(string id, string creator = null)
             : base(id)
         {
         }

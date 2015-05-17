@@ -1,12 +1,12 @@
-﻿using Tatan.Common.Exception;
-
-namespace Tatan.Common.Extension.Reflect
+﻿namespace Tatan.Common.Extension.Reflect
 {
     using System;
     using System.Reflection;
+    using Exception;
 
     /// <summary>
     /// 反射相关扩展类
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     public static class Reflect
     {
@@ -50,8 +50,8 @@ namespace Tatan.Common.Extension.Reflect
         /// <returns></returns>
         public static object InvokeDeclaredOnly(this object obj, string method, params object[] arguments)
         {
-            Assert.ArgumentNotNull("method", method);
-            Assert.ArgumentNotNull("arguments", arguments);
+            Assert.ArgumentNotNull(nameof(method), method);
+            Assert.ArgumentNotNull(nameof(arguments), arguments);
 
             var type = obj.GetType();
             var methodInfo = type.GetMethod(method,

@@ -7,6 +7,7 @@
 
     /// <summary>
     /// 角色
+    /// <para>author:zhoulitcqq</para>
     /// </summary>
     [Serializable]
     public partial class Role : DataEntity, INameable
@@ -24,7 +25,8 @@
         /// 构造函数
         /// </summary>
         /// <param name="id">唯一标识符</param>
-        public Role(string id)
+        /// <param name="creator"></param>
+        public Role(string id, string creator = null)
             : base(id)
         {
         }
@@ -37,7 +39,7 @@
         static Role()
         {
             _perproties = new PropertyCollection(typeof(Role),
-                "Id", "Name", "ParentId"
+                "Id", "Name"
             );
         }
         #endregion
@@ -65,11 +67,6 @@
         /// 角色组名
         /// </summary>
         public string Name { get; set; }
-
-        /// <summary>
-        /// 父角色Id
-        /// </summary>
-        public int ParentId { get; set; }
 
         #endregion
     }

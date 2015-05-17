@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Tatan.Common</RootNamespace>
     <AssemblyName>Tatan.Common</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
@@ -66,7 +66,7 @@
     <Compile Include="Cryptography\Internal\AesCipher.cs" />
     <Compile Include="Expression\ExpressionParser.cs" />
     <Compile Include="Caching\ICache.cs" />
-    <Compile Include="Extension\Deserialization\Deserialize.cs" />
+    <Compile Include="Extension\String\Deserialization\Deserialize.cs" />
     <Compile Include="Extension\Net\WebRequestExtension.cs" />
     <Compile Include="Extension\Reflect\Reflect.cs" />
     <Compile Include="Extension\Enum\Convert.cs" />
@@ -106,11 +106,7 @@
     <Compile Include="Guid.cs" />
     <Compile Include="Serialization\ISerializer.cs" />
     <Compile Include="DFA.cs" />
-    <Compile Include="Soa\Date.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="SqlBuilder.cs" />
-    <Compile Include="IObject.cs" />
+    <Compile Include="Soa\Date.cs" />
     <Compile Include="Xml\XmlParser.cs" />
     <Compile Include="IPropertyChanged.cs" />
     <Compile Include="ICountable.cs" />
@@ -119,17 +115,12 @@
     <Compile Include="ICertification.cs" />
     <Compile Include="Component\IAdaptable.cs" />
     <Compile Include="Date.cs" />
+    <Compile Include="Randomization.cs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <Content Include="Configuration\config.xml">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <None Include="Configuration\config.json">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <Folder Include="Drawing\" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="Exception\zh-cn.xml">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
