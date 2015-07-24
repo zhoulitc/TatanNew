@@ -1,5 +1,6 @@
 ﻿namespace Tatan.Data.Builder
 {
+    using System.Linq;
     using System.Text;
     using Common.Exception;
 
@@ -55,11 +56,16 @@
         /// <returns></returns>
         public string GetInsertStatement(string[] fields = null)
         {
-            fields = fields ?? _fields;
-            var columns = string.Join(",", fields);
-            var parameters = _provider.ParameterSymbol + _provider.LeftSymbol + 
-                string.Join(_provider.RightSymbol + "," + _provider.ParameterSymbol + _provider.LeftSymbol, 
-                _fields) + _provider.RightSymbol;
+            var properties = (fields ?? _fields).ToList();
+            properties.Add(nameof(IDataEntity.Creator));
+            properties.Add(nameof(IDataEntity.CreatedTime));
+
+            var columns = _provider.LeftSymbol + 
+                string.Join(_provider.RightSymbol + "," + _provider.LeftSymbol, properties) + 
+                _provider.RightSymbol;
+
+            var parameters = _provider.ParameterSymbol + 
+                string.Join("," + _provider.ParameterSymbol, properties);
 
             return string.Format("INSERT INTO {3}{0}{4}({1}) VALUES({2})",
                 _table, columns, parameters, _provider.LeftSymbol, _provider.RightSymbol);
@@ -80,8 +86,21 @@
                     field, _provider.ParameterSymbol, _provider.LeftSymbol, _provider.RightSymbol);
             }
 
-            return string.Format("UPDATE {3}{0}{4} SET {3}{1}{4} WHERE {2}",
+            return string.Format("UPDATE {3}{0}{4} SET {1} WHERE {2}",
                 _table, sets.Remove(0, 1).ToString(), condition, _provider.LeftSymbol, _provider.RightSymbol);
+        }
+
+        /// <summary>
+        /// 获取更新语句
+        /// </summary>
+        /// <param name="condition"></param>
+        /// <returns></returns>
+        public string GetUpdateStatement(string condition = null)
+        {
+            condition = condition ?? _keyCondition;
+
+            return string.Format("UPDATE {2}{0}{3} SET {{0}} WHERE {1}",
+                _table, condition, _provider.LeftSymbol, _provider.RightSymbol);
         }
 
         /// <summary>
@@ -111,7 +130,7 @@
             var columns = _provider.LeftSymbol + 
                 string.Join(_provider.RightSymbol + "," + _provider.LeftSymbol, fields) + _provider.RightSymbol;
 
-            return string.Format("SELECT {0} FROM {3}{1}{4} WHERE {2}",
+            return string.Format("SELECT {1} FROM {3}{0}{4} WHERE {2}",
                 _table, columns, condition, _provider.LeftSymbol, _provider.RightSymbol);
         }
     }

@@ -16,14 +16,14 @@
         public string Name { get; set; } = string.Empty;
 
         /// <summary>
-        /// 字段是否为主键
+        /// 字段长度/精度
         /// </summary>
-        public bool IsPrimaryKey { get; set; } = false;
+        public uint Size { get; set; } = 0;
 
         /// <summary>
-        /// 字段是否为只读
+        /// 字段小数位数
         /// </summary>
-        public bool IsReadOnly { get; set; } = false;
+        public uint Scale { get; set; } = 0;
 
         /// <summary>
         /// 字段是否属于枚举类型
@@ -31,8 +31,18 @@
         public bool IsEnum { get; set; } = false;
 
         /// <summary>
+        /// 字段是否不为空
+        /// </summary>
+        public bool IsNotNull { get; set; } = false;
+
+        /// <summary>
         /// 字段的默认值
         /// </summary>
         public object DefaultValue { get; set; } = null;
+
+        /// <summary>
+        /// 字段的说明
+        /// </summary>
+        public string Description { get; set; } = string.Empty;
     }
 }

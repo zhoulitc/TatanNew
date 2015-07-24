@@ -3,39 +3,52 @@
     using System;
     using System.Reflection;
     using Exception;
+    using Extension.Reflect;
+
+
 
     /// <summary>
     /// 属性集合
     /// <para>author:zhoulitcqq</para>
     /// </summary>
-    public sealed class PropertyCollection : ReadOnlyCollection<PropertyInfo>, IDisposable
+    public sealed class PropertyCollection : ReadOnlyCollection<PropertyCollection.Entry>, IDisposable
     {
         private static readonly Type _stringType = typeof (string);
+
+        /// <summary>
+        /// 条目
+        /// </summary>
+        public struct Entry
+        {
+            /// <summary>
+            /// 属性的get访问器
+            /// </summary>
+            public Func<object, object> Get;
+
+            /// <summary>
+            /// 属性的set访问器
+            /// </summary>
+            public Action<object, object> Set;
+
+            /// <summary>
+            /// 属性的类型
+            /// </summary>
+            public Type Type;
+        }
 
         /// <summary>
         /// 构造函数
         /// </summary>
         /// <param name="type"></param>
-        /// <param name="names"></param>
         /// <exception cref="System.ArgumentNullException">类型为空时抛出</exception>
         /// <exception cref="System.Reflection.AmbiguousMatchException">找到多个有指定名称且与指定绑定约束匹配的属性时抛出</exception>
-        public PropertyCollection(Type type, params string[] names)
+        public PropertyCollection(Type type)
         {
             Assert.ArgumentNotNull(nameof(type), type);
-            if (names.Length == 0)
+            var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+            foreach (var property in properties)
             {
-                var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
-                foreach (var property in properties)
-                {
-                    Collection.Add(property.Name, property);
-                }
-            }
-            else
-            {
-                foreach (var name in names)
-                {
-                    Collection.Add(name, type.GetProperty(name, BindingFlags.Public | BindingFlags.Instance));
-                }
+                AddTuple(type, property);
             }
         }
 
@@ -49,7 +62,7 @@
         {
             Assert.ObjectNotDisposed(_isDisposed, nameof(PropertyCollection));
             Assert.ArgumentNotNull(nameof(name), name);
-            return Contains(name) && Collection[name].PropertyType.IsAssignableFrom(_stringType);
+            return Contains(name) && Collection[name].Type.IsAssignableFrom(_stringType);
         }
 
         #region IDisposable
@@ -103,7 +116,7 @@
                 Assert.ArgumentNotNull(nameof(instance), instance);
                 Assert.ArgumentNotNull(nameof(name), name);
                 Assert.KeyFound(Collection, name);
-                return Collection[name].GetValue(instance);
+                return Collection[name].Get(instance);
             }
             set
             {
@@ -112,8 +125,18 @@
                 Assert.ArgumentNotNull(nameof(name), name);
                 Assert.ArgumentNotNull(nameof(value), value);
                 Assert.KeyFound(Collection, name);
-                Collection[name].SetValue(instance, value);
+                Collection[name].Set(instance, value);
             }
+        }
+
+        private void AddTuple(Type type, PropertyInfo property)
+        {
+            Collection.Add(property.Name, new Entry()
+            {
+                Get = type.GetGetMethod(property),
+                Set = type.GetSetMethod(property),
+                Type = property.PropertyType
+            });
         }
     }
 }

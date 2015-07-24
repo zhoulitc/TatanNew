@@ -1,65 +1,12 @@
 ﻿namespace {%ProjectName%}
 {
-    using System;
-    using Tatan.Common.Collections;
-    using Tatan.Data.Relation;
-
     #region {%Entity%}的实体类，无法继承
     /// <summary>
     /// {%Entity%}的实体类，无法继承
 	/// <para>author:zhoulitcqq</para>
     /// </summary>
-	[Serializable]
-	public partial class {%Entity%} : DataEntity
+	public partial class {%Entity%}
 	{
-		#region 构造函数
-
-		/// <summary>
-        /// 构造函数
-        /// </summary>
-        public {%Entity%}()
-            : base(-1)
-        {
-            
-        }
-
-        /// <summary>
-        /// 构造函数
-        /// </summary>
-        /// <param name="id">唯一标识符</param>
-        public {%Entity%}(string id)
-		    : base(id)
-        {
-        }
-        #endregion
-
-		#region Static Properties
-        [NonSerialized]
-        private static readonly PropertyCollection _perproties;
-
-        static {%Entity%}()
-        {
-            _perproties = new PropertyCollection(typeof({%Entity%}),
-				{%Names%}
-			);
-        }
-        #endregion
-		
-        #region Override Methods
-		/// <summary>
-        /// 获取属性集合
-        /// </summary>
-        protected override PropertyCollection Properties => _perproties;
-
-		/// <summary>
-        /// 清理属性
-        /// </summary>
-        public override void Clear()
-        {
-			{%Clear%}
-        }
-        #endregion
-
         #region Properties
         {%Fields%}
         #endregion

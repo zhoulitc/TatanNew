@@ -10,8 +10,7 @@
         public void TestCreate()
         {
             var p = new PropertyCollection(
-                new { Name = "wahaha", Value = 1 }.GetType(),
-                "Name", "Value");
+                new { Name = "wahaha", Value = 1 }.GetType());
             Assert.AreEqual(p.Contains("Name") && p.Contains("Value"), true);
 
             p = new PropertyCollection(
@@ -33,8 +32,7 @@
         {
             var o = new {Name = "wahaha", Value = 1};
             var p = new PropertyCollection(
-                o.GetType(),
-                "Name", "Value");
+                o.GetType());
             Assert.AreEqual(p[o, "Name"], "wahaha");
             try
             {
@@ -67,8 +65,7 @@
         {
             var o = new TestObject { Name = "wahaha", Value = 1 };
             var p = new PropertyCollection(
-                o.GetType(),
-                "Name", "Value");
+                o.GetType());
             p[o, "Name"] = "fuck";
             Assert.AreEqual(p[o, "Name"], "fuck");
             try
@@ -101,8 +98,7 @@
         public void PropertyCollectionDispose()
         {
             var p = new PropertyCollection(
-                new { Name = "wahaha", Value = 1 }.GetType(),
-                "Name", "Value");
+                new { Name = "wahaha", Value = 1 }.GetType());
             p.Dispose();
             Assert.AreEqual(p.Count, 0);
         }
@@ -111,8 +107,7 @@
         public void PropertyCollectionIsString()
         {
             var p = new PropertyCollection(
-                new { Name = "wahaha", Value = 1 }.GetType(),
-                "Name", "Value");
+                new { Name = "wahaha", Value = 1 }.GetType());
             Assert.AreEqual(p.IsString("Name"), true);
             Assert.AreEqual(p.IsString("Name1"), false);
             try

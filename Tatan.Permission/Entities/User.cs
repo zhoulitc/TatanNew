@@ -16,18 +16,11 @@
         /// <summary>
         /// 构造函数
         /// </summary>
-        public User()
-            : base(string.Empty)
-        {
-        }
-
-        /// <summary>
-        /// 构造函数
-        /// </summary>
         /// <param name="id">唯一标识符</param>
         /// <param name="creator"></param>
-        public User(string id, string creator = null)
-            : base(id)
+        /// <param name="createTime">创建时间</param>
+        public User(string id = null, string creator = null, string createTime = null)
+            : base(id, creator, createTime)
         {
         }
         #endregion
@@ -38,9 +31,7 @@
 
         static User()
         {
-            _perproties = new PropertyCollection(typeof(User),
-                "Id", "Name"
-            );
+            _perproties = new PropertyCollection(typeof(User));
         }
         #endregion
 

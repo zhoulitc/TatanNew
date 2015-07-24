@@ -108,16 +108,11 @@ namespace Tatan.Data.UnitTest
 
             static TestDataEntity()
             {
-                _perproties = new PropertyCollection(typeof(TestDataEntity),
-                    "Name", "Age");
+                _perproties = new PropertyCollection(typeof(TestDataEntity));
             }
 
-            public TestDataEntity() : base(string.Empty)
-            {
-            }
-
-            public TestDataEntity(string id)
-                : base(id)
+            public TestDataEntity(string id, string c, string d)
+                : base(id, c, d)
             {
             }
 

@@ -5,6 +5,7 @@
     using System.Collections.Generic;
     using System.Text;
     using Common.Collections;
+    using Common.Extension.String.Convert;
 
     #region 抽象通用实体类
     /// <summary>
@@ -22,13 +23,14 @@
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="creator"></param>
-        protected DataEntity(string id, string creator = null)
+        /// <param name="id">唯一标识</param>
+        /// <param name="creator">创建者</param>
+        /// <param name="createdTime">创建时间</param>
+        protected DataEntity(string id = null, string creator = null, string createdTime = null)
         {
-            Id = id;
+            Id = id ?? string.Empty;
             Creator = creator ?? "System";
-            CreatedTime = DateTime.Now;
+            CreatedTime = createdTime.As(DateTime.Now);
         }
         #endregion
 
@@ -70,7 +72,7 @@
         /// <summary>
         /// 一个自动生成的唯一标识符
         /// </summary>
-        public string Id { get; internal set; }
+        public string Id { get; private set; }
         #endregion
 
         #region IEnumerable
@@ -88,11 +90,11 @@
         /// 
         /// </summary>
         /// <returns></returns>
-        public IDataEntity Clone()
+        public IDataEntity Clone(string id)
         {
             var entity = (DataEntity)MemberwiseClone();
             entity.Clear();
-            entity.Id = DefaultId;
+            entity.Id = id;
             entity.PropertyChanged = null;
             entity.Creator = Creator;
             entity.CreatedTime = DateTime.Now;
@@ -103,9 +105,9 @@
         /// 
         /// </summary>
         /// <returns></returns>
-        public virtual IDataEntity Copy()
+        public virtual IDataEntity Copy(string id)
         {
-            var entity = Clone();
+            var entity = Clone(id);
             foreach (var property in Properties)
             {
                 entity[property] = Properties[this, property];
@@ -125,12 +127,12 @@
         /// <summary>
         /// 创建者
         /// </summary>
-        public string Creator { get; internal set; }
+        public string Creator { get; private set; }
 
         /// <summary>
         /// 创建时间
         /// </summary>
-        public DateTime CreatedTime { get; internal set; }
+        public DateTime CreatedTime { get; private set; }
         #endregion
 
         #region Object
@@ -160,7 +162,7 @@
         public override string ToString()
         {
             var builder = new StringBuilder(Properties.Count * 20);
-            builder.AppendFormat("\"Id\":{0},\"Creator\":\"{1}\",\"CreatedTime\":\"{2}\"", 
+            builder.AppendFormat("\"Id\":\"{0}\",\"Creator\":\"{1}\",\"CreatedTime\":\"{2}\"", 
                 Id, Creator, CreatedTime.ToString("yyyy-MM-dd hh:mm:ss"));
             foreach (var property in Properties)
             {

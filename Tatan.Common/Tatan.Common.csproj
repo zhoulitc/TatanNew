@@ -41,6 +41,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml" />
@@ -66,6 +67,8 @@
     <Compile Include="Cryptography\Internal\AesCipher.cs" />
     <Compile Include="Expression\ExpressionParser.cs" />
     <Compile Include="Caching\ICache.cs" />
+    <Compile Include="Extension\Data\DataRecordExtendsion.cs" />
+    <Compile Include="Extension\Stream\Convert\Convert.cs" />
     <Compile Include="Extension\String\Deserialization\Deserialize.cs" />
     <Compile Include="Extension\Net\WebRequestExtension.cs" />
     <Compile Include="Extension\Reflect\Reflect.cs" />
@@ -73,6 +76,7 @@
     <Compile Include="Extension\String\Codec\Codec.cs" />
     <Compile Include="Extension\String\IO\IO.cs" />
     <Compile Include="Extension\Net\WebResponseExtension.cs" />
+    <Compile Include="WindowsServices.cs" />
     <Compile Include="IDentifiable.cs" />
     <Compile Include="INotifiable.cs" />
     <Compile Include="IO\Runtime.cs" />

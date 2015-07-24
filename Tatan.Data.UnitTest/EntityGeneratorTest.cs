@@ -93,6 +93,14 @@ namespace Tatan.Data.UnitTest
                 Assert.IsTrue(true);
             }
         }
+
+        [TestMethod]
+        public void TestExecuteEntityPartialBuilder()
+        {
+            var a = System.Reflection.Assembly.Load("Tatan.Permission");
+            IBuilder g = new EntityPartialBuilder(a);
+            g.Execute(Runtime.Root);
+        }
     }
 }
     

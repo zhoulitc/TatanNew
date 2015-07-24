@@ -11,7 +11,7 @@ namespace Tatan.Data
     /// </summary>
     /// <typeparam name="T">实体类型</typeparam>
     public interface IDataQuery<T> : IDisposable
-        where T : IDataEntity, new()
+        where T : class, IDataEntity
     {
         /// <summary>
         /// 设置where条件

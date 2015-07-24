@@ -9,6 +9,7 @@ namespace Tatan.Data
     using System.Text;
     using Common.Exception;
     using Common.Expression;
+    using Common.Extension.Reflect;
     using Builder;
 
     /// <summary>
@@ -23,8 +24,8 @@ namespace Tatan.Data
         public IDataSource DataSource { get; internal set; }
 
         #region SQL
-        //实体原型
-        private readonly IDataEntity _entityPrototype;
+        //实体创建委托
+        private readonly Func<string, string, string, IDataEntity> _createHandle;
 
         //唯一标识符名称
         private const string _identityName = "Id";
@@ -59,19 +60,19 @@ namespace Tatan.Data
         {
             Name = tableName;
             DataSource = dataSource;
-            var constructorInfo = type.GetConstructor(new[] { typeof(string) });
-            if (constructorInfo != null)
-                _entityPrototype = (IDataEntity)constructorInfo.Invoke(new object[] { DataEntity.DefaultId });
+            _createHandle = type.GetConstructor<string, string, string, IDataEntity>();
+            Assert.ArgumentNotNull(nameof(_createHandle), _createHandle);
+            var entity = type.GetDeclaredOnlyProperties();
 
             //初始化SQL语句
-            SqlBuilder = new SqlBuilder(Name, _identityName, _entityPrototype.ToArray(), DataSource.Provider);
+            SqlBuilder = new SqlBuilder(Name, _identityName, entity.Select(p=>p.Name).ToArray(), DataSource.Provider);
             _insert = SqlBuilder.GetInsertStatement();
-            _delete = SqlBuilder.GetDeleteStatement();
+            _delete = SqlBuilder.GetDeleteStatement(" ");
             _deleteIdentity = SqlBuilder.GetDeleteStatement();
-            _update = SqlBuilder.GetUpdateStatement(new[] {"{0}"});
-            _updateIdentity = SqlBuilder.GetUpdateStatement(new[] {"{0}"});
+            _update = SqlBuilder.GetUpdateStatement(" ");
+            _updateIdentity = SqlBuilder.GetUpdateStatement(null);
             _counts = SqlBuilder.GetCountStatement("1=1");
-            _count = SqlBuilder.GetCountStatement();
+            _count = SqlBuilder.GetCountStatement(" ");
             _selectIdentity = SqlBuilder.GetSelectStatement();
         }
 
@@ -84,6 +85,8 @@ namespace Tatan.Data
             {
                 foreach (var name in entity)
                     p[name] = entity[name];
+                p[nameof(IDataEntity.Creator)] = entity.Creator;
+                p[nameof(IDataEntity.CreatedTime), typeof(DateTime)] = entity.CreatedTime;
             }) == 1);
         }
 
@@ -125,7 +128,8 @@ namespace Tatan.Data
             var set = new StringBuilder();
             foreach (var name in entity)
             {
-                set.AppendFormat("{0}={1}{2},", name, DataSource.Provider.ParameterSymbol, name);
+                set.AppendFormat("{3}{0}{4}={1}{2},", name, DataSource.Provider.ParameterSymbol, name,
+                    DataSource.Provider.LeftSymbol, DataSource.Provider.RightSymbol);
             }
             if (set.Length > 0)
                 set.Remove(set.Length - 1, 1);
@@ -194,16 +198,16 @@ namespace Tatan.Data
             });
         }
 
-        public T NewEntity<T>(string id = null)
+        public T NewEntity<T>(string id, string creator = null, string createdTime = null)
             where T : class, IDataEntity
         {
-            var entity = (DataEntity)_entityPrototype.Clone();
-            entity.Id = id ?? Common.Guid.New();
+            Assert.ArgumentNotNull(nameof(id), id);
+            var entity = _createHandle(id, creator, createdTime);
             return entity as T;
         }
 
         public IReadOnlyList<T> Query<T>(Func<IDataQuery<T>, IDataQuery<T>> queryFunction) 
-            where T : class, IDataEntity, new()
+            where T : class, IDataEntity
         {
             if (queryFunction == null)
                 return new ReadOnlyCollection<T>(new List<T>(0));
@@ -214,7 +218,7 @@ namespace Tatan.Data
         }
 
         public T Query<T>(string id)
-            where T : class, IDataEntity, new()
+            where T : class, IDataEntity
         {
             Assert.ArgumentNotNull(nameof(id), id);
             return DataSource.UseSession(Name, session =>
@@ -233,7 +237,7 @@ namespace Tatan.Data
 
         #region IDataQuery
         private class DataQuery<T> : IDataQuery<T>
-            where T : IDataEntity, new()
+            where T : class, IDataEntity
         {
             private string _select;
 
@@ -249,7 +253,7 @@ namespace Tatan.Data
             {
                 _source = source;
                 _from = name;
-                _select = string.Format("SELECT * FROM {0}", name);
+                _select = string.Format("SELECT * FROM {1}{0}{2}", name, source.Provider.LeftSymbol, source.Provider.RightSymbol);
                 _orderBy = new Dictionary<string, DataSort>();
             }
 

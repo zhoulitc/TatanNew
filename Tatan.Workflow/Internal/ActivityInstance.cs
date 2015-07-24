@@ -24,22 +24,22 @@ namespace Tatan.Workflow.Internal
 
         public IActivity Activity { get; private set; }
 
-        [Field(Name = "Remark", IsReadOnly = true)]
+        [Field(Name = "Remark")]
         public string Remark { get; private set; }
 
-        [Field(Name = "Id", IsPrimaryKey = true)]
+        [Field(Name = "Id")]
         public string Id { get; private set; }
 
-        [Field(Name = "FlowId", IsReadOnly = true)]
+        [Field(Name = "FlowId")]
         public string FlowId { get; private set; }
 
         [Field(Name = "State", IsEnum = true)]
         public ActivityInstanceState State { get; set; }
 
-        [Field(Name = "Creator", IsReadOnly = true)]
+        [Field(Name = "Creator")]
         public string Creator { get; private set; }
 
-        [Field(Name = "CreatedTime", IsReadOnly = true)]
+        [Field(Name = "CreatedTime")]
         public DateTime CreatedTime { get; private set; }
 
         public override string ToString()

@@ -14,20 +14,13 @@
     {
         #region 构造函数
         /// <summary>
-        /// 
-        /// </summary>
-        public Group()
-            : base(string.Empty)
-        {
-        }
-
-        /// <summary>
         /// 构造函数
         /// </summary>
         /// <param name="id">唯一标识符</param>
         /// <param name="creator"></param>
-        public Group(string id, string creator = null)
-            : base(id)
+        /// <param name="createTime">创建时间</param>
+        public Group(string id = null, string creator = null, string createTime = null)
+            : base(id, creator, createTime)
         {
         }
         #endregion
@@ -38,9 +31,7 @@
 
         static Group()
         {
-            _perproties = new PropertyCollection(typeof(Group),
-                "Id", "Name", "ParentId"
-            );
+            _perproties = new PropertyCollection(typeof(Group));
         }
         #endregion
 

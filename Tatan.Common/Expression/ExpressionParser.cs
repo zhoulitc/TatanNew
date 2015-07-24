@@ -229,6 +229,13 @@
                     _result.SetNull();
                     return node;
                 }
+                if (node.Expression.NodeType == ExpressionType.Constant)
+                {
+                    var field = node.Expression.Type.GetField(node.Member.Name);
+                    var value = field.GetValue(((ConstantExpression)node.Expression).Value);
+                    VisitConstant(Expression.Constant(value, node.Type));
+                    return node;
+                }
                 Assert.NotSupported();
                 return node;
             }

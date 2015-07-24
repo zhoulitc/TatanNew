@@ -33,7 +33,7 @@ namespace Tatan.Workflow.Internal
 
             _flow = flow;
             _flowTable = DataAttributes.GetTableName<FlowInstance>();
-            _flowKey = DataAttributes.GetPrimaryKey<FlowInstance>();
+            _flowKey = "Id"; //TODO
             _flowFields = DataAttributes.GetFieldNames<FlowInstance>();
             _activityTable = DataAttributes.GetTableName<ActivityInstance>();
             _activityFields = DataAttributes.GetFieldNames<ActivityInstance>();
@@ -77,7 +77,7 @@ namespace Tatan.Workflow.Internal
                 {
                     var builder = new SqlBuilder(_flow.BusinessTable, _flow.BusinessKey,
                         _flow.BusinessFields.Keys.ToArray(), _dataSource.Provider);
-                    _sqlUpdateBusiness = builder.GetUpdateStatement();
+                    _sqlUpdateBusiness = builder.GetUpdateStatement(null);
                 }
                 return _sqlUpdateBusiness;
             }
@@ -119,7 +119,7 @@ namespace Tatan.Workflow.Internal
                 {
                     var builder = new SqlBuilder(_flowTable, _flowKey,
                         _flowFields.ToArray(), _dataSource.Provider);
-                    _sqlUpdateFlow = builder.GetUpdateStatement();
+                    _sqlUpdateFlow = builder.GetUpdateStatement(null);
                 }
                 return _sqlUpdateFlow;
             }
@@ -225,27 +225,29 @@ namespace Tatan.Workflow.Internal
         {
             int count = session.Execute(SqlCountFlow, parameters => { parameters[_flowKey] = instance.Id; });
 
-            IDictionary<string, Tuple<Type, object>> properties = DataAttributes.GetFieldValues(instance, (count > 0));
-            properties[_flow.BusinessKey] = Tuple.Create(typeof (string), instance[_flow.BusinessKey]);
-            session.Execute((count > 0) ? SqlUpdateFlow : SqlInsertFlow, parameters =>
-            {
-                foreach (var property in properties)
-                {
-                    parameters[property.Key, property.Value.Item1] = property.Value.Item2;
-                }
-            });
+            //TODO
+            //IDictionary<string, Tuple<Type, object>> properties = DataAttributes.GetFieldValues(instance, (count > 0));
+            //properties[_flow.BusinessKey] = Tuple.Create(typeof (string), instance[_flow.BusinessKey]);
+            //session.Execute((count > 0) ? SqlUpdateFlow : SqlInsertFlow, parameters =>
+            //{
+            //    foreach (var property in properties)
+            //    {
+            //        parameters[property.Key, property.Value.Item1] = property.Value.Item2;
+            //    }
+            //});
         }
 
         private void OnHandlerActivity(IDataSession session, IActivityInstance instance)
         {
-            IDictionary<string, Tuple<Type, object>> properties = DataAttributes.GetFieldValues(instance);
-            session.Execute(SqlInsertActivity, parameters =>
-            {
-                foreach (var property in properties)
-                {
-                    parameters[property.Key, property.Value.Item1] = property.Value.Item2;
-                }
-            });
+            //TODO
+            //IDictionary<string, Tuple<Type, object>> properties = DataAttributes.GetFieldValues(instance);
+            //session.Execute(SqlInsertActivity, parameters =>
+            //{
+            //    foreach (var property in properties)
+            //    {
+            //        parameters[property.Key, property.Value.Item1] = property.Value.Item2;
+            //    }
+            //});
         }
     }
 }

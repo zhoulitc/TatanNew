@@ -171,7 +171,7 @@
             Assert.ArgumentNotNull(nameof(username), username);
             Assert.ArgumentNotNull(nameof(password), password);
 
-            var user = new UserLogin { Name = username, Password = password, RegisterTime = DateTime.Now };
+            var user = new UserLogin(string.Empty) { Name = username, Password = password, RegisterTime = DateTime.Now };
             return Source.Tables[_userLogin].Insert(user);
         }
 

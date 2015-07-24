@@ -15,17 +15,11 @@
         /// <summary>
         /// 构造函数
         /// </summary>
-        public UserLogin()
-            : base(string.Empty)
-        {
-        }
-
-        /// <summary>
-        /// 构造函数
-        /// </summary>
         /// <param name="id">唯一标识符</param>
-        public UserLogin(string id)
-            : base(id)
+        /// <param name="creator"></param>
+        /// <param name="createTime">创建时间</param>
+        public UserLogin(string id = null, string creator = null, string createTime = null)
+            : base(id, creator, createTime)
         {
         }
         #endregion
@@ -36,9 +30,7 @@
 
         static UserLogin()
         {
-            _perproties = new PropertyCollection(typeof(UserLogin),
-                "Name", "Password", "RegisterTime", "Count", "LastLoginTime", "LastLogoutTime", "LastLoginIp"
-            );
+            _perproties = new PropertyCollection(typeof(UserLogin));
         }
         #endregion
 

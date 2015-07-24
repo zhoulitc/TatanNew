@@ -20,6 +20,7 @@
 
         private static readonly IDictionary<DataProvider, IDataSource> _sources; //数据源集合
         private static readonly object _lock = new object();
+        private static DataProvider _defaultDataProvider;
 
         internal static readonly Dictionary<string, DbProviderFactory> DbFactories; //工厂集
 
@@ -27,6 +28,30 @@
         {
             _sources = new Dictionary<DataProvider, IDataSource>();
             DbFactories = new Dictionary<string, DbProviderFactory>(50);
+        }
+
+        /// <summary>
+        /// 注册一个默认的数据源
+        /// </summary>
+        /// <param name="configName"></param>
+        public static void Register(string configName = "Default")
+        {
+            var config = Configurations.Connection[configName, "ConnectionString"];
+            var provider = Configurations.Connection[configName, "ProviderName"];
+            _defaultDataProvider = new DataProvider(config, provider);
+            Connect(_defaultDataProvider);
+        }
+
+        /// <summary>
+        /// 获取默认的数据源，如果没有设置则返回null
+        /// </summary>
+        public static IDataSource Default
+        {
+            get
+            {
+                if (_defaultDataProvider == null) return null;
+                return _sources[_defaultDataProvider];
+            }
         }
 
         /// <summary>
@@ -40,17 +65,7 @@
             Assert.ArgumentNotNull(nameof(providerName), providerName);
             Assert.ArgumentNotNull(nameof(connectionString), connectionString);
             var provider = new DataProvider(providerName, connectionString);
-            if (!_sources.ContainsKey(provider))
-            {
-                lock (_lock)
-                {
-                    if (!_sources.ContainsKey(provider))
-                    {
-                        _sources.Add(provider, new DataSource(provider));
-                    }
-                }
-            }
-            return _sources[provider];
+            return Connect(provider);
         }
 
         /// <summary>
@@ -64,6 +79,21 @@
             var config = Configurations.Connection[configName, "ConnectionString"];
             var provider = Configurations.Connection[configName, "ProviderName"];
             return Connect(provider, config);
+        }
+
+        private static IDataSource Connect(DataProvider provider)
+        {
+            if (!_sources.ContainsKey(provider))
+            {
+                lock (_lock)
+                {
+                    if (!_sources.ContainsKey(provider))
+                    {
+                        _sources.Add(provider, new DataSource(provider));
+                    }
+                }
+            }
+            return _sources[provider];
         }
 
         private DataSource(DataProvider provider)

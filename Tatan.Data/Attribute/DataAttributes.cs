@@ -29,17 +29,17 @@
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static string GetPrimaryKey<T>()
-        {
-            var properties = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
-            foreach (var property in properties)
-            {
-                var attribute = property.GetCustomAttribute<FieldAttribute>();
-                if (attribute != null && attribute.IsPrimaryKey)
-                    return attribute.Name;
-            }
-            return string.Empty;
-        }
+        //public static string GetPrimaryKey<T>()
+        //{
+        //    var properties = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+        //    foreach (var property in properties)
+        //    {
+        //        var attribute = property.GetCustomAttribute<FieldAttribute>();
+        //        if (attribute != null && attribute.IsPrimaryKey)
+        //            return attribute.Name;
+        //    }
+        //    return string.Empty;
+        //}
 
         /// <summary>
         /// 获取字段定义集合
@@ -64,27 +64,27 @@
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static IDictionary<string, Tuple<Type, object>> GetFieldValues<T>(T entity, bool isReadOnly = false)
-        {
-            var properties = typeof (T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
-            var fields = new Dictionary<string, Tuple<Type, object>>(properties.Length);
-            foreach (var property in properties)
-            {
-                var attribute = property.GetCustomAttribute<FieldAttribute>();
-                if (isReadOnly && (attribute.IsReadOnly || attribute.IsPrimaryKey)) continue;
-                if (attribute != null)
-                {
-                    if (attribute.IsEnum)
-                    {
-                        fields[attribute.Name] = Tuple.Create(_enumType, property.GetValue(entity));
-                    }
-                    else
-                    {
-                        fields[attribute.Name] = Tuple.Create(property.PropertyType, property.GetValue(entity));
-                    }
-                }
-            }
-            return fields;
-        }
+        //public static IDictionary<string, Tuple<Type, object>> GetFieldValues<T>(T entity, bool isReadOnly = false)
+        //{
+        //    var properties = typeof (T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+        //    var fields = new Dictionary<string, Tuple<Type, object>>(properties.Length);
+        //    foreach (var property in properties)
+        //    {
+        //        var attribute = property.GetCustomAttribute<FieldAttribute>();
+        //        if (isReadOnly && (attribute.IsReadOnly || attribute.IsPrimaryKey)) continue;
+        //        if (attribute != null)
+        //        {
+        //            if (attribute.IsEnum)
+        //            {
+        //                fields[attribute.Name] = Tuple.Create(_enumType, property.GetValue(entity));
+        //            }
+        //            else
+        //            {
+        //                fields[attribute.Name] = Tuple.Create(property.PropertyType, property.GetValue(entity));
+        //            }
+        //        }
+        //    }
+        //    return fields;
+        //}
     }
 }

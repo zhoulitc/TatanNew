@@ -59,8 +59,10 @@
   <ItemGroup>
     <Compile Include="CipherTest.cs" />
     <Compile Include="ConfigFactoryTest.cs" />
+    <Compile Include="ReflectTest.cs" />
     <Compile Include="PropertyCollectionTest.cs" />
     <Compile Include="ReadOnlyCollectionTest.cs" />
+    <Compile Include="StreamTest.cs" />
     <Compile Include="StringHandlerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="JSONSerializerTest.cs" />

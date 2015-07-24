@@ -23,7 +23,7 @@ namespace Tatan.Data
         /// <param name="action">参数设置行为</param>
         /// <returns>泛型列表</returns>
         IReadOnlyList<T> GetEntities<T>(string request, Action<IDataParameters> action = null) 
-            where T : IDataEntity, new();
+            where T : class, IDataEntity;
 
         /// <summary>
         /// 获取一个数据实体集（异步版本）
@@ -34,7 +34,7 @@ namespace Tatan.Data
         /// <param name="action">参数设置行为</param>
         /// <returns>泛型列表</returns>
         Task<IReadOnlyList<T>> GetEntitiesAsync<T>(string request, Action<IDataParameters> action = null) 
-            where T : IDataEntity, new();
+            where T : class, IDataEntity;
 
         /// <summary>
         /// 执行请求获取一个数据标量

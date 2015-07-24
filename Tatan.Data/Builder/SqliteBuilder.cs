@@ -1,8 +1,12 @@
 ﻿namespace Tatan.Data.Builder
 {
+    using System;
     using System.Collections.Generic;
+    using System.Reflection;
     using Common.IO;
     using Relation;
+    using Tatan.Data.Attribute;
+
 
     /// <summary>
     /// Sqlite建表生成器
@@ -10,27 +14,46 @@
     /// </summary>
     public sealed class SqliteBuilder : TableBuilder
     {
-        private readonly static Dictionary<string, string> _types = new Dictionary<string, string>(6)
+        private readonly static Dictionary<string, string> _types = new Dictionary<string, string>(17)
             {
-                {"I", "INTEGER"},
-                {"L", "INTEGER"},
-                {"N", "DECIMAL({0},{1})"},
-                {"S", "VARCHAR({0})"},
-                {"B", "BOOLEAN"},
-                {"D", "DATETIME"}
+                {"int", "INTEGER"},
+                {"long", "INTEGER"},
+                {"sbyte", "INTEGER"},
+                {"short", "INTEGER"},
+                {"double", "DECIMAL({0},{1})"},
+                {"float", "DECIMAL({0},{1})"},
+                {"decimal", "DECIMAL({0},{1})"},
+                {"string", "VARCHAR({0})"},
+                {"bool", "BOOLEAN"},
+                {"datetime", "DATETIME"}
             };
+
+        private readonly IDataSource _source;
 
         #region 构造函数
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="tables"></param>
+        /// <param name="assembly"></param>
         /// <param name="source"></param>
-        public SqliteBuilder(IEnumerable<Tables> tables, IDataSource source)
-            : base(tables, source)
+        public SqliteBuilder(IDataSource source, Assembly assembly)
+            : base(assembly)
         {
+            _source = source;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="types"></param>
+        /// <param name="source"></param>
+        public SqliteBuilder(IDataSource source, params Type[] types)
+            : base(types)
+        {
+            _source = source;
+        }
+
         #endregion
 
         /// <summary>
@@ -43,15 +66,27 @@
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="column"></param>
+        /// <param name="field"></param>
+        /// <param name="property"></param>
         /// <returns></returns>
-        protected override string GetType(Fields column)
+        protected override string GetFieldInfo(FieldAttribute field, PropertyInfo property)
         {
-            if (column.Type == "S")
-                return string.Format(_types[column.Type], column.Size);
-            if (column.Type == "N")
-                return string.Format(_types[column.Type], column.Size, column.Scale);
-            return _types[column.Type];
+            var name = field == null ? property.Name : field.Name;
+            var type = GetType(field, property);
+
+            return string.Format("[{0}] {1} {2} {3}", 
+                name, type, GetNotNull(field), GetDefaultValue(field, property.PropertyType));
+        }
+
+        private string GetType(FieldAttribute field, PropertyInfo property)
+        {
+            if (property.PropertyType.Name.ToLower() == "string")
+                return string.Format(_types[property.PropertyType.Name.ToLower()], 
+                    field != null ? field.Size : 4000);
+            if (property.PropertyType.Name.ToLower() == "double")
+                return string.Format(_types[property.PropertyType.Name.ToLower()], 
+                    field != null ? field.Size : 4000, field != null ? field.Scale : 4000);
+            return _types[property.PropertyType.Name.ToLower()];
         }
     }
 }

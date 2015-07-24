@@ -12,6 +12,7 @@ namespace Tatan.Data
     public sealed class DataTableCollection : ReadOnlyCollection<IDataTable>
     {
         private readonly DataSource _source;
+        private static readonly object _lock = new object();
         internal DataTableCollection(DataSource source)
         {
             _source = source;
@@ -20,7 +21,7 @@ namespace Tatan.Data
         internal void Clear() => Collection.Clear();
 
         /// <summary>
-        /// 根据表名获取数据表
+        /// 根据表名获取数据表，如果不存在则会抛出异常
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
@@ -35,14 +36,22 @@ namespace Tatan.Data
         }
 
         /// <summary>
-        /// 根据表名获取数据表
+        /// 根据表名获取数据表，如果不存在则会加入数据表集合中
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         public IDataTable Get<T>() where T : IDataEntity
         {
-            var name = typeof (T).Name;
-            return this[name];
+            var type = typeof(T);
+            var name = type.Name;
+            if (!Collection.ContainsKey(name))
+            {
+                lock (_lock)
+                {
+                    Add(type);
+                }
+            }
+            return Collection[name];
         }
 
         /// <summary>

@@ -9,7 +9,7 @@ namespace Tatan.Data
     /// </summary>
     /// <typeparam name="T">实体类型</typeparam>
     public interface IDataPager<out T>
-        where T : IDataEntity, new()
+        where T : IDataEntity
     {
         /// <summary>
         /// 是否有上一页

@@ -10,13 +10,15 @@
         /// <summary>
         /// 浅拷贝对象
         /// </summary>
+        /// <param name="id"></param>
         /// <returns></returns>
-        T Clone();
+        T Clone(string id);
 
         /// <summary>
         /// 深拷贝对象
         /// </summary>
+        /// <param name="id"></param>
         /// <returns></returns>
-        T Copy();
+        T Copy(string id);
     }
 }

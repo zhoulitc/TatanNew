@@ -10,6 +10,9 @@ namespace Tatan.Data
     using Common.Exception;
     using Common.Extension.String.Convert;
     using Common.Logging;
+    using Tatan.Common.Extension.Reflect;
+    using Tatan.Common.Extension.Data;
+
 
     /// <summary>
     /// 数据库抽象会话类，处理一些通用的会话操作
@@ -56,7 +59,7 @@ namespace Tatan.Data
 
         #region 数据处理
         public IReadOnlyList<T> GetEntities<T>(string request, Action<IDataParameters> action = null)
-            where T : IDataEntity, new()
+            where T : class, IDataEntity
         {
             using (var reader = _Execute(request, action, () => _command.ExecuteReader()))
             {
@@ -65,7 +68,7 @@ namespace Tatan.Data
         }
 
         public async Task<IReadOnlyList<T>> GetEntitiesAsync<T>(string request, Action<IDataParameters> action = null)
-            where T : IDataEntity, new()
+            where T : class, IDataEntity
         {
             using (var reader = await _Execute(request, action, () => _command.ExecuteReaderAsync()))
             {
@@ -374,26 +377,23 @@ namespace Tatan.Data
         }
 
         private static IReadOnlyList<T> _GetEntities<T>(IDataReader reader)
-            where T : IDataEntity, new()
+            where T : class, IDataEntity
         {
             if (reader == null)
                 return new ReadOnlyCollection<T>(new List<T>(0));
+            if (Builder<T>.New == null)
+            {
+                Builder<T>.New = typeof(T).GetConstructor<string, string, string, T>();
+            }
             var entities = new List<T>(23);
             while (reader.Read())
             {
-                var entity = new T();
-                var dataEntity = entity as DataEntity;
-                for (var j = 0; j < reader.FieldCount; j++)
-                {
-                    if (reader.GetName(j) == "Id" && dataEntity != null)
-                        dataEntity.Id = reader[j].ToString();
-                    else if (reader.GetName(j) == "Creator" && dataEntity != null)
-                        dataEntity.Creator = reader[j].ToString();
-                    else if (reader.GetName(j) == "CreatedTime" && dataEntity != null)
-                        dataEntity.CreatedTime = reader[j].ToString().As(DateTime.Now);
-                    else if (!reader.IsDBNull(j))
-                        entity[reader.GetName(j)] = reader.GetValue(j);
-                }
+                var entity = Builder<T>.New(
+                    reader.GetValue(nameof(DataEntity.Id)), 
+                    reader.GetValue(nameof(DataEntity.Creator)),
+                    reader.GetValue(nameof(DataEntity.CreatedTime))
+                );
+                entity = reader.AsEntity(entity);
                 entities.Add(entity);
             }
             return new ReadOnlyCollection<T>(entities);
@@ -409,6 +409,11 @@ namespace Tatan.Data
                 }
             }
             return _dbFactories[name];
+        }
+
+        private static class Builder<T>
+        {
+            public static Func<string, string, string, T> New;
         }
         #endregion
     }

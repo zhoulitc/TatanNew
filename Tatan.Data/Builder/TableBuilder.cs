@@ -1,131 +1,133 @@
 ﻿namespace Tatan.Data.Builder
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using System.Text;
     using Common.Exception;
     using Common.Extension.String.Target;
     using Common.IO;
     using Relation;
+    using System.Reflection;
+    using Tatan.Common.Extension.Reflect;
+    using Tatan.Data.Attribute;
+
+
+
 
     /// <summary>
     /// sql建表生成器
     /// <para>author:zhoulitcqq</para>
     /// </summary>
-    public abstract class TableBuilder : IBuilder
+    public abstract class TableBuilder : Builder
     {
         /// <summary>
         /// 数据表
         /// </summary>
-        protected readonly IEnumerable<Tables> Tables;
-
-        /// <summary>
-        /// 数据源
-        /// </summary>
-        protected readonly IDataSource Source;
+        protected readonly IEnumerable<Type> Types;
+        private static readonly Type _interface = typeof(IDataEntity);
+        private static readonly Type _stringType = typeof(string);
 
         #region 构造函数
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="tables"></param>
-        /// <param name="source"></param>
-        protected TableBuilder(IEnumerable<Tables> tables, IDataSource source)
+        /// <param name="assembly">程序集</param>
+        public TableBuilder(Assembly assembly)
         {
-            Tables = tables ?? new List<Tables>();
-            Source = source;
+            Assert.ArgumentNotNull(nameof(assembly), assembly);
+            Types = assembly.GetTypes().Where(t => _interface.IsAssignableFrom(t));
         }
-        #endregion
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="outputFolder"></param>
-        public abstract void Execute(string outputFolder);
+        /// <param name="types">类型集合</param>
+        public TableBuilder(params Type[] types)
+        {
+            Assert.ArgumentNotNull(nameof(types), types);
+            Types = types.Where(t => _interface.IsAssignableFrom(t));
+        }
+
+        #endregion
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="inputFile"></param>
         /// <param name="outputFolder"></param>
-        public virtual void Execute(string inputFile, string outputFolder)
+        public override void Execute(string inputFile, string outputFolder)
         {
             Assert.FileFound(inputFile);
             Assert.DirectoryFound(outputFolder);
-            Assert.ArgumentNotNull(nameof(Source), Source);
 
             if (!outputFolder.EndsWith(Runtime.Separator))
                 outputFolder += Runtime.Separator;
 
-            foreach (var table in Tables)
+            foreach (var type in Types)
             {
                 var columns = new StringBuilder();
-                foreach (var column in table.GetFields(Source))
+                var properties = type.GetDeclaredOnlyProperties();
+                foreach (var property in properties)
                 {
-                    columns.AppendFormat("\n\t,[{0}] {1} {2} {3}", 
-                        column.Name, GetType(column), GetNotNull(column), GetDefaultValue(column));
+                    var attribute = property.GetCustomAttribute<FieldAttribute>();
+                    columns.AppendFormat("\n\t,{0}", GetFieldInfo(attribute, property));
                 }
 
                 var targets = new Dictionary<string, string>
                 {
-                    {"Table", table.Name},
+                    {"Table", type.Name},
                     {"Columns", columns.Length > 0 ? columns.Remove(0, 2).ToString() : string.Empty}
                 };
 
-                WriteCSharpCode(inputFile, outputFolder, targets);
+                var outputFile = outputFolder + targets["Table"] + ".sql";
+                WriteFile(inputFile, outputFile, targets);
             }
         }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="column"></param>
+        /// <param name="field"></param>
+        /// <param name="property"></param>
         /// <returns></returns>
-        protected virtual string GetType(Fields column) => string.Empty;
+        protected abstract string GetFieldInfo(FieldAttribute field, PropertyInfo property);
+    
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="field"></param>
+        /// <returns></returns>
+        protected virtual string GetNotNull(FieldAttribute field) 
+            => (field != null && field.IsNotNull) ? "NOT NULL" : string.Empty;
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="column"></param>
+        /// <param name="field"></param>
+        /// <param name="type"></param>
         /// <returns></returns>
-        protected virtual string GetNotNull(Fields column) => column.IsNotNull ? "NOT NULL" : string.Empty;
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="column"></param>
-        /// <returns></returns>
-        protected virtual string GetDefaultValue(Fields column)
+        protected virtual string GetDefaultValue(FieldAttribute field, Type type)
         {
-            if (column.DefaultValue == null)
+            if (field == null || field.DefaultValue == null)
                 return string.Empty;
-            if (column.Type == "S")
-                return string.Format("DEFAULT '{0}'", column.DefaultValue);
-            return string.Format("DEFAULT {0}", column.DefaultValue);
+            if (type == _stringType)
+                return string.Format("DEFAULT '{0}'", field.DefaultValue);
+            return string.Format("DEFAULT {0}", field.DefaultValue);
         }
 
-        /// <summary>
-        /// 写入文件
-        /// </summary>
-        /// <param name="inPath"></param>
-        /// <param name="outPath"></param>
-        /// <param name="targets"></param>
-        protected static void WriteCSharpCode(string inPath, string outPath, IDictionary<string, string> targets)
-        {
-            var fileName = outPath + targets["Table"] + ".sql";
-            if (!File.Exists(fileName))
-                File.Create(fileName).Close();
-            using (var sw = new StreamWriter(fileName, false, Encoding.UTF8))
-            {
-                using (var sr = new StreamReader(inPath, Encoding.UTF8))
-                {
-                    while (!sr.EndOfStream)
-                    {
-                        sw.WriteLine(sr.ReadLine().Replace(targets));
-                    }
-                }
-            }
-        }
+        ///// <summary>
+        ///// Mysql Comment
+        ///// </summary>
+        ///// <param name="field"></param>
+        ///// <returns></returns>
+        //protected virtual string GetDescription(FieldAttribute field)
+        //{
+        //    if (string.IsNullOrEmpty(field.Description))
+        //        return string.Empty;
+        //    return string.Format("COMMENT '{0}'", field.Description);
+        //}
     }
 }

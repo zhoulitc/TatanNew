@@ -9,7 +9,7 @@
     /// 关联集合
     /// <para>author:zhoulitcqq</para>
     /// </summary>
-    public abstract class AbstractRelationCollection<T> where T : class, IDentifiable, INameable, IDataEntity, new()
+    public abstract class AbstractRelationCollection<T> where T : class, IDentifiable, INameable, IDataEntity
     {
         /// <summary>
         /// 

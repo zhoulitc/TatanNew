@@ -30,9 +30,8 @@
         [TestMethod]
         public void TestGetEnumerator()
         {
-            ReadOnlyCollection<PropertyInfo> p = new PropertyCollection(
-                new { Name = "wahaha", Value = 1 }.GetType(),
-                "Name", "Value");
+            var p = new PropertyCollection(
+                new { Name = "wahaha", Value = 1 }.GetType());
             var i = p.GetEnumerator();
             Assert.AreEqual(i.MoveNext() && i.Current == "Name", true);
         }
@@ -40,9 +39,8 @@
         [TestMethod]
         public void TestContains()
         {
-            ReadOnlyCollection<PropertyInfo> p = new PropertyCollection(
-                new {Name = "wahaha", Value = 1}.GetType(),
-                "Name", "Value");
+            var p = new PropertyCollection(
+                new {Name = "wahaha", Value = 1}.GetType());
             Assert.AreEqual(p.Contains("Name"), true);
             Assert.AreEqual(p.Contains("Name1"), false);
             Assert.AreEqual(p.Contains(null), false);
@@ -53,8 +51,7 @@
         public void TestCount()
         {
             var p = new PropertyCollection(
-                new { Name = "wahaha", Value = 1 }.GetType(),
-                "Name", "Value");
+                new { Name = "wahaha", Value = 1 }.GetType());
             Assert.AreEqual(p.Count, 2);
         }
 

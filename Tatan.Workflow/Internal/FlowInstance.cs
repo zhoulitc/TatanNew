@@ -102,25 +102,25 @@ namespace Tatan.Workflow.Internal
             _flow.OnHandlerAfter(this);
         }
 
-        [Field(Name = "Id", IsPrimaryKey = true)]
+        [Field(Name = "Id")]
         public string Id { get; private set; }
 
-        [Field(Name = "BusinessId", IsReadOnly = true)]
+        [Field(Name = "BusinessId")]
         public string BusinessId { get; private set; }
 
-        [Field(Name = "EndDate", IsReadOnly = true)]
+        [Field(Name = "EndDate")]
         public DateTime EndDate { get; private set; }
 
         [Field(Name = "State", IsEnum = true)]
         public FlowInstanceState State { get; set; }
 
-        [Field(Name = "Type", IsReadOnly = true)]
+        [Field(Name = "Type")]
         public int Type { get; private set; }
 
-        [Field(Name = "Creator", IsReadOnly = true)]
+        [Field(Name = "Creator")]
         public string Creator { get; private set; }
 
-        [Field(Name = "CreatedTime", IsReadOnly = true)]
+        [Field(Name = "CreatedTime")]
         public DateTime CreatedTime { get; private set; }
 
         [Field(Name = "Modifier")]

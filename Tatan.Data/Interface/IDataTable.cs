@@ -109,9 +109,11 @@ namespace Tatan.Data
         /// <summary>
         /// 构建一个新实体
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">唯一标识</param>
+        /// <param name="creator">创建者</param>
+        /// <param name="createdTime">创建时间</param>
         /// <returns></returns>
-        T NewEntity<T>(string id = null)
+        T NewEntity<T>(string id, string creator = null, string createdTime = null)
             where T : class, IDataEntity;
 
 
@@ -121,7 +123,7 @@ namespace Tatan.Data
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         IReadOnlyList<T> Query<T>(Func<IDataQuery<T>, IDataQuery<T>> queryFunction)
-            where T : class, IDataEntity, new();
+            where T : class, IDataEntity;
 
         /// <summary>
         /// 查询唯一实体
@@ -130,6 +132,6 @@ namespace Tatan.Data
         /// <param name="id"></param>
         /// <returns></returns>
         T Query<T>(string id)
-            where T : class, IDataEntity, new();
+            where T : class, IDataEntity;
     }
 }

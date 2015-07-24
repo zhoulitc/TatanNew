@@ -12,7 +12,7 @@
     /// 实体生成器
     /// <para>author:zhoulitcqq</para>
     /// </summary>
-    public class EntityBuilder : IBuilder
+    public class EntityBuilder : Builder
     {
         private readonly IEnumerable<Tables> _tables;
         private readonly IDataSource _source;
@@ -47,14 +47,14 @@
         /// 
         /// </summary>
         /// <param name="outputFolder"></param>
-        public void Execute(string outputFolder) => Execute(Runtime.Root + @"Template\Entity.template", outputFolder);
+        public override void Execute(string outputFolder) => Execute(Runtime.Root + @"Template\Entity.template", outputFolder);
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="inputFile"></param>
         /// <param name="outputFolder"></param>
-        public void Execute(string inputFile, string outputFolder)
+        public override void Execute(string inputFile, string outputFolder)
         {
             Assert.FileFound(inputFile);
             Assert.DirectoryFound(outputFolder);
@@ -65,12 +65,10 @@
 
             foreach (var table in _tables)
             {
-                var names = new StringBuilder();
                 var fields = new StringBuilder();
                 var clears = new StringBuilder();
                 foreach (var column in table.GetFields(_source))
                 {
-                    names.AppendFormat("\"{0}\",", column.Name);
                     fields.AppendFormat("\n\t\t/// <summary>\n\t\t/// {0}\n\t\t/// </summary>", column.Title);
                     fields.AppendFormat("\n\t\tpublic {0} {1} {{ get; set; }}\n", _types[column.Type], column.Name);
                     clears.AppendFormat("\n\t\t\t{0} = default({1});", column.Name, _types[column.Type]);
@@ -80,29 +78,12 @@
                 {
                     {"ProjectName", _projectName},
                     {"Entity", table.Name},
-                    {"Names", names.Length > 0 ? names.Remove(names.Length - 1, 1).ToString() : string.Empty},
                     {"Fields", fields.ToString()},
                     {"Clear", clears.Length > 4 ? clears.Remove(0, 4).ToString() : string.Empty}
                 };
 
-                WriteCSharpCode(inputFile, outputFolder, targets);
-            }
-        }
-
-        private static void WriteCSharpCode(string inPath, string outPath, IDictionary<string, string> targets)
-        {
-            var fileName = outPath + targets["Entity"] + ".cs";
-            if (!File.Exists(fileName))
-                File.Create(fileName).Close();
-            using (var sw = new StreamWriter(fileName, false, Encoding.UTF8))
-            {
-                using (var sr = new StreamReader(inPath, Encoding.UTF8))
-                {
-                    while (!sr.EndOfStream)
-                    {
-                        sw.WriteLine(sr.ReadLine().Replace(targets));
-                    }
-                }
+                var outputFile = outputFolder + table.Name + ".cs";
+                WriteFile(inputFile, outputFile, targets);
             }
         }
     }

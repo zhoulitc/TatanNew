@@ -36,12 +36,12 @@ namespace Tatan.Data.UnitTest
             };
             entity["Name"] = "zhouli";
             entity.Age = 1;
-            var entity1 = entity.Clone();
+            var entity1 = entity.Clone("2");
             entity1["Name"] = "";
             entity["Name"] = "zhouli1";
             Assert.AreEqual(entity1["Name"],string.Empty);
             Assert.AreEqual(entity1["Age"], 0);
-            var entity2 = entity.Copy();
+            var entity2 = entity.Copy("3");
             Assert.AreEqual(entity2["Name"], "zhouli1");
             Assert.AreEqual(entity2["Age"], 1);
             entity2["Age"] = 2;
@@ -61,7 +61,7 @@ namespace Tatan.Data.UnitTest
                 if (name == "Name") Assert.AreEqual(entity[name], "2");
                 else if (name == "Age") Assert.AreEqual(entity[name], 2);
             }
-            var entity1 = entity.Copy();
+            var entity1 = entity.Copy("4");
             Assert.AreEqual(entity1.Equals(entity), false);
             Assert.AreEqual(entity1.Equals(null), false);
         }
@@ -72,12 +72,11 @@ namespace Tatan.Data.UnitTest
 
             static TestDataEntity()
             {
-                _perproties = new PropertyCollection(typeof(TestDataEntity),
-                    "Name", "Age");
+                _perproties = new PropertyCollection(typeof(TestDataEntity));
             }
 
-            public TestDataEntity(string id = "")
-                : base(id)
+            public TestDataEntity(string id, string c, string t)
+                : base(id, c, t)
             {
             }
 

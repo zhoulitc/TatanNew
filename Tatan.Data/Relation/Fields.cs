@@ -1,74 +1,14 @@
 ﻿namespace Tatan.Data.Relation
 {
-    using System;
-    using Common.Collections;
-
     #region Fields的实体类，无法继承
     /// <summary>
     /// Fields的实体类，无法继承。此实体保存了表的列信息
     /// <para>author:zhoulitcqq</para>
     /// </summary>
-    [Serializable]
-    public partial class Fields : DataEntity
+    public partial class Fields
     {
-        #region 构造函数
-
-        /// <summary>
-        /// 构造函数
-        /// </summary>
-        public Fields()
-            : base(string.Empty)
-        {
-            
-        }
-
-        /// <summary>
-        /// 构造函数
-        /// </summary>
-        /// <param name="id">唯一标识符</param>
-        /// <param name="creator"></param>
-        public Fields(string id, string creator = null)
-            : base(id)
-        {
-        }
-        #endregion
-
-        #region Static Properties
-        [NonSerialized]
-        private static readonly PropertyCollection _perproties;
-
-        static Fields()
-        {
-            _perproties = new PropertyCollection(typeof(Fields),
-                "Name", "Title", "Type", "Size", "Scale", "DefaultValue", "IsNotNull", "TableId", "OrderId"
-            );
-        }
-        #endregion
-
-        #region Override Methods
-        /// <summary>
-        /// 获取属性集合
-        /// </summary>
-        protected override PropertyCollection Properties => _perproties;
-
-        /// <summary>
-        /// 清理属性
-        /// </summary>
-        public override void Clear()
-        {
-            Name = default(string);
-            Title = default(string);
-            Type = default(string);
-            Size = default(int);
-            Scale = default(int);
-            DefaultValue = default(string);
-            IsNotNull = default(bool);
-            TableId = default(int);
-            OrderId = default(int);
-        }
-        #endregion
-
         #region Properties
+
         /// <summary>
         /// 字段名
         /// </summary>

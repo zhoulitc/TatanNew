@@ -43,14 +43,17 @@
     <Compile Include="Attribute\FieldAttribute.cs" />
     <Compile Include="Attribute\TableAttribute.cs" />
     <Compile Include="Attribute\DataAttributes.cs" />
+    <Compile Include="Builder\Builder.cs" />
+    <Compile Include="Builder\EntityPartialBuilder.cs" />
+    <Compile Include="Builder\TableBuilder.cs" />
     <Compile Include="Collection\DataTableCollection.cs" />
     <Compile Include="DataEntity.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DataSource.cs" />
+    <Compile Include="DataEntityExtension.cs" />
     <Compile Include="Enum\DataSort.cs" />
     <Compile Include="Builder\SqliteBuilder.cs" />
-    <Compile Include="Builder\TableBuilder.cs" />
     <Compile Include="Extension\DataExtension.cs" />
     <Compile Include="Interface\IDataProvider.cs" />
     <Compile Include="Interface\IDataCreated.cs" />
@@ -71,11 +74,15 @@
     <Compile Include="Builder\IBuilder.cs" />
     <Compile Include="Builder\EntityBuilder.cs" />
     <Compile Include="Relation\Tables.cs" />
+    <Compile Include="Relation\FieldsPartial.cs" />
     <Compile Include="Relation\TablesPartial.cs" />
     <Compile Include="Relation\Collections\FieldsCollection.cs" />
     <Compile Include="Builder\SqlBuilder.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Template\EntityPartial.template">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Template\Entity.template">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
