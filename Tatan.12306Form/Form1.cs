@@ -65,8 +65,8 @@ namespace Tatan._12306Form
 
         private void button2_Click(object sender, EventArgs e)
         {
-            var s = "3%2C0%2C1%2C%E5%91%A8%E8%A0%A1%2C1%2C431021198805280038%2C13686893341%2CN".AsDecode("url");
-            var s1 = "Tue+Mar+10+2015+00%3A00%3A00+GMT%2B0800+(%E4%B8%AD%E5%9B%BD%E6%A0%87%E5%87%86%E6%97%B6%E9%97%B4)".AsDecode("url");
+            var s = "3%2C0%2C1%2C%E5%91%A8%E8%A0%A1%2C1%2C431021198805280038%2C13686893341%2CN".AsDecode(Coding.Url);
+            var s1 = "Tue+Mar+10+2015+00%3A00%3A00+GMT%2B0800+(%E4%B8%AD%E5%9B%BD%E6%A0%87%E5%87%86%E6%97%B6%E9%97%B4)".AsDecode(Coding.Url);
             var cookie = string.Format("; _jc_save_fromStation={0}; _jc_save_toStation={1}; _jc_save_fromDate={2}; _jc_save_toDate={3}; _jc_save_wfdc_flag=dc; ",
                 "%u5E7F%u5DDE%2CGZQ", "%u6210%u90FD%2CCDW", _entity["date"], _entity["date"]);
             if (!_entity["cookie"].Contains(cookie))

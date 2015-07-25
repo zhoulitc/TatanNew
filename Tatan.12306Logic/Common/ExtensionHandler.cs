@@ -40,7 +40,7 @@ namespace Tatan._12306Logic.Common
             script.AddCode("var keyStr = \"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=\";");
             string value = script.Eval("eval(\"encode32(bin216(Base32.encrypt('1111','" + key + "')))\")").ToString();
             input["key"] = key;
-            input["value"] = value.AsEncode("url");
+            input["value"] = value.AsEncode(Coding.Url);
 
             begin = content.IndexOf("var globalRepeatSubmitToken = '");
             if (begin > 0)

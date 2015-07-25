@@ -9,7 +9,7 @@ using Tatan.Common.Extension.String.Regular;
 namespace Tatan.Common.UnitTest
 {
     using Extension.String.Convert;
-    using Extension.String.Target;
+    using Extension.String.Template;
     using Extension;
 
     [TestClass]
@@ -205,10 +205,10 @@ namespace Tatan.Common.UnitTest
                 var s = ex.Message;
             }
 
-            Assert.AreEqual("A".AsEnum<T1>(), T1.A);
-            Assert.AreEqual("0".AsEnum<T2>(), T2.AA);
+            Assert.AreEqual("A".As<T1>(), T1.A);
+            Assert.AreEqual("0".As<T2>(), T2.AA);
             string ss = null;
-            Assert.AreEqual(ss.AsEnum<T1>(T1.A), T1.A);
+            Assert.AreEqual(ss.As<T1>(T1.A), T1.A);
         }
 
         public struct Test

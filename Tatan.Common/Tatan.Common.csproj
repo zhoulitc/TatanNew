@@ -47,8 +47,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Caching\Cache.cs" />
-    <Compile Include="Caching\CacheAdapter.cs" />
+    <Compile Include="Net\CookiesAdapter.cs" />
+    <Compile Include="Net\SessionCacheAdapter.cs" />
+    <Compile Include="Net\SessionAdapter.cs" />
+    <Compile Include="Net\CustomCacheAdapter.cs" />
+    <Compile Include="Net\CacheAdapter.cs" />
     <Compile Include="Collections\AbstractReadOnlyCollection.cs" />
     <Compile Include="Compiler\TreeNodeCollection.cs" />
     <Compile Include="Collections\ReadOnlyCollection.cs" />
@@ -66,15 +69,15 @@
     <Compile Include="Cryptography\Internal\Base64Cipher.cs" />
     <Compile Include="Cryptography\Internal\AesCipher.cs" />
     <Compile Include="Expression\ExpressionParser.cs" />
-    <Compile Include="Caching\ICache.cs" />
+    <Compile Include="Net\ICache.cs" />
     <Compile Include="Extension\Data\DataRecordExtendsion.cs" />
-    <Compile Include="Extension\Stream\Convert\Convert.cs" />
-    <Compile Include="Extension\String\Deserialization\Deserialize.cs" />
+    <Compile Include="Extension\Stream\Convert\ConvertExtension.cs" />
+    <Compile Include="Extension\String\Deserialization\DeserializationExtension.cs" />
     <Compile Include="Extension\Net\WebRequestExtension.cs" />
-    <Compile Include="Extension\Reflect\Reflect.cs" />
-    <Compile Include="Extension\Enum\Convert.cs" />
-    <Compile Include="Extension\String\Codec\Codec.cs" />
-    <Compile Include="Extension\String\IO\IO.cs" />
+    <Compile Include="Extension\Reflect\ReflectExtension.cs" />
+    <Compile Include="Extension\Enum\ConvertExtension.cs" />
+    <Compile Include="Extension\String\Codec\CodecExtension.cs" />
+    <Compile Include="Extension\String\IO\IOExtension.cs" />
     <Compile Include="Extension\Net\WebResponseExtension.cs" />
     <Compile Include="WindowsServices.cs" />
     <Compile Include="IDentifiable.cs" />
@@ -90,8 +93,8 @@
     <Compile Include="Cryptography\Internal\NullCipher.cs" />
     <Compile Include="Cryptography\Internal\Sha1Cipher.cs" />
     <Compile Include="Cryptography\Internal\SymmetricCipher.cs" />
-    <Compile Include="Extension\String\Convert\Convert.cs" />
-    <Compile Include="Extension\String\Regular\Regular.cs" />
+    <Compile Include="Extension\String\Convert\ConvertExtension.cs" />
+    <Compile Include="Extension\String\Regular\RegularExtension.cs" />
     <Compile Include="Exception\Assert.cs" />
     <Compile Include="I18n\Languages.cs" />
     <Compile Include="Logging\LogAdapter.cs" />
@@ -102,7 +105,7 @@
     <Compile Include="Net\ICookies.cs" />
     <Compile Include="Net\ISession.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Extension\String\Target\Target.cs" />
+    <Compile Include="Extension\String\Template\TemplateExtension.cs" />
     <Compile Include="Serialization\Internal\XmlSerializer.cs" />
     <Compile Include="Serialization\Internal\AbstractSerializer.cs" />
     <Compile Include="Serialization\Serializers.cs" />

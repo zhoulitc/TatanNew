@@ -61,14 +61,14 @@ namespace Tatan.Data.UnitTest
         [TestMethod]
         public void TestExecuteTableNull()
         {
-            IBuilder g = new SqliteBuilder(_source, (System.Reflection.Assembly)null);
+            IBuilder g = new SqliteBuilder(_source, System.Reflection.Assembly.Load("Tatan.Data"));
             g.Execute(Runtime.Root);
         }
 
         [TestMethod]
         public void TestExecuteTableNull2()
         {
-            IBuilder g = new SqliteBuilder(_source, (System.Reflection.Assembly)null);
+            IBuilder g = new SqliteBuilder(_source, System.Reflection.Assembly.Load("Tatan.Data"));
             g.Execute(Runtime.Root.Substring(0, Runtime.Root.Length - 1));
         }
 

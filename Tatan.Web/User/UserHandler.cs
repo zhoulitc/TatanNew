@@ -49,12 +49,12 @@
                 var id = session.ExecuteScalar<long>(string.Format(_checkSql, Source.Provider.ParameterSymbol), p =>
                 {
                     p[nameof(UserLogin.Name)] = username;
-                    p[nameof(UserLogin.Password)] = password.AsEncode("md5");
+                    p[nameof(UserLogin.Password)] = password.AsEncode(Coding.Md5);
                 });
                 if (id > 0)
                 {
                     us.Id = id;
-                    us.Guid = (id + username).AsEncode("md5");
+                    us.Guid = (id + username).AsEncode(Coding.Md5);
                     success = session.Execute(string.Format(_updateSql, Source.Provider.ParameterSymbol), p =>
                     {
                         p[nameof(UserLogin.Id)] = id;
@@ -75,8 +75,8 @@
             });
             if (!result) return us;
             us.IsLogin = true;
-            us.Token = password.AsEncode("md5");
-            us.State = Http.Session.Id.AsEncode("md5");
+            us.Token = password.AsEncode(Coding.Md5);
+            us.State = Http.Session.Id.AsEncode(Coding.Md5);
 
             Http.Cache.Set(us.Guid, us);
             Http.Cookies[us.Guid] = us.ToString();

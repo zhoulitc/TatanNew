@@ -15,7 +15,7 @@
     /// <para>author:zhoulitcqq</para>
     /// <para>此方法组不会抛出异常</para>
     /// </summary>
-    public static class Convert
+    public static class ConvertExtension
     {
         private static class Traits<T> where T : struct
         {
@@ -40,7 +40,7 @@
             }
         }
 
-        static Convert()
+        static ConvertExtension()
         {
             SetParse<int>();
             SetParse<uint>();
@@ -70,11 +70,10 @@
         /// <typeparam name="T"></typeparam>
         public static void SetExtend<T>(string name)
         {
-            typeof (Convert).GetMethod(name, BindingFlags.NonPublic | BindingFlags.Static)
+            typeof (ConvertExtension).GetMethod(name, BindingFlags.NonPublic | BindingFlags.Static)
                 .CreateDelegate(out Extend<T>.Call);
         }
 
-        // ReSharper disable once UnusedMember.Local
         private static bool AsBooleanExtend(string s, bool def)
         {
             return s.Trim() == "1" || def;
@@ -94,26 +93,15 @@
                 return def;
 
             T ret;
-            if (Traits<T>.Call == null || !Traits<T>.Call(value, out ret))
+            if (typeof(T).IsEnum)
             {
-                ret = Extend<T>.Call != null ? Extend<T>.Call(value, def) : def;
+                if (!Enum.TryParse(value, out ret))
+                {
+                    ret = Extend<T>.Call != null ? Extend<T>.Call(value, def) : def;
+                }
+                return ret;
             }
-            return ret;
-        }
-
-        /// <summary>
-        /// 转换为枚举，不会抛出异常。转换失败则返回def
-        /// </summary>
-        /// <param name="value"></param>
-        /// <param name="def">默认值</param>
-        /// <returns></returns>
-        public static T AsEnum<T>(this string value, T def = default(T)) where T : struct
-        {
-            if (string.IsNullOrEmpty(value))
-                return def;
-
-            T ret;
-            if (!Enum.TryParse(value, out ret))
+            if (Traits<T>.Call == null || !Traits<T>.Call(value, out ret))
             {
                 ret = Extend<T>.Call != null ? Extend<T>.Call(value, def) : def;
             }

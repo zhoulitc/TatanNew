@@ -10,7 +10,7 @@
     /// 提供字符串的正则表达式匹配扩展方法
     /// <para>author:zhoulitcqq</para>
     /// </summary>
-    public static class Regular
+    public static class RegularExtension
     {
         private static readonly Regex _isInt;
         private static readonly Regex _isNumber;
@@ -22,7 +22,7 @@
         private static readonly int[] _wi;
         private static readonly string _addresses;
 
-        static Regular()
+        static RegularExtension()
         {
             _isInt = new Regex(@"^-?[1-9]\d*$");
             _isNumber = new Regex(@"^-?([1-9]\d*.\d*|0.\d*[1-9]\d*|0?.0+|0)$");

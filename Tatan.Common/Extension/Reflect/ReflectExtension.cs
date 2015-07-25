@@ -12,7 +12,7 @@
     /// 反射相关扩展类
     /// <para>author:zhoulitcqq</para>
     /// </summary>
-    public static class Reflect
+    public static class ReflectExtension
     {
         /// <summary>
         /// 创建一个委托

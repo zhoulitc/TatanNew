@@ -2,7 +2,6 @@
 {
     using System;
     using System.Web;
-    using Caching;
     using Exception;
 
     /// <summary>
@@ -15,13 +14,14 @@
 
         /// <summary>
         /// 获取或设置HTTP的上下文
+        /// <para>异步调用时，上下文为null</para>
         /// </summary>
         public static HttpContext Context
         {
             get
             {
                 var context = HttpContext.Current;
-                Assert.ArgumentNotNull("context", context);
+                Assert.ArgumentNotNull(nameof(context), context);
                 return context;
             }
         }
@@ -29,190 +29,33 @@
         /// <summary>
         /// 获取Request对象
         /// </summary>
-        public static HttpRequest Request => Context.Request;
+        public static HttpRequest Request => Context?.Request;
 
         /// <summary>
         /// 获取Response对象
         /// </summary>
-        public static HttpResponse Response => Context.Response;
+        public static HttpResponse Response => Context?.Response;
 
         /// <summary>
         /// 获取Server对象
         /// </summary>
-        public static HttpServerUtility Server => Context.Server;
+        public static HttpServerUtility Server => Context?.Server;
 
         #endregion
-
-        #region Cache
 
         /// <summary>
         /// 获取Cache对象
         /// </summary>
-        public static ICache Cache => Caching.Cache.GetCache();
-
-        #endregion
-
-        #region Cookies
+        public static ICache Cache { get; internal set; }
 
         /// <summary>
         /// 获取Cookies对象
         /// </summary>
-        public static ICookies Cookies => InternalCookies.Instance;
-
-        private sealed class InternalCookies : ICookies
-        {
-            #region 单例
-
-            private static readonly InternalCookies _instance = new InternalCookies();
-
-            private InternalCookies() { }
-
-            public static InternalCookies Instance => _instance;
-
-            #endregion
-
-            public void Clear() => Context.Response.Cookies.Clear();
-
-            public int Count => Context.Request.Cookies.Count;
-
-            public string this[string key]
-            {
-                get //从Request中读取
-                {
-                    Assert.ArgumentNotNull(nameof(key), key);
-                    var cookie = Context.Request.Cookies[key];
-                    if (cookie == null)
-                        return string.Empty;
-                    return cookie.Value;
-                }
-                set //从Response中写入
-                {
-                    Assert.ArgumentNotNull(nameof(key), key);
-                    var cookie = Context.Response.Cookies[key];
-                    if (cookie == null) //Add
-                    {
-                        if (!string.IsNullOrEmpty(value))
-                            Context.Response.Cookies.Add(new HttpCookie(key, value));
-                    }
-                    else
-                    {
-                        if (string.IsNullOrEmpty(value)) //Delete
-                        {
-                            cookie.Expires = DateTime.Now.AddYears(-2);
-                        }
-                        else //Edit
-                        {
-                            cookie.Value = value;
-                        }
-                        Context.Response.Cookies.Set(cookie);
-                    }
-                }
-            }
-
-            /// <summary>
-            /// 根据key设置Cookie的过期时间
-            /// </summary>
-            /// <param name="key">键</param>
-            /// <param name="expires">过期时间，单位分钟</param>
-            public void SetExpires(string key, double expires)
-            {
-                Assert.ArgumentNotNull(nameof(key), key);
-                var cookie = Context.Response.Cookies[key];
-                if (cookie != null)
-                {
-                    cookie.Expires = DateTime.Now.AddMinutes(expires);
-                    Context.Response.Cookies.Set(cookie);
-                }
-            }
-        }
-
-        #endregion
-
-        #region Session
+        public static ICookies Cookies { get; internal set; }
 
         /// <summary>
         /// 获取Session对象
         /// </summary>
-        public static ISession Session => InternalSession.Instance;
-
-        private sealed class InternalSession : ISession
-        {
-            #region 单例
-
-            private static readonly InternalSession _instance = new InternalSession();
-
-            private InternalSession() { }
-
-            public static InternalSession Instance => _instance;
-
-            #endregion
-
-            public void Abandon() => Context.Session.Abandon();
-
-            public void Clear()
-            {
-                lock (Context.Session.SyncRoot)
-                {
-                    Context.Session.Clear();
-                }
-            }
-
-            public int Count => Context.Session.Count;
-
-            public string Id => Context.Session.SessionID;
-
-            public bool IsNew => Context.Session.IsNewSession;
-
-            public T Get<T>(string key)
-            {
-                Assert.ArgumentNotNull(nameof(key), key);
-                return (T) Context.Session[key];
-            }
-
-            public object this[string key]
-            {
-                set
-                {
-                    Assert.ArgumentNotNull(nameof(key), key);
-                    var oldValue = Context.Session[key];
-                    lock (Context.Session.SyncRoot)
-                    {
-                        if (oldValue == null) //Add
-                        {
-                            if (value != null)
-                                Context.Session.Add(key, value);
-                        }
-                        else
-                        {
-                            if (value == null) //Delete
-                            {
-                                Context.Session.Remove(key);
-                            }
-                            else //Edit
-                            {
-                                Context.Session[key] = value;
-                            }
-                        }
-                    }
-                }
-            }
-
-            public int Timeout
-            {
-                get
-                {
-                    return Context.Session.Timeout;
-                }
-                set
-                {
-                    lock (Context.Session.SyncRoot)
-                    {
-                        Context.Session.Timeout = value;
-                    }
-                }
-            }
-        }
-
-        #endregion
+        public static ISession Session { get; internal set; }
     }
 }

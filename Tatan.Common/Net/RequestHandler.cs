@@ -8,7 +8,7 @@
     using Extension.Net;
     using Extension.String.Convert;
     using Extension.String.IO;
-    using Extension.String.Target;
+    using Extension.String.Template;
     using Serialization;
 
     /// <summary>

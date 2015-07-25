@@ -4,7 +4,7 @@
     /// Session会话接口
     /// <para>author:zhoulitcqq</para>
     /// </summary>
-    public interface ISession : IDentifiable<string>, IClearable, ICountable
+    public interface ISession : IDentifiable<string>
     {
         /// <summary>
         /// 取消当前Session

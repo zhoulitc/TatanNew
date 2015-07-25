@@ -16,15 +16,15 @@
     {
         private readonly static Dictionary<string, string> _types = new Dictionary<string, string>(17)
             {
-                {"int", "INTEGER"},
-                {"long", "INTEGER"},
+                {"int32", "INTEGER"},
+                {"int64", "INTEGER"},
                 {"sbyte", "INTEGER"},
-                {"short", "INTEGER"},
+                {"int16", "INTEGER"},
                 {"double", "DECIMAL({0},{1})"},
-                {"float", "DECIMAL({0},{1})"},
+                {"single", "DECIMAL({0},{1})"},
                 {"decimal", "DECIMAL({0},{1})"},
                 {"string", "VARCHAR({0})"},
-                {"bool", "BOOLEAN"},
+                {"boolean", "BOOLEAN"},
                 {"datetime", "DATETIME"}
             };
 
@@ -74,8 +74,9 @@
             var name = field == null ? property.Name : field.Name;
             var type = GetType(field, property);
 
-            return string.Format("[{0}] {1} {2} {3}", 
-                name, type, GetNotNull(field), GetDefaultValue(field, property.PropertyType));
+            return string.Format("{4}{0}{5} {4}{1}{5} {2} {3}",
+                name, type, GetNotNull(field), GetDefaultValue(field, property.PropertyType),
+                _source.Provider.LeftSymbol, _source.Provider.RightSymbol);
         }
 
         private string GetType(FieldAttribute field, PropertyInfo property)

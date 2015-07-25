@@ -9,7 +9,7 @@
     /// <para>author:zhoulitcqq</para>
     /// <para>此方法组不会抛出异常</para>
     /// </summary>
-    public static class Deserialization
+    public static class DeserializationExtension
     {
         /// <summary>
         /// 将枚举类型转换为int
@@ -17,9 +17,9 @@
         /// <param name="value"></param>
         /// <param name="serializer"></param>
         /// <returns></returns>
-        public static T Deserialize<T>(this string value, ISerializer serializer) where T : class
+        public static T Deserialize<T>(this string value, ISerializer serializer = null)
         {
-            if (string.IsNullOrEmpty(value)) return null;
+            if (string.IsNullOrEmpty(value)) return default(T);
 
             value = value.Trim();
             if (serializer == null)
@@ -31,7 +31,7 @@
                 else if (SameXml(value))
                     serializer = Serializers.Xml;
                 else
-                    return null;
+                    return default(T);
             }
             return serializer.Deserialize<T>(value);
         }

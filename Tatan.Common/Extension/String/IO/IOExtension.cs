@@ -14,7 +14,7 @@
     /// <para>author:zhoulitcqq</para>
     /// <para>此方法组不会抛出异常</para>
     /// </summary>
-    public static class Io
+    public static class IOExtension
     {
         #region Path
 

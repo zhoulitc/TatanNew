@@ -50,7 +50,7 @@ namespace Tatan.Common.UnitTest
 
             try
             {
-                Io.CopyDirectory(null, newdir);
+                IOExtension.CopyDirectory(null, newdir);
             }
             catch (System.Exception e)
             {
@@ -63,7 +63,7 @@ namespace Tatan.Common.UnitTest
         {
             try
             {
-                Io.CopyDirectory(null, newdir);
+                IOExtension.CopyDirectory(null, newdir);
             }
             catch (System.Exception e)
             {

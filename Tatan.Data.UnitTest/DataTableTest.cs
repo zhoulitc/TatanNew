@@ -49,17 +49,17 @@ namespace Tatan.Data.UnitTest
                 Type = "S",
                 TableId = 1
             };
-            _source.Tables["Fields"].Insert(f);
+            _source.Tables.Get<Fields>().Insert(f);
             f.Clear();
 
-            var result = _source.Tables["Fields"].Query<Fields>(query => query.
+            var result = _source.Tables.Get<Fields>().Query<Fields>(query => query.
                Where(tde => tde.Name == "col1").
                OrderBy("Name", DataSort.Descending)).GetPager();
 
             Assert.AreEqual(result.TotalCount, 1);
             Assert.AreEqual(result.PageIndex, 1);
             Assert.AreEqual(result.Current[0].Name, "col1");
-            Assert.AreEqual(_source.Tables["Fields"].Count(),1);
+            Assert.AreEqual(_source.Tables.Get<Fields>().Count(),1);
 
             var t = new Tables
             {
@@ -67,9 +67,9 @@ namespace Tatan.Data.UnitTest
                 Title = "表1",
                 Remark = "这是一个表"
             };
-            _source.Tables["Tables"].Insert(t);
+            _source.Tables.Get<Tables>().Insert(t);
             t.Clear();
-            Assert.AreEqual(_source.Tables["Tables"].Count(), 1);
+            Assert.AreEqual(_source.Tables.Get<Tables>().Count(), 1);
 
             t = new Tables("1");
             var fields = t.GetFields(_source);
@@ -79,19 +79,19 @@ namespace Tatan.Data.UnitTest
                 Assert.IsNotNull(field.Name);
             }
 
-            Assert.AreEqual(_source.Tables["Tables"].Update(new Tables("1") {Name = "table2"}), false);
+            Assert.AreEqual(_source.Tables.Get<Tables>().Update(new Tables("1") {Name = "table2"}), false);
 
-            Assert.AreEqual(_source.Tables["Tables"].Count<Tables>(table => table.Id == "0"), 0);
+            Assert.AreEqual(_source.Tables.Get<Tables>().Count<Tables>(table => table.Id == "0"), 0);
 
-            Assert.AreEqual(_source.Tables["Tables"].Update<Tables>(new{Title="wahaha1"}, table=>table.Name=="table1"), 1);
+            Assert.AreEqual(_source.Tables.Get<Tables>().Update<Tables>(new{Title="wahaha1"}, table=>table.Name=="table1"), 1);
 
-            Assert.AreEqual(_source.Tables["Tables"].Update<Tables>(
+            Assert.AreEqual(_source.Tables.Get<Tables>().Update<Tables>(
                 new Dictionary<string, object>{{"Title","walala"}}, 
                 table => table.Name == "table1"), 1);
 
-            Assert.AreEqual(_source.Tables["Tables"].Delete(new Tables("1")), false);
-            Assert.AreEqual(_source.Tables["Tables"].Delete("1"), false);
-            Assert.AreEqual(_source.Tables["Fields"].Delete<Fields>(field=>field.Id=="1"), 0);
+            Assert.AreEqual(_source.Tables.Get<Tables>().Delete(new Tables("1")), false);
+            Assert.AreEqual(_source.Tables.Get<Tables>().Delete("1"), false);
+            Assert.AreEqual(_source.Tables.Get<Fields>().Delete<Fields>(field=>field.Id=="1"), 0);
         }
 
         [TestMethod]

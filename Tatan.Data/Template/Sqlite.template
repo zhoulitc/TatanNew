@@ -1,5 +1,7 @@
 ﻿--author:zhoulitcqq
 CREATE TABLE [{%Table%}](
-	[Id] INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+	[Id] [INTEGER] NOT NULL PRIMARY KEY AUTOINCREMENT
 	{%Columns%}
+	,[Creator] [VARCHAR(50)] NOT NULL DEFAULT ''
+	,[CreatedTime] [DATETIME] NOT NULL DEFAULT (datetime('now', 'localtime'))
 );

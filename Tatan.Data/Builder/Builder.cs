@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Text;
-    using Common.Extension.String.Target;
+    using Common.Extension.String.Template;
 
     /// <summary>
     /// 实体生成器

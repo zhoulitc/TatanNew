@@ -2,16 +2,13 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Text;
     using Common.Exception;
-    using Common.Extension.String.Target;
     using Common.IO;
-    using Relation;
     using System.Reflection;
-    using Tatan.Common.Extension.Reflect;
-    using Tatan.Data.Attribute;
+    using Common.Extension.Reflect;
+    using Attribute;
 
 
 
@@ -26,7 +23,7 @@
         /// 数据表
         /// </summary>
         protected readonly IEnumerable<Type> Types;
-        private static readonly Type _interface = typeof(IDataEntity);
+        private static readonly Type _interface = typeof(DataEntity);
         private static readonly Type _stringType = typeof(string);
 
         #region 构造函数
@@ -38,7 +35,7 @@
         public TableBuilder(Assembly assembly)
         {
             Assert.ArgumentNotNull(nameof(assembly), assembly);
-            Types = assembly.GetTypes().Where(t => _interface.IsAssignableFrom(t));
+            Types = assembly.GetTypes().Where(t => _interface.IsAssignableFrom(t) && t != _interface);
         }
 
         /// <summary>
@@ -48,7 +45,7 @@
         public TableBuilder(params Type[] types)
         {
             Assert.ArgumentNotNull(nameof(types), types);
-            Types = types.Where(t => _interface.IsAssignableFrom(t));
+            Types = types.Where(t => _interface.IsAssignableFrom(t) && t != _interface);
         }
 
         #endregion
@@ -73,13 +70,14 @@
                 foreach (var property in properties)
                 {
                     var attribute = property.GetCustomAttribute<FieldAttribute>();
-                    columns.AppendFormat("\n\t,{0}", GetFieldInfo(attribute, property));
+                    if (attribute == null) continue;
+                    columns.AppendFormat("\r\n\t,{0}", GetFieldInfo(attribute, property));
                 }
 
                 var targets = new Dictionary<string, string>
                 {
                     {"Table", type.Name},
-                    {"Columns", columns.Length > 0 ? columns.Remove(0, 2).ToString() : string.Empty}
+                    {"Columns", columns.Length > 0 ? columns.Remove(0, 3).ToString() : string.Empty}
                 };
 
                 var outputFile = outputFolder + targets["Table"] + ".sql";

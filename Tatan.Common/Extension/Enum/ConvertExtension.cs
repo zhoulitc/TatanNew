@@ -9,7 +9,7 @@
     /// <para>author:zhoulitcqq</para>
     /// <para>此方法组不会抛出异常</para>
     /// </summary>
-    public static class Convert
+    public static class ConvertExtension
     {
         #region 将枚举类型转换为int
 

@@ -1,4 +1,4 @@
-﻿namespace Tatan.Common.Extension.String.Target
+﻿namespace Tatan.Common.Extension.String.Template
 {
     using System.Collections.Generic;
     using System.Text;
@@ -9,7 +9,7 @@
     /// 模板引擎处理
     /// <para>author:zhoulitcqq</para>
     /// </summary>
-    public static class Target
+    public static class TemplateExtension
     {
         /// <summary>
         /// 替换

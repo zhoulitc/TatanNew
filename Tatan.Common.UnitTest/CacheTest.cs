@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Tatan.Common.Caching;
 using Tatan.Common.Component;
+using Tatan.Common.Net;
 
 namespace Tatan.Common.UnitTest
 {
@@ -18,53 +18,50 @@ namespace Tatan.Common.UnitTest
         public void TestCustom()
         {
             ComponentManager.Register((IAdapter) new CustomCacheAdapter());
-            Cache.Set("1", 1, (k, v) =>
+            Http.Cache.Set("1", 1, (k, v) =>
             {
-                Assert.AreEqual(k, "1");
+                Assert.AreEqual(k.Substring(k.Length - 1), "1");
                 Assert.AreEqual(v, 1);
             });
-            Assert.AreEqual(Cache.Get<int>("1"), 1);
-            Cache.Set("2", 1, new TimeSpan(0,0,0,0,1), (k, v) =>
+            Assert.AreEqual(Http.Cache.Get<int>("1"), 1);
+            Http.Cache.Set("2", 1, new TimeSpan(0,0,0,0,1), (k, v) =>
             {
-                Assert.AreEqual(k, "2");
+                Assert.AreEqual(k.Substring(k.Length - 1), "2");
                 Assert.AreEqual(v, 1);
             });
-            Assert.IsTrue(Cache.Contains("1"));
-            Cache.Remove("1");
-            Cache.Clear();
-            Assert.IsFalse(Cache.Contains("1"));
-            Assert.AreEqual(Cache.Count, 0);
-        }
-
-
-        [TestMethod]
-        public void TestInvokeExtension()
-        {
-            ComponentManager.Register(new CacheAdapter());
-            var s = Cache.InvokeExtension("EffectiveBytes");
-            Assert.AreEqual(s, (long)-1);
+            Assert.IsTrue(Http.Cache.Contains("1"));
+            Http.Cache.Remove("1");
+            Http.Cache.Clear();
+            Assert.IsFalse(Http.Cache.Contains("1"));
+            Assert.AreEqual(Http.Cache.Count, 0);
         }
 
         [TestMethod]
         public void TestWeb()
         {
-            Cache.Set("1", 1, (k, v) =>
+            ComponentManager.Register(new CacheAdapter());
+            Http.Cache.Set("1", 1, (k, v) =>
             {
-                Assert.AreEqual(k, "1");
+                Assert.AreEqual(k.Substring(k.Length - 1), "1");
                 Assert.AreEqual(v, 1);
             });
-            Assert.AreEqual(Cache.Get<int>("1"), 1);
-            Cache.Set("3", 3);
-            Cache.Set("2", 1, new TimeSpan(0, 0, 1), (k, v) =>
+            Http.Cache.Set("11", "2", 1);
+            //Http.Cache.Remove("11");
+            Assert.AreEqual(Http.Cache.Get<int>("1"), 1);
+            Assert.AreEqual(Http.Cache.Get<int>("11", "2"), 1);
+            Http.Cache.Set("3", 3);
+            Http.Cache.Set("2", 1, new TimeSpan(0, 0, 1), (k, v) =>
             {
-                Assert.AreEqual(k, "2");
+                Assert.AreEqual(k.Substring(k.Length - 1), "2");
                 Assert.AreEqual(v, 1);
             });
-            Assert.IsTrue(Cache.Contains("1"));
-            Cache.Remove("1");
-            Cache.Clear();
-            Assert.IsFalse(Cache.Contains("1"));
-            Assert.AreEqual(Cache.Count, 0);
+            Assert.IsTrue(Http.Cache.Contains("1"));
+            Assert.IsTrue(Http.Cache.Contains("11", "2"));
+            Http.Cache.Remove("1");
+            Http.Cache.Remove("11");
+            Http.Cache.Clear();
+            Assert.IsFalse(Http.Cache.Contains("1"));
+            Assert.AreEqual(Http.Cache.Count, 0);
         }
     }
 }

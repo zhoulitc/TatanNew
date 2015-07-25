@@ -4,7 +4,7 @@
     using System.IO;
     using System.Text;
     using Common.Exception;
-    using Common.Extension.String.Target;
+    using Common.Extension.String.Template;
     using Common.IO;
     using Relation;
 

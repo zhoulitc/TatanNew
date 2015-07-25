@@ -1,17 +1,9 @@
-﻿using System;
-using System.Text;
-using System.Text.RegularExpressions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Tatan.Common.Extension.Enum;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tatan.Common.Extension.Stream.Convert;
 
 
 namespace Tatan.Common.UnitTest
 {
-    using Extension.String.Convert;
-    using Extension.String.Target;
-    using Extension;
-
     [TestClass]
     public class StreamTest
     {
