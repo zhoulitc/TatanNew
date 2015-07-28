@@ -47,6 +47,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extension\Function\FixedExtension.cs" />
+    <Compile Include="Extension\Function\UncurryingExtension.cs" />
+    <Compile Include="Extension\Function\CurryingExtension.cs" />
+    <Compile Include="Extension\Object\ObjectExtension.cs" />
+    <Compile Include="Logging\DefaultLogAdapter.cs" />
     <Compile Include="Net\CookiesAdapter.cs" />
     <Compile Include="Net\SessionCacheAdapter.cs" />
     <Compile Include="Net\SessionAdapter.cs" />
@@ -72,13 +77,14 @@
     <Compile Include="Net\ICache.cs" />
     <Compile Include="Extension\Data\DataRecordExtendsion.cs" />
     <Compile Include="Extension\Stream\Convert\ConvertExtension.cs" />
-    <Compile Include="Extension\String\Deserialization\DeserializationExtension.cs" />
     <Compile Include="Extension\Net\WebRequestExtension.cs" />
     <Compile Include="Extension\Reflect\ReflectExtension.cs" />
     <Compile Include="Extension\Enum\ConvertExtension.cs" />
     <Compile Include="Extension\String\Codec\CodecExtension.cs" />
     <Compile Include="Extension\String\IO\IOExtension.cs" />
     <Compile Include="Extension\Net\WebResponseExtension.cs" />
+    <Compile Include="Serialization\XmlSerializerAdapter.cs" />
+    <Compile Include="Serialization\JsonSerializerAdapter.cs" />
     <Compile Include="WindowsServices.cs" />
     <Compile Include="IDentifiable.cs" />
     <Compile Include="INotifiable.cs" />

@@ -58,33 +58,33 @@ namespace Tatan.Common.UnitTest
         private static void CommonConvertTest<T>(T value, T min, T max, string lagel, T def) where T : struct
         {
             //测试正常值
-            var s = value.ToString().As(def);
+            var s = value.ToString().AsValue(def);
             Assert.AreEqual(s, value);
 
             //测试空值
             string n = null;
-            Assert.AreEqual(n.As(def), def);
+            Assert.AreEqual(n.AsValue(def), def);
 
             //测试越界值
             if (min.ToString() == "0")
             {
-                var lr = "-1".As(def);
+                var lr = "-1".AsValue(def);
                 Assert.AreEqual(lr, def);
             }
             else
             {
-                var lr = (min.ToString() + "0").As(def);
+                var lr = (min.ToString() + "0").AsValue(def);
                 Assert.AreEqual(lr, def);
             }
-            var ur = (max.ToString() + "0").As(def);
+            var ur = (max.ToString() + "0").AsValue(def);
             Assert.AreEqual(ur, def);
 
             //测试非法值
-            var lg = lagel.As(def);
+            var lg = lagel.AsValue(def);
             Assert.AreEqual(lg, def);
 
             //测试前后空格值
-            var tm = ("            " + value.ToString() + "            ").As(def);
+            var tm = ("            " + value.ToString() + "            ").AsValue(def);
             Assert.AreEqual(tm, value);
         }
 
@@ -103,9 +103,9 @@ namespace Tatan.Common.UnitTest
             CommonConvertTest(1.79769e+208, double.MinValue, double.MaxValue, "12d", -1);
             CommonConvertTest(-3.40282e+028f, float.MinValue, float.MaxValue, "12d", -1);
 
-            var a1 = "false".As<bool>();
-            var aa1 = "1".As<bool>();
-            var a2 = "2321".As(true);
+            var a1 = "false".AsValue<bool>();
+            var aa1 = "1".AsValue<bool>();
+            var a2 = "2321".AsValue(true);
             Assert.IsFalse(a1);
             Assert.IsTrue(aa1);
             Assert.IsTrue(a2);
@@ -118,15 +118,15 @@ namespace Tatan.Common.UnitTest
             z1 = dsa.AsBytes();
             Assert.AreEqual(z1.Length, 0);
 
-            var w1 = "2014-05-10".As<DateTime>();
-            var w2 = "s12".As(new DateTime(2014, 5, 10));
+            var w1 = "2014-05-10".AsValue<DateTime>();
+            var w2 = "s12".AsValue(new DateTime(2014, 5, 10));
             Assert.AreEqual(w1, new DateTime(2014,5,10));
             Assert.AreEqual(w2, new DateTime(2014, 5, 10));
 
-            var s1 = Guid.New().As<System.Guid>();
-            var s2 = Guid.New().As<System.Guid>();
-            var s3 = "".As<System.Guid>();
-            var s4 = "sdsadsa".As<System.Guid>();
+            var s1 = Guid.New().AsValue<System.Guid>();
+            var s2 = Guid.New().AsValue<System.Guid>();
+            var s3 = "".AsValue<System.Guid>();
+            var s4 = "sdsadsa".AsValue<System.Guid>();
             Assert.AreEqual(s1.ToString().Length>0, true);
             Assert.AreEqual(s2.ToString().Length > 0, true);
             Assert.AreEqual(s3.ToString(), "00000000-0000-0000-0000-000000000000");
@@ -205,10 +205,10 @@ namespace Tatan.Common.UnitTest
                 var s = ex.Message;
             }
 
-            Assert.AreEqual("A".As<T1>(), T1.A);
-            Assert.AreEqual("0".As<T2>(), T2.AA);
+            Assert.AreEqual("A".AsValue<T1>(), T1.A);
+            Assert.AreEqual("0".AsValue<T2>(), T2.AA);
             string ss = null;
-            Assert.AreEqual(ss.As<T1>(T1.A), T1.A);
+            Assert.AreEqual(ss.AsValue<T1>(T1.A), T1.A);
         }
 
         public struct Test

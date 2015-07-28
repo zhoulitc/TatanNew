@@ -18,7 +18,7 @@ namespace Tatan.Common
         public static void StartService(string name)
         {
             Assert.ArgumentNotNull(nameof(name), name);
-            using (ServiceController controller = new ServiceController(name))
+            using (var controller = new ServiceController(name))
             {
                 if (controller.Status == ServiceControllerStatus.Stopped || 
                     controller.Status == ServiceControllerStatus.StopPending)
@@ -37,7 +37,7 @@ namespace Tatan.Common
         public static void StopService(string name)
         {
             Assert.ArgumentNotNull(nameof(name), name);
-            using (ServiceController controller = new ServiceController(name))
+            using (var controller = new ServiceController(name))
             {
                 if (controller.Status == ServiceControllerStatus.Running ||
                     controller.Status == ServiceControllerStatus.StartPending)

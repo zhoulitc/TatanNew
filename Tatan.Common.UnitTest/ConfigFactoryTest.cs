@@ -9,6 +9,7 @@ namespace Tatan.Common.UnitTest
     using Configuration;
     using System.Xml.Serialization;
     using SystemFile = System.IO.File;
+    using Tatan.Common.Extension.Object;
 
     [TestClass]
     public class ConfigFactoryTest
@@ -109,35 +110,37 @@ namespace Tatan.Common.UnitTest
         [TestMethod]
         public void TestXmlSerializerExtension()
         {
-            var xml = Serializers.CreateXmlSerializer(
+            Component.ComponentManager.Register(new JsonSerializerAdapter(
                 JsonConvert.SerializeObject,
                 JsonConvert.DeserializeObject
-                );
+                ));
             var o = Configurations.Get<TestConfig>("test");
-            var s = xml.Serialize(o);
+            var s = o.ToJsonString();
             Assert.AreEqual(s, "{\"Name\":\"wahaha\"}");
 
-            s = xml.Serialize(null);
+            object oo = null;
+            s = oo.ToXmlString();
             Assert.AreEqual(s, string.Empty);
         }
 
         [TestMethod]
         public void TestXmlSerializer()
         {
-            var xml = Serializers.Xml;
-            var s = xml.Serialize(new TestData { Name = "wahaha" });
+            Component.ComponentManager.Register(new XmlSerializerAdapter());
+
+            var s = new TestData { Name = "wahaha" }.ToXmlString();
             Assert.AreEqual(s.Length>0, true);
 
-            s = xml.Serialize(new TestConfig2 { Name = "wahaha" });
+            s = new TestConfig2 { Name = "wahaha" }.ToXmlString();
             Assert.AreEqual(s.Length > 0, true);
 
             var o = Configurations.Get<TestConfig>("test");
-            s = xml.Serialize(o);
+            s = o.ToXmlString();
             Assert.AreEqual(s, "<?xml version=\"1.0\"?>\r\n<TestConfig xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <Name>wahaha</Name>\r\n</TestConfig>");
 
-            
 
-            s = xml.Serialize(null);
+            object oo = null;
+            s = oo.ToXmlString();
             Assert.AreEqual(s, string.Empty);
         }
     }

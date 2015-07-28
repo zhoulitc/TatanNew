@@ -3,7 +3,10 @@ using Newtonsoft.Json;
 
 namespace Tatan.Common.UnitTest
 {
+    using System;
     using Serialization;
+    using Tatan.Common.Extension.Object;
+    using Tatan.Common.Extension.String.Convert;
 
     public class User
     {
@@ -60,14 +63,12 @@ namespace Tatan.Common.UnitTest
         public void JsonSerializeUsingExtension()
         {
             //使用第三方json序列化
-            var json = Serializers.CreateJsonSerializer(
-                JsonConvert.SerializeObject,
-                JsonConvert.DeserializeObject<User>
-                );
-            var s1 = json.Serialize(_user);
+            Component.ComponentManager.Register(new JsonSerializerAdapter(new NewtonsoftJsonSerializers()));
+
+            var s1 = _user.ToJsonString();
             Assert.AreEqual(s1, _text);
 
-            var u = json.Deserialize<User>(s1);
+            var u = s1.AsObject<User>();
             Assert.AreEqual(u, _user);
         }
 
@@ -75,51 +76,63 @@ namespace Tatan.Common.UnitTest
         public void JsonDeserializeUsingExtension()
         {
             //使用第三方json序列化
-            var json = Serializers.CreateJsonSerializer(
-                JsonConvert.SerializeObject,
-                JsonConvert.DeserializeObject<User>
-                );
-            var user1 = json.Deserialize<User>(_text);
+            Component.ComponentManager.Register(new JsonSerializerAdapter(new NewtonsoftJsonSerializers()));
+            var user1 = _text.AsObject<User>();
             Assert.AreEqual(user1, _user);
 
-            var s1 = json.Serialize(user1);
+            var s1 = user1.ToJsonString();
             Assert.AreEqual(s1, _text);
         }
 
         [TestMethod]
         public void JsonSerializeUsingDefault()
         {
-            var json = Serializers.Json;
+            Component.ComponentManager.Register(new JsonSerializerAdapter());
             //json.UsingDefault();
-            var s1 = json.Serialize(_user);
+            var s1 = _user.ToJsonString();
             Assert.AreEqual(s1, _textd);
         }
 
         [TestMethod]
         public void JsonDeserializeUsingDefault()
         {
-            var json = Serializers.Json;
+            Component.ComponentManager.Register(new JsonSerializerAdapter());
             //json.UsingDefault();
-            var user1 = json.Deserialize<UserInfo>("{\"Address\":\"\\\"我也不知道\\\"\",\"Objs\":[33,\"wuyu\",false],\"Sex\":true}");
+            var user1 = "{\"Address\":\"\\\"我也不知道\\\"\",\"Objs\":[33,\"wuyu\",false],\"Sex\":true}".AsObject<UserInfo>();
             Assert.AreEqual(user1.Address, _user.Info.Address);
         }
 
         [TestMethod]
         public void JsonSerializeEmpty()
         {
+            Component.ComponentManager.Register(new JsonSerializerAdapter());
             //使用第三方json序列化
-            var json = Serializers.Json;
-            var s1 = json.Serialize(null);
+            object oo = null;
+            var s1 = oo.ToJsonString();
             Assert.AreEqual(s1, string.Empty);
         }
 
         [TestMethod]
         public void JsonDeserializeEmpty()
         {
+            Component.ComponentManager.Register(new JsonSerializerAdapter());
             //使用第三方json序列化
-            var json = Serializers.Json;
-            var user1 = json.Deserialize<User>(null);
+            string oo = null;
+            var user1 = oo.AsObject<User>();
             Assert.AreEqual(user1, null);
+        }
+
+        public class NewtonsoftJsonSerializers : ISerializer
+        {
+            public T Deserialize<T>(string text)
+            {
+                return JsonConvert.DeserializeObject<T>(text);
+            }
+
+            public string Serialize(object obj)
+            {
+                return JsonConvert.SerializeObject(obj);
+            }
         }
     }
 }

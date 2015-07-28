@@ -5,6 +5,7 @@
     using System.Reflection;
     using Logging;
     using Reflect;
+    using Serialization;
 
     internal delegate bool TryParse<T>(string value, out T def);
 
@@ -87,7 +88,7 @@
         /// <param name="def"></param>
         /// <exception cref="System.Exception">调用扩展转换时抛出的异常</exception>
         /// <returns></returns>
-        public static T As<T>(this string value, T def = default(T)) where T : struct
+        public static T AsValue<T>(this string value, T def = default(T)) where T : struct
         {
             if (string.IsNullOrEmpty(value))
                 return def;
@@ -107,6 +108,38 @@
             }
             return ret;
         }
+
+        #region 转换为对象
+
+        /// <summary>
+        /// 将字符串反序列化成指定对象
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static T AsObject<T>(this string value) where T : class
+        {
+            if (string.IsNullOrEmpty(value)) return null;
+
+            value = value.Trim();
+            if (SameJson(value))
+                return Serializers.Json.Deserialize<T>(value);
+            else if (SameXml(value))
+                return Serializers.Xml.Deserialize<T>(value);
+            else
+                return null;
+        }
+
+        private static bool SameJson(string value)
+        {
+            return (value.StartsWith("{") && value.EndsWith("}")) || (value.StartsWith("[") && value.EndsWith("]"));
+        }
+
+        private static bool SameXml(string value)
+        {
+            return (value.StartsWith("<?xml") && value.EndsWith(">"));
+        }
+
+        #endregion
 
         #region 转换为Bytes
 

@@ -7,6 +7,8 @@
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using Exception;
+    using System.Linq;
+
 
     /// <summary>
     /// 反射相关扩展类
@@ -78,6 +80,8 @@
             }
             return methodInfo.Invoke(obj, arguments);
         }
+
+        #region AsEntity
 
         private static class Builder<T>
         {
@@ -166,6 +170,10 @@
             return Builder<T>.AsEntity(record, entity);
         }
 
+        #endregion
+
+        #region GetMethod
+
         /// <summary>
         /// 获取Get属性的反射方法
         /// </summary>
@@ -201,6 +209,10 @@
             generator.Emit(OpCodes.Ret);
             return (Func<object, object>)getmethod.CreateDelegate(typeof(Func<object, object>));
         }
+
+        #endregion
+
+        #region SetMethod
 
         /// <summary>
         /// 获取Set属性的反射方法
@@ -238,6 +250,10 @@
             generator.Emit(OpCodes.Ret);
             return (Action<object, object>)setmethod.CreateDelegate(typeof(Action<object, object>));
         }
+
+        #endregion
+
+        #region Constructor
 
         /// <summary>
         /// 获取一个无参数的构造函数委托
@@ -342,6 +358,10 @@
             generator.Emit(OpCodes.Ret);
             return (Func<T1, T2, T3, T4, TResult>)constructor.CreateDelegate(typeof(Func<T1, T2, T3, T4, TResult>));
         }
+
+        #endregion
+
+        #region Clone
 
         /// <summary>
         /// 将一个类型实例克隆成另一个类型实例(强类型)
@@ -574,6 +594,77 @@
             }
             return (g, t, s) => { };
         }
+
+        #endregion
+
+        #region SetCustomAttribute
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="builder"></param>
+        /// <param name="values"></param>
+        /// <returns></returns>
+        public static void SetCustomAttribute<T>(this TypeBuilder builder, params object[] values)
+        {
+            var types = values == null ? Type.EmptyTypes : values.Select(v => v.GetType()).ToArray();
+            builder.SetCustomAttribute(new CustomAttributeBuilder(typeof(T).GetConstructor(types), values));
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="builder"></param>
+        /// <param name="values"></param>
+        /// <returns></returns>
+        public static void SetCustomAttribute<T>(this MethodBuilder builder, params object[] values)
+        {
+            var types = values == null ? Type.EmptyTypes : values.Select(v => v.GetType()).ToArray();
+            builder.SetCustomAttribute(new CustomAttributeBuilder(typeof(T).GetConstructor(types), values));
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="builder"></param>
+        /// <param name="values"></param>
+        /// <returns></returns>
+        public static void SetCustomAttribute<T>(this PropertyBuilder builder, params object[] values)
+        {
+            var types = values == null ? Type.EmptyTypes : values.Select(v => v.GetType()).ToArray();
+            builder.SetCustomAttribute(new CustomAttributeBuilder(typeof(T).GetConstructor(types), values));
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="builder"></param>
+        /// <param name="values"></param>
+        /// <returns></returns>
+        public static void SetCustomAttribute<T>(this FieldBuilder builder, params object[] values)
+        {
+            var types = values == null ? Type.EmptyTypes : values.Select(v => v.GetType()).ToArray();
+            builder.SetCustomAttribute(new CustomAttributeBuilder(typeof(T).GetConstructor(types), values));
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="builder"></param>
+        /// <param name="values"></param>
+        /// <returns></returns>
+        public static void SetCustomAttribute<T>(this ParameterBuilder builder, params object[] values)
+        {
+            var types = values == null ? Type.EmptyTypes : values.Select(v => v.GetType()).ToArray();
+            builder.SetCustomAttribute(new CustomAttributeBuilder(typeof(T).GetConstructor(types), values));
+        }
+
+        #endregion
     }
 
     /// <summary>

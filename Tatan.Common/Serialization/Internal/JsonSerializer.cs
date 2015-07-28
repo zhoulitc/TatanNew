@@ -13,20 +13,9 @@
     {
         #region 单例
 
-        private static readonly JsonSerializer _instance = new JsonSerializer();
+        private static readonly JsonSerializer _instance = new JsonSerializer(null, null);
         private static readonly Type _dictionaryType = typeof (IDictionary);
         private readonly IDictionary<Type, DataContractJsonSerializer> _typeMap;
-
-        private JsonSerializer()
-            : base(null, null)
-        {
-            _typeMap = new Dictionary<Type, DataContractJsonSerializer>();
-            var type = typeof (IDictionary<string, object>);
-            _typeMap.Add(type,
-                new DataContractJsonSerializer(type,
-                    new DataContractJsonSerializerSettings {UseSimpleDictionaryFormat = true}));
-        }
-
         public static JsonSerializer Instance => _instance;
 
         #endregion
@@ -34,6 +23,11 @@
         public JsonSerializer(Func<object, string> serializeFunction, Func<string, object> deserializeFunction)
             : base(serializeFunction, deserializeFunction)
         {
+            _typeMap = new Dictionary<Type, DataContractJsonSerializer>();
+            var type = typeof(IDictionary<string, object>);
+            _typeMap.Add(type,
+                new DataContractJsonSerializer(type,
+                    new DataContractJsonSerializerSettings { UseSimpleDictionaryFormat = true }));
         }
 
         protected override void SerializeAction<T>(T obj, Type type, MemoryStream ms)

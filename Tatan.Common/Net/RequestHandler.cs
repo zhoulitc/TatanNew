@@ -82,7 +82,7 @@
                 else if (header.Key == "User-Agent")
                     request.UserAgent = header.Value;
                 else if (header.Key == "If-Modified-Since")
-                    request.IfModifiedSince = header.Value.As<DateTime>();
+                    request.IfModifiedSince = header.Value.AsValue<DateTime>();
                 else
                     request.Headers[header.Key] = header.Value;
             }

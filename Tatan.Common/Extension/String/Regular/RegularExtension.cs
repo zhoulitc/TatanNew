@@ -224,7 +224,7 @@
             }
 
             var birth = value.Substring(6, 8).Insert(6, "-").Insert(4, "-");
-            if (birth.As(DateTime.MinValue) == DateTime.MinValue)
+            if (birth.AsValue(DateTime.MinValue) == DateTime.MinValue)
             {
                 return false;//生日验证            
             }
@@ -232,7 +232,7 @@
             var sum = 0;
             for (var i = 0; i < prefix.Length; i++)
             {
-                sum += _wi[i] * value[i].ToString().As<int>();
+                sum += _wi[i] * value[i].ToString().AsValue<int>();
             }
             if (_verifyCodes[sum % 11] != suffix)
             {
@@ -265,7 +265,7 @@
             }
 
             var birth = value.Substring(6, 6).Insert(4, "-").Insert(2, "-");
-            if (birth.As(DateTime.MinValue) == DateTime.MinValue)
+            if (birth.AsValue(DateTime.MinValue) == DateTime.MinValue)
             {
                 return false; //生日验证            
             }

@@ -67,7 +67,7 @@
             if (_fields != null)
                 return _fields;
 
-            var id = Id.As<int>();
+            var id = Id.AsValue<int>();
             var entities = source.Tables.Get<Fields>().Query<Fields>(q => q.Where(f => id == f.TableId));
             _fields = new FieldsCollection(entities);
             return _fields;

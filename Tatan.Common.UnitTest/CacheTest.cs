@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tatan.Common.Component;
 using Tatan.Common.Net;
+using Tatan.Common.Extension.Function;
 
 namespace Tatan.Common.UnitTest
 {

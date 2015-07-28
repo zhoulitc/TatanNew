@@ -12,15 +12,8 @@
     {
         #region 单例
 
-        private static readonly XmlSerializer _instance = new XmlSerializer();
+        private static readonly XmlSerializer _instance = new XmlSerializer(null, null);
         private readonly IDictionary<Type, Xml> _typeMap;
-
-        private XmlSerializer()
-            : base(null, null)
-        {
-            _typeMap = new Dictionary<Type, Xml>();
-        }
-
         public static XmlSerializer Instance => _instance;
 
         #endregion
@@ -28,6 +21,7 @@
         public XmlSerializer(Func<object, string> serializeFunction, Func<string, object> deserializeFunction)
             : base(serializeFunction, deserializeFunction)
         {
+            _typeMap = new Dictionary<Type, Xml>();
         }
 
         protected override void SerializeAction<T>(T obj, Type type, MemoryStream ms)

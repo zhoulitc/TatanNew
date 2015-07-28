@@ -8,6 +8,33 @@ using System.Security;
 
 namespace ConsoleTest
 {
+    using System.Runtime.Serialization;
+
+    /// <summary>
+    /// 服务请求对象
+    /// </summary>
+    [DataContract]
+    public class ServiceRequest
+    {
+        /// <summary>
+        /// 在服务器端保存的服务对象全名
+        /// </summary>
+        [DataMember]
+        public string Service { get; set; }
+
+        /// <summary>
+        /// 服务的行为名，默认为Call
+        /// </summary>
+        [DataMember]
+        public string Action { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [DataMember]
+        public object[] Arguments { get; set; }
+    }
+
     public class Program
     {
         public static void Main(string[] args)
@@ -59,6 +86,11 @@ namespace ConsoleTest
             //    Sex = SexType.Nan
             //};
             //var aaaa = func6(aa6);
+        }
+
+        public void te()
+        {
+
         }
 
         public static AA4 F(AA a)

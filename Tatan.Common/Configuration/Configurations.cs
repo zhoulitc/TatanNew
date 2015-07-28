@@ -8,9 +8,10 @@
     using System.Text;
     using System.Xml.Serialization;
     using Exception;
-    using Extension.String.Deserialization;
+    using Extension.String.Convert;
     using Extension.String.IO;
     using Serialization;
+
 
     /// <summary>
     /// 配置文件管理者
@@ -22,9 +23,9 @@
         private static readonly IDictionary<string, DateTime> _fileDateTimes;
         private static readonly IDictionary<string, IConfiguration> _configures;
         private static readonly IDictionary<string, object> _xmlConfigures;
-        private static readonly AppSettingsConfiguration _appConfiguration;
-        private static readonly ConnectionStringsConfiguration _connectionConfiguration;
-        private static readonly NullConfig _nullConfig;
+        private static readonly IConfiguration _appConfiguration;
+        private static readonly IConfiguration _connectionConfiguration;
+        private static readonly IConfiguration _nullConfig;
         private static readonly object _lock;
 
         static Configurations()
@@ -36,17 +37,17 @@
             _xmlConfigures = new Dictionary<string, object>();
             _nullConfig = new NullConfig();
             _appConfiguration = new AppSettingsConfiguration();
-            Current = _appConfiguration;
             _connectionConfiguration = new ConnectionStringsConfiguration();
+            Current = _appConfiguration;
         }
 
         /// <summary>
         /// 注册一个配置文件到IConfiguration集合中
         /// </summary>
         /// <param name="path">配置文件路径</param>
-        /// <param name="serializer">序列器对象</param>
+        /// <param name="format">序列器对象</param>
         /// <exception cref="System.ArgumentNullException">传入参数为空时</exception>
-        public static void Register(string path, ISerializer serializer = null)
+        public static void Register(string path)
         {
             Assert.ArgumentNotNull(nameof(path), path);
             Assert.FileFound(path);
@@ -57,7 +58,7 @@
             {
                 if (!_configures.ContainsKey(name))
                 {
-                    Current = new DefaultConfig(path, serializer);
+                    Current = new DefaultConfig(path);
                     _configures.Add(name, Current);
                     if (!_files.ContainsKey(name))
                         _files.Add(name, path);
@@ -71,9 +72,8 @@
         /// 注册一个配置文件到一个实体类中
         /// </summary>
         /// <param name="path">配置文件路径</param>
-        /// <param name="serializer">序列器对象</param>
         /// <exception cref="System.ArgumentNullException">传入参数为空时</exception>
-        public static void Register<T>(string path, ISerializer serializer = null) where T : class
+        public static void Register<T>(string path) where T : class
         {
             Assert.ArgumentNotNull(nameof(path), path);
             Assert.FileFound(path);
@@ -85,7 +85,7 @@
                 if (!_xmlConfigures.ContainsKey(name))
                 {
                     var content = File.ReadAllText(path, Encoding.UTF8);
-                    var config = content.Deserialize<T>(serializer);
+                    var config = content.AsObject<T>();
                     _xmlConfigures.Add(name, config);
                     if (!_files.ContainsKey(name))
                         _files.Add(name, path);
@@ -127,12 +127,12 @@
         /// 获取指定配置文件(不是路径)，如果文件被更新过，则会重新加载
         /// </summary>
         /// <param name="name">配置文件名(不是路径)</param>
-        /// <param name="serializer">序列器对象</param>
+        /// <param name="format">序列器对象</param>
         /// <exception cref="System.ArgumentNullException">传入参数为空时</exception>
-        public static IConfiguration Get(string name, ISerializer serializer = null)
+        public static IConfiguration Get(string name)
         {
             Assert.ArgumentNotNull(nameof(name), name);
-            Reload(name, serializer);
+            Reload(name);
             if (!_configures.ContainsKey(name))
                 return _nullConfig;
             return _configures[name];
@@ -156,7 +156,7 @@
         /// <returns></returns>
         public static IConfiguration Connection => _connectionConfiguration;
 
-        private static void Reload(string name, ISerializer serializer = null)
+        private static void Reload(string name)
         {
             if (!_configures.ContainsKey(name))
                 return;
@@ -166,7 +166,7 @@
             {
                 lock (_lock)
                 {
-                    _configures[name] = new DefaultConfig(path, serializer);
+                    _configures[name] = new DefaultConfig(path);
                 }
             }
         }
@@ -200,14 +200,14 @@
             private const string _defaultConfigName = "default";
             private readonly IDictionary<string, IDictionary<string, string>> _sections;
 
-            public DefaultConfig(string path, ISerializer serializer)
+            public DefaultConfig(string path)
             {
                 _sections = new Dictionary<string, IDictionary<string, string>>
                 {
                     {_defaultConfigName, new Dictionary<string, string>()}
                 };
                 var content = File.ReadAllText(path);
-                var entity = content.Deserialize<ConfigurationEntity>(serializer);
+                var entity = content.AsObject<ConfigurationEntity>();
                 foreach (var config in entity.Configures)
                 {
                     _sections[_defaultConfigName].Add(config.Name, config.Value);

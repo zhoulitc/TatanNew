@@ -4,8 +4,8 @@
     using System.Net;
     using System.Text;
     using System.Threading.Tasks;
-    using String.Deserialization;
-    using Serialization;
+    using String.Convert;
+
 
     /// <summary>
     /// Http响应扩展方法
@@ -38,7 +38,7 @@
         /// <param name="encoding"></param>
         /// <returns></returns>
         public static T GetJsonObject<T>(this WebResponse value, Encoding encoding = null) where T : class
-            => GetContent(value, encoding).Deserialize<T>(Serializers.Json);
+            => GetContent(value, encoding).AsObject<T>();
 
         /// <summary>
         /// 获取响应内容

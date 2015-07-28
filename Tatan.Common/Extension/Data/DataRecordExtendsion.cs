@@ -41,7 +41,7 @@
         public static T GetValue<T>(this IDataRecord record, string name, T def = default(T)) where T : struct
         {
             var obj = GetValue(record, name);
-            return string.IsNullOrEmpty(obj) ? def : obj.ToString().As(def);
+            return string.IsNullOrEmpty(obj) ? def : obj.ToString().AsValue(def);
         }
 
         #endregion

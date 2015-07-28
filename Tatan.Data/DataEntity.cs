@@ -30,7 +30,7 @@
         {
             Id = id ?? string.Empty;
             Creator = creator ?? "System";
-            CreatedTime = createdTime.As(DateTime.Now);
+            CreatedTime = createdTime.AsValue(DateTime.Now);
         }
         #endregion
 
